@@ -1,9 +1,18 @@
-const state={
-  'headerFixed':false,
-  'Asidefixed':false,
-  'container':false,
-  'asideIndent':false
+var state={
+  'headerFixed' : false,
+  'Asidefixed'  : false,
+  'container'   : false,
+  'asideIndent' : false,
+  'themeID'     : "1",
 }
+
+
+if (localStorage.getItem("settings")) {
+  state = JSON.parse(localStorage.getItem("settings"))
+} else {
+  localStorage.setItem("settings",JSON.stringify(state))
+}
+
 
 const actions={
 
@@ -27,6 +36,7 @@ const mutations={
       default:
         break;
     }
+    localStorage.setItem("settings",JSON.stringify(state))
   }
 }
 export default {
