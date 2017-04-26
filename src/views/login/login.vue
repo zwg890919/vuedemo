@@ -15,7 +15,7 @@
               <i-input v-model="formInline.verifyCode" size="large" placeholder="请输入验证码"></i-input>
           </Col>
           <Col span="4">
-              <img src="api/verifycode" />
+              <img src="api/verifycode" style="height:36px;" />
           </Col>
       </Row>
       <Button type="primary" long size="large" style="margin-top:32px;" @click="getToken">登陆</Button>

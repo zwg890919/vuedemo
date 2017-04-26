@@ -1,25 +1,25 @@
-var state={
-  'headerFixed' : false,
-  'Asidefixed'  : false,
-  'container'   : false,
-  'asideIndent' : false,
-  'themeID'     : "1",
+var state = {
+  'headerFixed': false,
+  'Asidefixed': false,
+  'container': false,
+  'asideIndent': false,
+  'themeID': "1",
 }
 
 
 if (localStorage.getItem("settings")) {
   state = JSON.parse(localStorage.getItem("settings"))
 } else {
-  localStorage.setItem("settings",JSON.stringify(state))
+  localStorage.setItem("settings", JSON.stringify(state))
 }
 
 
-const actions={
+const actions = {
 
 }
 
-const mutations={
-  changeSetting(state,type){
+const mutations = {
+  changeSetting(state, type) {
     switch (type) {
       case 1:
         state.headerFixed = !state.headerFixed
@@ -36,7 +36,7 @@ const mutations={
       default:
         break;
     }
-    localStorage.setItem("settings",JSON.stringify(state))
+    localStorage.setItem("settings", JSON.stringify(state))
   }
 }
 export default {

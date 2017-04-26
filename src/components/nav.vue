@@ -15,41 +15,54 @@
       </a>
       <div class="layout-nav-dropdown" :class="{active : dropdown}">
         <a @click="dropdown = !dropdown">
-          应用
-          <Icon type="arrow-down-b"></Icon>
-        </a>
+                应用
+                <Icon type="arrow-down-b"></Icon>
+              </a>
         <div class="dropdown-area" v-show="dropdown">
           <div>
             <p>实例演示</p>
-            <img src="../assets/image/app_monitor.png" width="100" height="100"  alt="">
+            <img src="../assets/image/app_monitor.png" width="100" height="100" alt="">
           </div>
           <div>
             <p>后台设置</p>
-            <img src="../assets/image/app_setting.png" width="100" height="100"  alt="">
+            <img src="../assets/image/app_setting.png" width="100" height="100" alt="">
           </div>
         </div>
       </div>
+      <div class="navbar-right">
+        <a class="nav-btn">
+          <Icon type="ios-bell-outline"></Icon>
+        </a>
+        <a class="nav-btn" @click="settingshow = !settingshow">
+          <Icon type="ios-cog"></Icon>
+        </a>
+      </div>
     </div>
+    <setting :settingshow="settingshow"></setting>
   </div>
 </template>
-<style lang="scss">
-
-</style>
 <script>
-  export default{
-    data(){
-      return {
-        dropdown : false,
-      }
-    },
-    props:["asideIndent",'headerFixed'],
-    methods:{
-      changeIndent(){
-        this.$store.commit("changeSetting",1)
-        this.$store.commit("changeSetting",2)
-        this.$store.commit("changeSetting",3)
-        this.$store.commit("changeSetting",4)
-      }
+import setting from "./setting"
+export default {
+  data() {
+    return {
+      dropdown: false,
+      settingshow: false,
     }
+  },
+  props: ["asideIndent", 'headerFixed'],
+  methods: {
+    changeIndent() {
+      this.$store.commit("changeSetting", 4)
+    }
+  },
+  components:{
+    setting
   }
+}
 </script>
+<style lang="scss">
+.navbar-right {
+  float: right;
+}
+</style>
