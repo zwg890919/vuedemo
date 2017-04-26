@@ -139,18 +139,16 @@ export default {
       }
     }
 
-    @each $animal,
-    $logo-color,
-    $header-color,
-    $aside-color in (puma, black, default),
-    (sea-slug, blue, pointer),
-    (egret, white, move) {
-      .#{$animal}-icon {
-        background-image: url('/images/#{$animal}.png');
-        border: 2px solid $color;
-        cursor: $cursor;
-      }
-    }
+    // @each $animal,$logo-color,$header-color, $aside-color in  (1, #1c2b36, #ffffff, #1c2b36),(2, #1c2b36, #1c2b36, #ffffff),(3, #3a3f51, default),(4, black, default),
+    //                                                           (5, black, default),(6, black, default),(7, black, default),(9, black, default),
+    //                                                           (9, black, default),(10, black, default),(11, black, default),(12, black, default),
+    //                                                           (13, black, default),(14, black, default),{
+    //   .#{$animal}-icon {
+    //     background-image: url('/images/#{$animal}.png');
+    //     border: 2px solid $color;
+    //     cursor: $cursor;
+    //   }
+    // }
   }
 }
 </style>
