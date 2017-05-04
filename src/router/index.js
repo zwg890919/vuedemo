@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/home'
+import System from '@/views/system'
 import Login from '@/views/login/login'
+
+const authUser = resolve => require(['../views/system/auth/user.vue'], resolve)
 
 Vue.use(Router)
 
@@ -21,7 +24,22 @@ export default new Router({
     }, {
       path: '/fix',
       name: 'fix',
-      component: Home
+      component: System,
+      children: [{
+        path: '',
+        redirect: 'auth/user',
+      }, {
+        path: 'auth',
+        template:"<router-view></router-view>",
+        children: [{
+          path: '',
+          redirect: 'user',
+        }, {
+          path: 'user',
+          component: authUser
+        }]
+
+      }]
     }
   ]
 })
