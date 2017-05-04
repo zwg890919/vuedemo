@@ -1,19 +1,20 @@
 import axios from 'axios'
 import config from './config'
 import Qs from 'Qs'
+import router from '../router'
 /**
  * [checkCode deal with data.code]
  * @param  {[object]} response
  * @return {[object]} response
  */
 function checkStatus(response) {
-  // console.log(response);
   if (response.status == 200) {
     return response.data;
   } else {
     return false;
   }
 }
+
 export default {
   /**
    * [config some public options about ajax]
@@ -33,7 +34,7 @@ export default {
       params: params,
       timeout: config.timeout,
       headers: config.headers,
-    }).then(checkStatus)
+    }).then(checkStatus);
   },
   /**
    * [post]
@@ -48,19 +49,19 @@ export default {
       data: data,
       timeout: config.timeout,
       headers: config.headers,
-    }).then(checkStatus)
+    }).then(checkStatus);
   },
   login(data) {
     data = Qs.stringify(data)
     return axios({
       method: 'post',
-      url: config.api+config.getToken,
+      url: config.api + config.getToken,
       data: data,
       timeout: config.timeout,
       headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
     }).then(checkStatus)
   },
 }

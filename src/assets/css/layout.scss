@@ -20,6 +20,7 @@
         &.layout-aside {
             top: 50px;
             bottom: 0;
+            padding-top:0px;
             left: 0;
             z-index: 1000;
             width: 200px;
@@ -31,11 +32,13 @@
         height: 50px;
         text-align: left;
         background: #fff;
+        z-index: 9999;
         &__header {
             width: 200px;
             height: 50px;
             background-color: #1c2b36;
             float: left;
+            z-index:10001;
             .navbar-brand {
                 display: inline-block;
                 float: none;
@@ -131,6 +134,7 @@
                         width: 200px;
                         padding: 0px 15px;
                         text-align: center;
+                        cursor: pointer;
                         &:first-child {
                             border-right: 1px solid #edf1f2
                         }
@@ -150,12 +154,13 @@
         color: #7793a7;
         float: left;
         background-color: #1c2b36;
+        // padding-top:50px;
         &.asideIndent {
             width: 60px;
         }
         &:before {
             position: absolute;
-            top: 50px;
+            top: 0px;
             bottom: 0;
             left: 0px;
             z-index: -1;
@@ -181,4 +186,7 @@
     .layout-aside {
         left: inherit;
     }
+}
+.aside-fixed{
+  margin-top:50px;
 }

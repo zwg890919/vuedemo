@@ -43,23 +43,22 @@
       }
     },
     methods: {
-       getToken() { //async
-        // var data = await api.login(this.formInline)
-        // if(data.success){
-        //   // console.log(this.$totast)
-          // this.$totast.warning({
+       async getToken() { //
+        var data = await api.login(this.formInline)
+        if(data.success){
+          // this.$totast.success({
           //   title:"一条提示信息啊",
           //   message:"这是一条提示信息啊一条提示信息啊"
           // })
           this.$router.push("home")
-        // }
+        }
       }
     }
   }
 </script>
 <style lang="scss">
   .login {
-    background: url("../../assets/image/login/bg.jpg") center no-repeat;
+    background: url("../../assets/images/login/bg.jpg") center no-repeat;
     background-size:100% auto;
     position:absolute;
     top:0;
@@ -76,7 +75,7 @@
         height: 30px;
         padding: 20px 0;
         .login-header-logo{
-          background: url(../../assets/image/login/loginicon.png);
+          background: url(../../assets/images/login/loginicon.png);
           width: 105px;
           height: 30px;
           top: 0;

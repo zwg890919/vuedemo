@@ -13,7 +13,7 @@ export default {
 
 <style>
 html {
-  background: url("../static/image/bg.jpg");
+  background: url("../static/images/bg.jpg");
   background-attachment: fixed;
   background-size: cover;
   height: 100%;
