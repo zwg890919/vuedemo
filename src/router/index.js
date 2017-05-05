@@ -46,7 +46,7 @@ export default new Router({
 				redirect: 'auth',
 			}, {
 				path: 'auth',
-				name: "fix.auth",
+				name: "app.auth",
 				component: {
 					template: "<keep-alive><router-view></router-view></keep-alive>",
 				},
@@ -73,4 +73,5 @@ export default new Router({
 			}]
 		}
 	]
+>>>>>>> master
 })

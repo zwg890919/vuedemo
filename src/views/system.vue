@@ -12,8 +12,8 @@
 <style scoped>
 .layout-content {
     position: absolute;
-    top: 50px;
-    bottom: 0px;
+    top:50px;
+    bottom: 5px;
     left: 0px;
     right: 0px;
     overflow-y: auto
