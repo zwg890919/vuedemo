@@ -61,16 +61,16 @@ export default {
 		}
 	},
 	methods: {
-		getToken() { //async
-			// var data = await api.login(this.formInline)
-			// if(data.success){
-			//   // console.log(this.$totast)
+		async getToken() { 
+			var data = await api.login(this.formInline)
+			if(data.success){
+			  // console.log(this.$totast)
 			// this.$totast.warning({
-			//   title:"一条提示信息啊",
-			//   message:"这是一条提示信息啊一条提示信息啊"
+			// title:"一条提示信息啊",
+			// message:"这是一条提示信息啊一条提示信息啊"
 			// })
-			this.$router.push("home")
-			// }
+				this.$router.push("app");
+			}
 		}
 	}
 }

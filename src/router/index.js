@@ -7,6 +7,9 @@ import Login from '@/views/login/login'
 const authUser = resolve => require(['../views/system/auth/user.vue'], resolve)
 const authMenu = resolve => require(['../views/system/auth/menu.vue'], resolve)
 
+const tableStatic = resolve => require(['../views/example/table/tableStatic.vue'], resolve)
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -19,9 +22,21 @@ export default new Router({
 			name: 'login',
 			component: Login
 		}, {
-			path: '/home',
-			name: 'home',
+			path: '/app',
+			name: 'app',
 			component: Home,
+			children: [{
+				path: 'table',
+				name: "app.table",
+				component: {
+					template: "<keep-alive><router-view></router-view></keep-alive>",
+				},
+				children: [{
+					path: 'tablestatic',
+					name: "app.table.tablestatic",
+					component: tableStatic
+				}]
+			}]
 		}, {
 			path: '/fix',
 			name: 'fix',
@@ -31,7 +46,7 @@ export default new Router({
 				redirect: 'auth',
 			}, {
 				path: 'auth',
-				name: "app.auth",
+				name: "fix.auth",
 				component: {
 					template: "<keep-alive><router-view></router-view></keep-alive>",
 				},
