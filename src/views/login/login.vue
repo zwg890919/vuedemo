@@ -32,8 +32,8 @@
 						placeholder="请输入验证码">
 					</i-input>
 				</Col>
-				<Col span="4">
-					<img src="api/verifycode" style="height:36px;" />
+				<Col span="4" style="width: auto;">
+					<img src="api/verifycode" onclick="this.src='/verifycode?' + Math.random()"/>
 				</Col>
 			</Row>
 			<Button type="primary" long size="large" style="margin-top:15px;" @click="getToken">登陆</Button>

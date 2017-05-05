@@ -1,5 +1,6 @@
 <template>
   <div class="layout-aside" :class="{'asideIndent':asideIndent,'layout-fixed':Asidefixed,'aside-fixed':!Asidefixed&&headerFixed}">
+    <div class="nav_warp">
       <ul>
         <li class="layout-aside__title">快捷菜单</li>
         <li class="layout-aside__item layout-aside__quick">
@@ -9,19 +10,20 @@
           </a>
         </li>
         <li class="line"></li>
+
         <li class="layout-aside__title">{{currentMenu.name}}</li>
-        <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.show}">
+        <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
           <a @click="drowpDown(item)">
             <Icon type="ios-paper"></Icon>
-            <span>{{item.name}}***{{item.menuHref}}</span>
+            <span>{{item.name}}</span>
             <span class="fr">
-                <Icon type="chevron-right" v-show="!item.show"></Icon>
-                <Icon type="chevron-down" v-show="item.show"></Icon>
-              </span>
+                    <Icon type="chevron-right" v-show="item.id != lastmenu"></Icon>
+                    <Icon type="chevron-down" v-show="item.id == lastmenu"></Icon>
+                  </span>
           </a>
-          <ul v-show="item.show">
+          <ul>
             <li v-for="subitem in item.childrens" :key="subitem.id">
-              <router-link :to="subitem.menuHref | transformUrl" active-class="active">{{subitem.name}}{{subitem.menuHref}}</router-link>
+              <router-link :to="subitem.menuHref | transformUrl" active-class="active">{{subitem.name}}</router-link>
             </li>
           </ul>
         </li>
@@ -32,12 +34,21 @@
           </router-link>
         </li>
       </ul>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
 .asideTitle {
   color: #5c798f;
   margin: 15px 15px 10px;
+}
+
+.nav_warp {
+  position: relative;
+  width: 217px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .layout-aside {
@@ -60,19 +71,24 @@
     position: relative;
     display: block;
     &.active {
+      ul {
+        height: auto
+      }
       &>a {
         background: #131e26;
       }
     }
-    ul{
+    ul {
       background-color: #131e26;
+      height: 0px;
+      overflow: hidden;
     }
     li {
       a {
         padding-left: 55px;
-        &.active{
+        &.active {
           background-color: #16232d;
-          color:#fff;
+          color: #fff;
         }
       }
     }
@@ -120,14 +136,11 @@
   }
 }
 </style>
-<style lang="scss">
-
-</style>
 <script>
 export default {
   data() {
     return {
-      // activeName: "fix.auth.user"
+      lastmenu: window.localStorage.getItem("menuId")
     }
   },
   computed: {
@@ -138,29 +151,22 @@ export default {
     },
     currentMenu: v => v.$store.state.appMenu.currentApp,
   },
-  created() {
-    console.log(this.$route)
-  },
-  mounted() {
-    this.$nextTick(function () {
-    });
-  },
   props: ['asideIndent', 'Asidefixed', 'headerFixed'],
   methods: {
-    changeRoute(go) {
-      go = go.replace(/\./g, "/")
-      this.$router.replace("/" + go)
-    },
     drowpDown(item) {
-      this.$set(item, "show", !item.show)
-    }
+      if (this.lastmenu == item.id) {
+        this.lastmenu = ""
+        window.localStorage.setItem("menuId", "")
+      } else {
+        this.lastmenu = item.id
+        window.localStorage.setItem("menuId", item.id)
+      }
+
+    },
   },
-  filters:{
-    transformUrl(val){
-      // val = val.split(".")
-      // val = val[val.length-1]
-      console.log(val)
-      val = "/"+val.replace(/\./g, "/")
+  filters: {
+    transformUrl(val) {
+      val = "/" + val.replace(/\./g, "/")
       return val
     }
   }
