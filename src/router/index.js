@@ -8,6 +8,7 @@ const authUser = resolve => require(['../views/system/auth/user.vue'], resolve)
 const authMenu = resolve => require(['../views/system/auth/menu.vue'], resolve)
 
 const tableStatic = resolve => require(['../views/example/table/tableStatic.vue'], resolve)
+const dataTable = resolve => require(['../views/example/table/dataTable.vue'], resolve)
 
 
 Vue.use(Router)
@@ -35,6 +36,10 @@ export default new Router({
 					path: 'tablestatic',
 					name: "app.table.tablestatic",
 					component: tableStatic
+				}, {
+					path: 'datatable',
+					name: "app.table.datatable",
+					component: dataTable
 				}]
 			}]
 		}, {
