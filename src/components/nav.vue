@@ -19,7 +19,7 @@
           <Icon type="arrow-down-b"></Icon>
         </a>
         <div class="dropdown-area" v-show="dropdown">
-          <div @click="changeMenu(userapp)" v-for="userapp in applist">
+          <div @click="changeMenu(userapp)" v-for="userapp in applist" :key="userapp.id">
             <p>{{userapp.name}}</p>
             <img :src="'../../static'+userapp.menuIconclass" width="100" height="100" alt="">
           </div>
@@ -56,11 +56,8 @@ export default {
     changeIndent() {
       this.$store.commit("changeSetting", 4)
     },
-    // changeMenu(type){
-    //   console.log(type)
-    // },
     ...mapActions([
-      'changeMenu' // 映射 this.increment() 为 this.$store.dispatch('increment')
+      'changeMenu'
     ]),
   },
   components: {

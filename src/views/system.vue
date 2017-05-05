@@ -3,14 +3,15 @@
     <layout-nav   :asideIndent="asideIndent" :headerFixed="true" :asidefixed="true"></layout-nav>
     <layout-aside :asideIndent="asideIndent" :headerFixed="true" :Asidefixed="true"></layout-aside>
     <div class="layout-content">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
 <style scoped>
   .layout-content{
     position: absolute;
-    z-index:199999;
     top:50px;
     bottom: 0px;
     left: 0px;
@@ -52,7 +53,7 @@
             applist.push(node)
           }
         }, this);
-        const currentApp = applist[0]
+        const currentApp = applist[1]
         var state = {applist,currentApp}
         this.$store.dispatch("getMenu",state)
       }

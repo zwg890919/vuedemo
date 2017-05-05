@@ -20,25 +20,35 @@ export default new Router({
     }, {
       path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
     }, {
       path: '/fix',
       name: 'fix',
       component: System,
       children: [{
         path: '',
-        redirect: 'auth/user',
+        redirect: 'auth',
       }, {
         path: 'auth',
-        template:"<router-view></router-view>",
+        component: {
+          template: "<keep-alive><router-view></router-view></keep-alive>",
+        },
         children: [{
           path: '',
           redirect: 'user',
         }, {
           path: 'user',
           component: authUser
+        }, {
+          path: 'userpck',
+          component: authUser
+        }, {
+          path: 'menu',
+          component: authUser
+        } ,{
+          path: 'tenant',
+          component: authUser
         }]
-
       }]
     }
   ]
