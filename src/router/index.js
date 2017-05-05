@@ -31,7 +31,7 @@ export default new Router({
         redirect: 'auth',
       }, {
         path: 'auth',
-        name:"app.auth",
+        name: "app.auth",
         component: {
           template: "<keep-alive><router-view></router-view></keep-alive>",
         },
@@ -40,19 +40,19 @@ export default new Router({
           redirect: 'user',
         }, {
           path: 'user',
-          name:"fix.auth.user",
+          name: "fix.auth.user",
           component: authUser
         }, {
           path: 'userpck',
-          name:"fix.auth.userpck",
+          name: "fix.auth.userpck",
           component: authUser
         }, {
           path: 'menu',
-          name:"fix.auth.menu",
+          name: "fix.auth.menu",
           component: authMenu
-        } ,{
+        }, {
           path: 'tenant',
-          name:"fix.auth.tenant",
+          name: "fix.auth.tenant",
           component: authUser
         }]
       }]

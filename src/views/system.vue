@@ -13,7 +13,7 @@
   .layout-content{
     position: absolute;
     top:50px;
-    bottom: 0px;
+    bottom: 5px;
     left: 0px;
     right: 0px;
     overflow-y: auto
