@@ -24,16 +24,16 @@
 			</i-input>
 			<Row :gutter="20">
 				<Col span="16">
-				<i-input 
-					type="text" 
-					class="login-wrap__input validate" 
-					v-model="formInline.verifyCode" 
-					size="large" 
-					placeholder="请输入验证码">
-				</i-input>
+					<i-input 
+						type="text" 
+						class="login-wrap__input validate" 
+						v-model="formInline.verifyCode" 
+						size="large" 
+						placeholder="请输入验证码">
+					</i-input>
 				</Col>
 				<Col span="4">
-				<img src="api/verifycode" style="height:36px;" />
+					<img src="api/verifycode" style="height:36px;" />
 				</Col>
 			</Row>
 			<Button type="primary" long size="large" style="margin-top:15px;" @click="getToken">登陆</Button>
@@ -50,7 +50,6 @@
 <script>
 import api from "../../api"
 
-<<<<<<< HEAD
 export default {
 	data() {
 		return {
@@ -83,7 +82,7 @@ export default {
 	left: 0;
 	bottom: 0;
 	right: 0;
-	background: url("../../assets/image/login/bg.jpg") center no-repeat;
+	background: url("../../assets/images/login/bg.jpg") center no-repeat;
 	background-size: 100% auto;
 	&-header {
 		height: 70px;
@@ -98,7 +97,7 @@ export default {
 				float: left;
 				width: 105px;
 				height: 30px;
-				background: url(../../assets/image/login/loginicon.png);
+				background: url(../../assets/images/login/loginicon.png);
 			}
 			span {
 				float: left;
@@ -146,7 +145,7 @@ export default {
 				width: 16px;
 				height: 12px;
 				margin-top: -6px;
-				background: url('../../assets/image/login/loginicon.png') no-repeat 0 -36px;
+				background: url('../../assets/images/login/loginicon.png') no-repeat 0 -36px;
 			}
 			input {
 				padding-left: 35px;
@@ -158,7 +157,7 @@ export default {
 				width: 10px;
 				height: 14px;
 				margin-top: -7px;
-				background: url('../../assets/image/login/loginicon.png') no-repeat -38px -35px;
+				background: url('../../assets/images/login/loginicon.png') no-repeat -38px -35px;
 			}
 		}
 		.validate {
@@ -167,95 +166,7 @@ export default {
 				width: 16px;
 				height: 12px;
 				margin-top: -5px;
-				background: url('../../assets/image/login/loginicon.png') no-repeat -84px -37px;
-=======
-  export default {
-    data(){
-      return {
-        formInline:{
-          userMobile:"13800000000",
-          userPassword:"123456",
-          verifyCode:""
-        }
-      }
-    },
-    methods: {
-       async getToken() { //
-        var data = await api.login(this.formInline)
-        if(data.success){
-          // this.$totast.success({
-          //   title:"一条提示信息啊",
-          //   message:"这是一条提示信息啊一条提示信息啊"
-          // })
-          this.$router.push("home")
-        }
-      }
-    }
-  }
-</script>
-<style lang="scss">
-  .login {
-    background: url("../../assets/images/login/bg.jpg") center no-repeat;
-    background-size:100% auto;
-    position:absolute;
-    top:0;
-    left:0;
-    bottom:0;
-    right:0;
-    &-header{
-      height:70px;
-      background:#ffffff;
-      opacity:0.9;
-      .login-container{
-        width:970px;
-        margin:0px auto;
-        height: 30px;
-        padding: 20px 0;
-        .login-header-logo{
-          background: url(../../assets/images/login/loginicon.png);
-          width: 105px;
-          height: 30px;
-          top: 0;
-          float: left;
-        }
-        span{
-          padding:0px 15px;
-          margin:7px 0px 7px 15px;
-          font-size:16px;
-          height:18px;
-          line-height:18px;
-          float:left;
-          color:#679fd7;
-          border-left:1px solid #127fce
-        }
-      }
-    }
-    &-bottom{
-      height:75px;
-      background:#fff;
-      opacity:0.9;
-      position:absolute;
-      bottom:0px;
-      width:100%;
-      p{
-        text-align:center;
-        line-height:75px;
-      }
-    }
-    &-wrap{
-      position: absolute;
-      height: 350px;
-      width: 400px;
-      padding:0px 50px;
-      top: 20%;
-      right: 10%;
-      z-index: 101;
-      zoom: 1;
-      background: #ffffff;
-      opacity: 0.90;
-			&__input{
-				margin:0px 0px 15px;
->>>>>>> master
+				background: url('../../assets/images/login/loginicon.png') no-repeat -84px -37px;
 			}
 		}
 	}
