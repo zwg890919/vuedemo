@@ -1,44 +1,54 @@
 <template>
   <div class="layout-aside" :class="{'asideIndent':asideIndent,'layout-fixed':Asidefixed,'aside-fixed':!Asidefixed&&headerFixed}">
-    <ul>
-      <li class="layout-aside__title">快捷菜单</li>
-      <li class="layout-aside__item layout-aside__quick">
-        <a href="">
-          <Icon type="ios-paper"></Icon>
-          应用主页
-        </a>
-      </li>
-      <li class="line"></li>
-      <li class="layout-aside__title">{{currentMenu.name}}</li>
-      <li class="layout-aside__item" v-for="item in currentMenu.childrens"
-          v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
-        <a @click="drowpDown(item)">
-          <Icon type="ios-paper"></Icon>
-          <span>{{item.name}}</span>
-          <span class="fr">
-            <Icon type="chevron-right" v-show="item.id != lastmenu"></Icon>
-            <Icon type="chevron-down" v-show="item.id == lastmenu"></Icon>
-          </span>
-        </a>
-        <ul>
-          <li v-for="subitem in item.childrens" :key="subitem.id">
-            <router-link :to="subitem.menuHref | transformUrl" active-class="active">{{subitem.name}}</router-link>
-          </li>
-        </ul>
-      </li>
-      <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
-        <router-link :to="item.menuHref | transformUrl">
-          <Icon type="ios-paper"></Icon>
-          <span>{{item.name}}</span>
-        </router-link>
-      </li>
-    </ul>
+    <div class="nav_warp">
+      <ul>
+        <li class="layout-aside__title">快捷菜单</li>
+        <li class="layout-aside__item layout-aside__quick">
+          <a href="">
+            <Icon type="ios-paper"></Icon>
+            应用主页
+          </a>
+        </li>
+        <li class="line"></li>
+
+        <li class="layout-aside__title">{{currentMenu.name}}</li>
+        <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
+          <a @click="drowpDown(item)">
+            <Icon type="ios-paper"></Icon>
+            <span>{{item.name}}</span>
+            <span class="fr">
+                    <Icon type="chevron-right" v-show="item.id != lastmenu"></Icon>
+                    <Icon type="chevron-down" v-show="item.id == lastmenu"></Icon>
+                  </span>
+          </a>
+          <ul>
+            <li v-for="subitem in item.childrens" :key="subitem.id">
+              <router-link :to="subitem.menuHref | transformUrl" active-class="active">{{subitem.name}}</router-link>
+            </li>
+          </ul>
+        </li>
+        <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
+          <router-link :to="item.menuHref | transformUrl">
+            <Icon type="ios-paper"></Icon>
+            <span>{{item.name}}</span>
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
 .asideTitle {
   color: #5c798f;
   margin: 15px 15px 10px;
+}
+
+.nav_warp {
+  position: relative;
+  width: 217px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .layout-aside {
@@ -144,10 +154,10 @@ export default {
   props: ['asideIndent', 'Asidefixed', 'headerFixed'],
   methods: {
     drowpDown(item) {
-      if(this.lastmenu == item.id){
+      if (this.lastmenu == item.id) {
         this.lastmenu = ""
         window.localStorage.setItem("menuId", "")
-      }else{
+      } else {
         this.lastmenu = item.id
         window.localStorage.setItem("menuId", item.id)
       }

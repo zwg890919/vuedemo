@@ -5,6 +5,7 @@ import System from '@/views/system'
 import Login from '@/views/login/login'
 
 const authUser = resolve => require(['../views/system/auth/user.vue'], resolve)
+const authMenu = resolve => require(['../views/system/auth/menu.vue'], resolve)
 
 Vue.use(Router)
 
@@ -48,7 +49,7 @@ export default new Router({
         }, {
           path: 'menu',
           name:"fix.auth.menu",
-          component: authUser
+          component: authMenu
         } ,{
           path: 'tenant',
           name:"fix.auth.tenant",

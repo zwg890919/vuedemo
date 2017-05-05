@@ -8,5 +8,8 @@ module.exports = {
     'Content-Type': 'application/json; charset=UTF-8'
   },
   getToken: "/dologin",
-  getMenu: "/auth/menu/user?pageid=10011"
+  getMenu: "/auth/menu/user?pageid=10011",
+
+  /****全局菜单****/
+  globalMenu: "/auth/menu/global"
 }
