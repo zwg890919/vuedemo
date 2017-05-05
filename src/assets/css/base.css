@@ -141,5 +141,7 @@ a:focus,*:focus {
 .fr {
     float:right;
 }
-
+html,body{
+  height:100%;
+}
 

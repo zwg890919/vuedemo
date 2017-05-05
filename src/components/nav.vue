@@ -1,6 +1,6 @@
 <template>
   <div class="layout-nav" :class="{'layout-fixed':headerFixed}">
-    <div class="layout-nav__header" :class="{'layout-indent':asideIndent}">
+    <div class="layout-nav__header" :class="{'layout-indent':asideIndent,'layout-fixed':asidefixed||headerFixed}">
       <a href="" class="navbar-brand">
         <Icon type="ionic"></Icon>
         <span v-show="!asideIndent">聚有财理财</span>
@@ -15,17 +15,13 @@
       </a>
       <div class="layout-nav-dropdown" :class="{active : dropdown}">
         <a @click="dropdown = !dropdown">
-                应用
-                <Icon type="arrow-down-b"></Icon>
-              </a>
+          应用
+          <Icon type="arrow-down-b"></Icon>
+        </a>
         <div class="dropdown-area" v-show="dropdown">
-          <div>
-            <p>实例演示</p>
-            <img src="../assets/image/app_monitor.png" width="100" height="100" alt="">
-          </div>
-          <div>
-            <p>后台设置</p>
-            <img src="../assets/image/app_setting.png" width="100" height="100" alt="">
+          <div @click="changeMenu(userapp)" v-for="userapp in applist" :key="userapp.id">
+            <p>{{userapp.name}}</p>
+            <img :src="'../../static'+userapp.menuIconclass" width="100" height="100" alt="">
           </div>
         </div>
       </div>
@@ -43,6 +39,8 @@
 </template>
 <script>
 import setting from "./setting"
+import { mapActions } from 'vuex'
+
 export default {
   data() {
     return {
@@ -50,13 +48,19 @@ export default {
       settingshow: false,
     }
   },
-  props: ["asideIndent", 'headerFixed'],
+  props: ["asideIndent", 'headerFixed', 'asidefixed'],
+  computed: {
+    applist: v => v.$store.state.appMenu.applist
+  },
   methods: {
     changeIndent() {
       this.$store.commit("changeSetting", 4)
-    }
+    },
+    ...mapActions([
+      'changeMenu'
+    ]),
   },
-  components:{
+  components: {
     setting
   }
 }
