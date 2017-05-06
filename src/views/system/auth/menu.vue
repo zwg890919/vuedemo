@@ -3,7 +3,16 @@
         <div>
             <ul>
                 <li class="row-row">
-                    <tree :treedata="treedata.childrens"></tree>
+                    <!--<tree :treedata="treedata.childrens"></tree>-->
+                    <jyc-tree
+                        :treedata="treedata.childrens"
+                        :showCheckbox="false"
+                        @tree-dbclick="treedbclick"
+                        @tree-click="treeClick"
+                        @tree-close="treeClose"
+                        @tree-extend="treeExtend"
+                        @tree-check="treeCheck">
+                    </jyc-tree>
                 </li>
                 <li class="menu-bottom">
                     <Button type="success">
@@ -30,7 +39,7 @@
 </template>
 <script>
 import api from "@/api/"
-import tree from "@/components/tree"
+// import tree from "@/components/tree"
 
 export default {
     data() {
@@ -44,16 +53,30 @@ export default {
     methods: {
         async getMenu() {
             const data = await api.get(api.config.globalMenu)
-            // console.log(data)
             this.treedata = data.datas.result;
+        },
+        treedbclick(){
+            console.log("双击")
+        },
+        treeClick(){
+            console.log("选择")
+        },
+        treeClose(){
+            console.log("删除")
+        },
+        treeExtend(){
+            console.log("展开")
+        },
+        treeCheck(data){
+            // console.log(data)
         }
     },
     components:{
-        tree
+        // tree
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .gobal-menu {
     color: #58666e;
     background-color: #edf1f2;
