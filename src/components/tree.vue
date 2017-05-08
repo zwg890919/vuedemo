@@ -1,14 +1,30 @@
+<template>
+    <div class="menu-warp">
+        <ul>
+            <li v-for="item in data">
+                <a @click="nodeClick(item)" @dblclick="dnodeClick" :class="{active:item.id == selectNode}">
+                    <Icon type="minus-round" @click.native="extendMenu()"></Icon>
+                    <Icon type="folder" class="menu-folder"></Icon>
+                    <span>{{item.name}}</span>
+                    <Icon type="close" class="delMenu" @click.native="delMenu()"></Icon>
+                </a>
+            </li>
+        </ul>
+    </div>
+</template>
 <script>
 export default {
     data() {
         return {
+            data: {},
             selectNode: ""
         }
     },
-    props: {
-        treedata: {
-            type: Array,
-            default: function () { return [] }
+    props: ['treedata'],
+    watch: {
+        treedata(val) {
+            this.data = val.childrens
+            console.log(this.data)
         }
     },
     methods: {
@@ -19,82 +35,13 @@ export default {
         dnodeClick() {
             console.log(2)
         },
-        delMenu() {
+        delMenu(){
             console.log(3)
         },
-        extendMenu() {
+        extendMenu(){
             console.log(4)
         }
-    },
-    render: function (h, context) {
-        if (this.treedata.length > 0) {
-            var treeNode = [];
-            this.treedata.map(function (item) {
-                treeNode.push(drawNode(item, h))
-                item.childrens.map(function (subItem) {
-                    treeNode.push(drawNode(subItem, h))
-                    subItem.childrens.map(function (childItem) {
-                        treeNode.push(drawNode(childItem, h))
-                        childItem.childrens.map(function (xchildItem) {
-                            treeNode.push(drawNode(xchildItem, h))
-                        })
-                    })
-                })
-            })
-            return h(
-                'div', {
-                    attrs: {
-                        class: "menu-warp"
-                    }
-                }, [h("ul", treeNode
-                )]
-            )
-        }
     }
-}
-var drawNode = function (item, h) {
-
-    var _this = this
-    item.IconType = "minus-round"
-    if (item.childrens.length > 0) {
-        var menuType = "folder"
-        var menuTypeClass = "menu-folder"
-        var treePlue = h("Icon", {
-            attrs: {
-                type: item.IconType
-            },
-            nativeOn: {
-                click: function (event) {
-                    console.log(31)
-                    item.IconType = "plus-round"
-                }
-            }
-        })
-    } else {
-        var menuType = "android-document"
-        var menuTypeClass = "menu-document"
-        var treePlus = ""
-    }
-    return h("li", {
-        class: "level-" + item.level,
-    }, [
-            h("a", [
-                treePlue,
-                h("Icon", {
-                    attrs: {
-                        type: menuType
-                    },
-                    class: menuTypeClass
-                }),
-                h("span", item.name),
-                h("Icon", {
-                    attrs: {
-                        type: "close",
-                    },
-                    class: "delMenu"
-                })
-            ])
-        ])
 }
 </script>
 <style lang="scss">
@@ -110,22 +57,6 @@ var drawNode = function (item, h) {
     }
     ul {
         li {
-            &.level-1 {
-                position: relative;
-                left: 0;
-            }
-            &.level-2 {
-                position: relative;
-                left: 20px;
-            }
-            &.level-3 {
-                position: relative;
-                left: 60px;
-            }
-            &.level-4 {
-                position: relative;
-                left: 80px;
-            }
             a {
                 position: relative;
                 display: block;
@@ -151,15 +82,10 @@ var drawNode = function (item, h) {
                     font-size: 20px;
                     margin: 0px 8px;
                 }
-                .menu-document {
-                    color: #51c6ea;
-                    font-size: 20px;
-                    margin: 0px 8px;
-                }
                 .delMenu {
                     float: right;
                     display: none;
-                    margin-top: 3px;
+                    margin-top:3px;
                     vertical-align: middle;
                 }
                 &:hover {
@@ -172,3 +98,4 @@ var drawNode = function (item, h) {
     }
 }
 </style>
+

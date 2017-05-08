@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import iView from 'iview'
 import vueToast from '../plugin/toast/'
+import jycTree from '../plugin/tree'
 import VueCookie from 'vue-cookie'
 // Tell Vue to use the plugin
 import axios from 'axios'
@@ -17,6 +18,7 @@ import '../plugin/toast/index.css'
 Vue.use(iView)
 Vue.use(VueCookie)
 Vue.use(vueToast)
+Vue.use(jycTree)
 
 Vue.config.productionTip = false
 
