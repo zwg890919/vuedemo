@@ -60,6 +60,9 @@ export default {
 			}
 		}
 	},
+	created() {
+		window.localStorage.removeItem('menuId');
+	},
 	methods: {
 		async getToken() { 
 			var data = await api.login(this.formInline)
@@ -83,7 +86,7 @@ export default {
 	bottom: 0;
 	right: 0;
 	background: url("../../assets/images/login/bg.jpg") center no-repeat;
-	background-size: 100% auto;
+	background-size: cover;
 	&-header {
 		height: 70px;
 		background: #fff;

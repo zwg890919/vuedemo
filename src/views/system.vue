@@ -16,7 +16,7 @@
     bottom: 5px;
     left: 0px;
     right: 0px;
-    overflow-y: auto
+    overflow-y: auto;
 }
 </style>
 <script>

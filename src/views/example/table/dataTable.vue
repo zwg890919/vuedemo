@@ -1,7 +1,7 @@
 <template>
     <div class="wrap">
         <h2>dataTable</h2>
-        <div class="table">
+        <div class="table clearfix">
             <Table :context="self" :data="tableData1" :columns="tableColumns1" stripe>
             </Table>
             <div class="table-page fr">
@@ -126,7 +126,6 @@ export default {
     }
     .table {
         padding: 20px;
-        overflow: hidden;
         .table-page{
             margin-top: 20px;
         }

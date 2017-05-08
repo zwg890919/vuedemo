@@ -10,6 +10,9 @@ const authMenu = resolve => require(['../views/system/auth/menu.vue'], resolve)
 const tableStatic = resolve => require(['../views/example/table/tableStatic.vue'], resolve)
 const dataTable = resolve => require(['../views/example/table/dataTable.vue'], resolve)
 
+const slider = resolve => require(['../views/example/form/slider.vue'], resolve)
+const elements = resolve => require(['../views/example/form/elements.vue'], resolve)
+
 
 Vue.use(Router)
 
@@ -40,6 +43,21 @@ export default new Router({
 					path: 'datatable',
 					name: "app.table.datatable",
 					component: dataTable
+				}]
+			}, {
+				path: 'form',
+				name: "app.form",
+				component: {
+					template: "<keep-alive><router-view></router-view></keep-alive>",
+				},
+				children: [{
+					path: 'slider',
+					name: "app.form.slider",
+					component: slider
+				}, {
+					path: 'elements',
+					name: "app.form.elements",
+					component: elements
 				}]
 			}]
 		}, {
