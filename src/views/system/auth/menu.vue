@@ -4,15 +4,17 @@
             <ul>
                 <li class="row-row">
                     <!--<tree :treedata="treedata.childrens"></tree>-->
-                    <jyc-tree
-                        :treedata="treedata.childrens"
-                        :showCheckbox="false"
-                        @tree-dbclick="treedbclick"
-                        @tree-click="treeClick"
-                        @tree-close="treeClose"
-                        @tree-extend="treeExtend"
-                        @tree-check="treeCheck">
-                    </jyc-tree>
+                    <div class="scroll-cell">
+                        <jyc-tree v-if="false"
+                            :treedata="treedata.childrens"
+                            :showCheckbox="false"
+                            @tree-dbclick="treedbclick"
+                            @tree-click="treeClick"
+                            @tree-close="treeClose"
+                            @tree-extend="treeExtend"
+                            @tree-check="treeCheck">
+                        </jyc-tree>
+                    </div>
                 </li>
                 <li class="menu-bottom">
                     <Button type="success">
@@ -25,7 +27,7 @@
         <div>
             <ul>
                 <li class="row-row bg-white">
-                    12312313
+                    <menu-info :data="currentData"></menu-info>
                 </li>
                 <li class="menu-bottom ltr">
                     <Button type="success">
@@ -39,12 +41,12 @@
 </template>
 <script>
 import api from "@/api/"
-// import tree from "@/components/tree"
-
+import menuInfo from "@/views/system/auth/menu/menuinfo"
 export default {
     data() {
         return {
-            treedata:{}
+            treedata:{},
+            currentData:{}
         }
     },
     created() {
@@ -58,8 +60,8 @@ export default {
         treedbclick(){
             console.log("双击")
         },
-        treeClick(){
-            console.log("选择")
+        treeClick(data){
+            console.log(data)
         },
         treeClose(){
             console.log("删除")
@@ -72,7 +74,7 @@ export default {
         }
     },
     components:{
-        // tree
+        menuInfo
     }
 }
 </script>
@@ -107,6 +109,14 @@ export default {
                 background: #edf1f2;
                 &.bg-white {
                     background: #fff;
+                }
+                .scroll-cell{
+                    position: absolute;
+                    top:0px;
+                    left:0px;
+                    right:0px;
+                    bottom:0px;
+                    overflow: auto
                 }
             }
             .menu-bottom {

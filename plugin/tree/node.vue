@@ -12,7 +12,7 @@
                 <span  @click="nodeClick">
                     <Icon type="folder" class="menu-folder" v-if="itemdata.childrens.length>0"></Icon>
                     <Icon type="android-document" :class="{'ml-m':showCheckbox}" class="menu-document" v-if="itemdata.childrens.length==0"></Icon>
-                    <span>{{itemdata.name}}{{itemdata.checkState}}</span>
+                    <span>{{itemdata.name}}</span>
                 </span>
                 <Icon type="close" class="delMenu" @click.native="delMenu()"></Icon>
             </a>
