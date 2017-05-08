@@ -149,12 +149,12 @@ export default {
                 .menu-folder {
                     color: #fad733;
                     font-size: 20px;
-                    margin: 0px 8px;
+                    margin: 0px 3px 0px 8px;
                 }
                 .menu-document {
                     color: #51c6ea;
                     font-size: 20px;
-                    margin: 0px 8px 0px 20px;
+                    margin: 0px 8px 0px 10px;
                     &.ml-m {
                         margin-left: 10px;
                     }

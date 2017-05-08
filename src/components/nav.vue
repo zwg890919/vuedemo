@@ -13,8 +13,8 @@
       <a class="nav-btn">
         <Icon type="ios-person-outline"></Icon>
       </a>
-      <div class="layout-nav-dropdown" :class="{active : dropdown}">
-        <a @click="dropdown = !dropdown">
+      <div class="layout-nav-dropdown" :class="{active : dropdown}" @click="dropdown = !dropdown">
+        <a >
           应用
           <Icon type="arrow-down-b"></Icon>
         </a>

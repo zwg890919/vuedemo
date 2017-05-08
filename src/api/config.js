@@ -11,5 +11,6 @@ module.exports = {
     getMenu: "/auth/menu/user?pageid=10011",
 
     /****全局菜单****/
-    globalMenu: "/auth/menu/global"
+    globalMenu: "/auth/menu/global",
+    itemList:"/auth/item/list"
 }
