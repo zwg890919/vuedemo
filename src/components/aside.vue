@@ -10,7 +10,7 @@
                     </a>
                 </li>
                 <li class="line"></li>
-    
+
                 <li class="layout-aside__title">{{currentMenu.name}}</li>
                 <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
                     <a @click="drowpDown(item)">

@@ -59,7 +59,18 @@ export default new Router({
 					name: "app.form.elements",
 					component: elements
 				}]
-			}]
+			},{
+                path:"ui",
+                name:"app.ui",
+                component:{
+                    template: "<keep-alive><router-view></router-view></keep-alive>",
+                },
+                children:[{
+                    path:"css",
+                    name:"app.ui.css",
+                    component:resolve => require(['../views/example/ui/css.vue'], resolve)
+                }]
+            }]
 		}, {
 			path: '/fix',
 			name: 'fix',

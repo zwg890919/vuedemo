@@ -23,34 +23,43 @@ Vue.use(jycTree)
 Vue.config.productionTip = false
 
 axios.interceptors.response.use(  //请求拦截
-  response => {
-    return response;
-  },
-  error => {
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          router.push('/login')
-          break;
-      }
-    }
-    return Promise.reject(error.response.data)   // 返回接口返回的错误信息
-  });
+    response => {
+        if (response.data.success) {
+            return response;
+        } else {
+            Apper.$totast.error({
+			    title:"错误提示",
+			    message:response.data.i18nMessage
+			})
+            return false
+        }
+
+    },
+    error => {
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    router.push('/login')
+                    break;
+            }
+        }
+        return Promise.reject(error.response.data)   // 返回接口返回的错误信息
+    });
 
 // 路由拦截实现缺省
 router.beforeEach((to, from, next) => {
-  if (to.matched.length > 0) {
-    next()
-  } else {
-    next("/app")
-  }
+    if (to.matched.length > 0) {
+        next()
+    } else {
+        next("/app")
+    }
 })
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
+const Apper = new Vue({
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: { App }
 })

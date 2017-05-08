@@ -3,14 +3,14 @@ module.exports = {
 
     timeout: 30000,
     headers: {
-        //Authorization: 'Bearer ' + sessionStorage.getItem('token'),
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/json; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded'
     },
     getToken: "/dologin",
     getMenu: "/auth/menu/user?pageid=10011",
 
     /****全局菜单****/
     globalMenu: "/auth/menu/global",
-    itemList:"/auth/item/list"
+    itemList:"/auth/item/list",
+    authMenu:"/auth/menu"
 }
