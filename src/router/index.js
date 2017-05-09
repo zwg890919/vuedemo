@@ -69,6 +69,10 @@ export default new Router({
                     path:"css",
                     name:"app.ui.css",
                     component:resolve => require(['../views/example/ui/css.vue'], resolve)
+                }, {
+                    path:"timeline",
+                    name:"app.ui.timeline",
+                    component:resolve => require(['../views/example/ui/timeline.vue'], resolve)
                 }]
             }]
 		}, {
@@ -106,5 +110,21 @@ export default new Router({
 				}]
 			}]
 		}
-	]
+	],
+    mode: 'history',
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            const position = {}
+            if (to.hash) {
+            position.selector = to.hash
+            }
+            if (to.matched.some(m => m.meta.scrollToTop)) {
+            position.x = 0
+            position.y = 0
+            }
+            return position
+        }
+    }
 })
