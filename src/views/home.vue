@@ -57,5 +57,31 @@ export default {
 .fixed-padding-t {
 	padding-top: 50px;
 }
+.jyc-wrap {
+	// ivew样式覆盖
+	.ivu-card{
+		margin:20px;
+		position:relative;
+	}
+    h2 {
+        padding: 20px;
+        color: #58666e;
+        font-size: 24px;
+        font-weight: normal;
+        border-bottom: 1px solid #dee5e7;
+        background: #f6f8f8;
+    }
+    .card-box{
+    	padding:20px;
+    }
+    .line{
+    	display: block;
+	    position: absolute;
+	    top: 0;
+	    bottom: 0;
+	    left: 50%;
+	    border: 1px dashed #eee;
+    }
+}
 </style>
 
