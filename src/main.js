@@ -1,5 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import "babel-polyfill" //解决IE浏览器promiss
+
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -15,11 +17,10 @@ import '../my-theme/dist/iview.css';
 import './assets/css/base.css'
 import '../plugin/toast/index.css'
 
-import "babel-polyfill" //解决IE浏览器promiss
 
 Vue.use(iView)
 Vue.use(VueCookie)
-// Vue.use(vueToast)
+Vue.use(vueToast)
 Vue.use(jycTree)
 
 Vue.config.productionTip = false
