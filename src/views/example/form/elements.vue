@@ -2,6 +2,10 @@
     <div class="wrap">
         <h2>Form Elements</h2>
         <div class="input-wrap">
+            <Row>
+                <Col :span="12"></Col>
+                <Col :span="12"></Col>
+            </Row>
             <Input v-model="value1" size="large" placeholder="large size"></Input>
             <Input v-model="value2" placeholder="default size"></Input>
             <Input v-model="value3" size="small" placeholder="small size"></Input>

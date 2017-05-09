@@ -14,7 +14,7 @@
     position: absolute;
     top:50px;
     bottom: 5px;
-    left: 0px;
+    left: 200px;
     right: 0px;
     overflow-y: auto;
 }
