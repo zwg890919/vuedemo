@@ -1,20 +1,21 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import "babel-polyfill" //解决IE浏览器promiss
 
 import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
 import iView from 'iview'
-import vueToast from '../plugin/toast/'
-import jycTree from '../plugin/tree'
+import vueToast from './plugin/toast/'
+import jycTree from './plugin/tree'
 import VueCookie from 'vue-cookie'
 // Tell Vue to use the plugin
 import axios from 'axios'
 
 import '../my-theme/dist/iview.css';
 import './assets/css/base.css'
-import '../plugin/toast/index.css'
+import './plugin/toast/index.css'
 
 
 Vue.use(iView)
