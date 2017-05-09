@@ -11,7 +11,7 @@ var toastInt = function (type, tips, Vue) {
         },
         mounted() {
             var _this = this;
-            setTimeout(function () {        // 4、延迟2.5秒后移除该提示
+            setTimeout(function () {
                 _this.toastshow = false;
             }, 2500)
         },
@@ -23,19 +23,19 @@ var toastInt = function (type, tips, Vue) {
 Toast.install = function (Vue) {
 
     Vue.prototype.$totast = {
-        success: (tips) => {
+        success: function(tips) {
             toastInt("success", tips, Vue);
         },
-        info: (tips) => {
+        info: function(tips) {
             toastInt("info", tips, Vue);
         },
-        wait: (tips) => {
+        wait: function(tips) {
             toastInt("wait", tips, Vue);
         },
-        error: (tips) => {
+        error: function(tips) {
             toastInt("error", tips, Vue);
         },
-        warning: (tips) => {
+        warning: function(tips) {
             toastInt("warning", tips, Vue);
         },
     }
