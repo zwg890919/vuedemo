@@ -15,10 +15,7 @@ import '../my-theme/dist/iview.css';
 import './assets/css/base.css'
 import '../plugin/toast/index.css'
 
-var Promise =require('promise-polyfill')
-if (!window.Promise) {
-    window.Promise = Promise;
-}
+import "babel-polyfill" //解决IE浏览器promiss
 
 Vue.use(iView)
 Vue.use(VueCookie)
