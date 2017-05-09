@@ -15,7 +15,10 @@ import '../my-theme/dist/iview.css';
 import './assets/css/base.css'
 import '../plugin/toast/index.css'
 
-
+var Promise =require('promise-polyfill')
+if (!window.Promise) {
+    window.Promise = Promise;
+}
 
 Vue.use(iView)
 Vue.use(VueCookie)
