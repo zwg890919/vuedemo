@@ -12,7 +12,7 @@
 				type="text" 
 				class="login-wrap__input" 
 				v-model="formInline.userMobile" 
-				size="large" 
+				size="large"
 				placeholder="请输入用户名">
 			</i-input>
 			<i-input 
