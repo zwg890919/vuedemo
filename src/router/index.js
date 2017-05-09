@@ -69,6 +69,10 @@ export default new Router({
                     path:"css",
                     name:"app.ui.css",
                     component:resolve => require(['../views/example/ui/css.vue'], resolve)
+                }, {
+                    path:"timeline",
+                    name:"app.ui.timeline",
+                    component:resolve => require(['../views/example/ui/timeline.vue'], resolve)
                 }]
             }]
 		}, {
