@@ -19,7 +19,7 @@ import "babel-polyfill" //解决IE浏览器promiss
 
 Vue.use(iView)
 Vue.use(VueCookie)
-Vue.use(vueToast)
+// Vue.use(vueToast)
 Vue.use(jycTree)
 
 Vue.config.productionTip = false
