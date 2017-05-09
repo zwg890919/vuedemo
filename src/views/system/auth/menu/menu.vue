@@ -22,9 +22,7 @@
             <ul>
                 <li class="row-row bg-white">
                     <div>
-                        <div class="scroll-cell">
-                            <menu-info :data="itemList"></menu-info>
-                        </div>
+                        <menu-info :itemdata="itemList" :selectItem="selectData"></menu-info>
                     </div>
                 </li>
                 <li class="menu-bottom ltr">
@@ -89,6 +87,7 @@ export default {
         return {
             treedata: {},
             currentData: {},
+            selectData:{},
             addMenu: false,
             itemList: {},
             modalType:"add"
@@ -121,8 +120,10 @@ export default {
         },
         treeClick(data) {
             this.currentData = {};
+            this.selectData = data;
             this.currentData.menuParentName = data.name
             this.currentData.menuParentId = data.id
+            window.location.hash = "#"+data.menuItemId
         },
         treeClose(data) {
             this.$Modal.confirm({
@@ -255,6 +256,12 @@ export default {
                     width: 100%;
                     height: 100%;
                     overflow: hidden;
+                }
+                .search-item{
+                    padding:5px;
+                    height:40px;
+                    border-bottom: #dee5e7 1px solid;
+                    background:#f6f8f8;
                 }
                 .scroll-cell {
                     position: absolute;

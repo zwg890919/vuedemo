@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -14,6 +15,7 @@ import axios from 'axios'
 import '../my-theme/dist/iview.css';
 import './assets/css/base.css'
 import '../plugin/toast/index.css'
+
 
 Vue.use(iView)
 Vue.use(VueCookie)
@@ -48,11 +50,11 @@ axios.interceptors.response.use(  //请求拦截
 
 // 路由拦截实现缺省
 router.beforeEach((to, from, next) => {
-    if (to.matched.length > 0) {
+    // if (to.matched.length > 0) {
         next()
-    } else {
-        next("/app")
-    }
+    // } else {
+    //     next("/app")
+    // }
 })
 
 /* eslint-disable no-new */

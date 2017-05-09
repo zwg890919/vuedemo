@@ -190,6 +190,9 @@
     }
     .layout-aside {
         left: inherit;
+        &:before{
+            left: inherit;
+        }
     }
 }
 .aside-fixed{
