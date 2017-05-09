@@ -73,6 +73,10 @@ export default new Router({
                     path:"timeline",
                     name:"app.ui.timeline",
                     component:resolve => require(['../views/example/ui/timeline.vue'], resolve)
+                }, {
+                    path:"buttons",
+                    name:"app.ui.buttons",
+                    component:resolve => require(['../views/example/ui/buttons.vue'], resolve)
                 }]
             }]
 		}, {

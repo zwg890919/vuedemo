@@ -82,6 +82,9 @@ export default {
 	    left: 50%;
 	    border: 1px dashed #eee;
     }
+    .comp-box{
+    	padding:0 50px;
+    }
 }
 </style>
 
