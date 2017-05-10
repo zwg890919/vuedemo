@@ -67,12 +67,36 @@
 			<Row :gutter="16">
                 <Col span="12">
                     <div class="comp-box">
-                    	 1
+                    	<Button type="primary" @click="modal6 = true">显示对话框</Button>
+                        <Modal
+                            v-model="modal6"
+                            title="对话框标题"
+                            :loading="loading"
+                            @on-ok="asyncOK">
+                            <p>点击确定后，对话框将在 2秒 后关闭。</p>
+                        </Modal>
                     </div>
                 </Col>
                 <Col span="12">
                     <div class="comp-box">
-                        2
+                        <Button @click="modal7 = true">禁用右上角关闭（含Esc键）</Button>
+                        <Modal
+                            title="对话框标题"
+                            v-model="modal7"
+                            :closable="false">
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                        </Modal>
+                        <Button @click="modal8 = true">禁用遮罩层关闭</Button>
+                        <Modal
+                            title="对话框标题"
+                            v-model="modal8"
+                            :mask-closable="false">
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                        </Modal>
                     </div>
                 </Col>
         	</Row>
@@ -82,16 +106,53 @@
 			<Row :gutter="16">
                 <Col span="12">
                     <div class="comp-box">
-                    	 1
+                        <Button @click="modal9 = true">距离顶部 20px</Button>
+                        <Modal
+                            title="对话框标题"
+                            v-model="modal9"
+                            :styles="{top: '20px'}">
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                        </Modal>
+                        <Button @click="modal10 = true">垂直居中</Button>
+                        <Modal
+                            title="对话框标题"
+                            v-model="modal10"
+                            class-name="vertical-center-modal">
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                            <p>对话框内容</p>
+                        </Modal>
                     </div>
                 </Col>
                 <Col span="12">
                     <div class="comp-box">
-                        2
+                        <Button @click="instance('info')">消息</Button>
+                        <Button @click="instance('success')">成功</Button>
+                        <Button @click="instance('warning')">警告</Button>
+                        <Button @click="instance('error')">错误</Button>
                     </div>
                 </Col>
         	</Row>
     	</Card>
+        <Card>
+            <div class="line"></div>
+            <Row :gutter="16">
+                <Col span="12">
+                    <div class="comp-box">
+                        <Button @click="confirm">标准</Button>
+                        <Button @click="custom">自定义按钮文字</Button>
+                        <Button @click="async">异步关闭</Button>
+                    </div>
+                </Col>
+                <Col span="12">
+                    <div class="comp-box">
+                        
+                    </div>
+                </Col>
+            </Row>
+        </Card>
     </div>
 </template>
 <script>
@@ -103,7 +164,13 @@
                 modal_loading: false,
                 modal3: false,
                 modal4: false,
-                modal5: false
+                modal5: false,
+                modal6: false,
+                loading: true,
+                modal7: false,
+                modal8: false,
+                modal9: false,
+                modal10: false,
             }
         },
         methods: {
@@ -120,7 +187,86 @@
                     this.modal2 = false;
                     this.$Message.success('删除成功');
                 }, 2000);
+            },
+            asyncOK () {
+                setTimeout(() => {
+                    this.modal6 = false;
+                }, 2000);
+            },
+            instance (type) {
+                const title = '对话框的标题';
+                const content = '<p>一些对话框内容</p><p>一些对话框内容</p>';
+                switch (type) {
+                    case 'info':
+                        this.$Modal.info({
+                            title: title,
+                            content: content
+                        });
+                        break;
+                    case 'success':
+                        this.$Modal.success({
+                            title: title,
+                            content: content
+                        });
+                        break;
+                    case 'warning':
+                        this.$Modal.warning({
+                            title: title,
+                            content: content
+                        });
+                        break;
+                    case 'error':
+                        this.$Modal.error({
+                            title: title,
+                            content: content
+                        });
+                        break;
+                }
+            },
+            confirm () {
+                this.$Modal.confirm({
+                    title: '确认对话框标题',
+                    content: '<p>一些对话框内容</p><p>一些对话框内容</p>',
+                    onOk: () => {
+                        this.$Message.info('点击了确定');
+                    },
+                    onCancel: () => {
+                        this.$Message.info('点击了取消');
+                    }
+                });
+            },
+            custom () {
+                this.$Modal.confirm({
+                    title: '确认对话框标题',
+                    content: '<p>一些对话框内容</p><p>一些对话框内容</p>',
+                    okText: 'OK',
+                    cancelText: 'Cancel'
+                });
+            },
+            async () {
+                this.$Modal.confirm({
+                    title: '确认对话框标题',
+                    content: '<p>对话框将在 2秒 后关闭</p>',
+                    loading: true,
+                    onOk: () => {
+                        setTimeout(() => {
+                            this.$Modal.remove();
+                            this.$Message.info('异步关闭了对话框');
+                        }, 2000);
+                    }
+                });
             }
         }
     }
 </script>
+<style lang="scss">
+    .vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+</style>
