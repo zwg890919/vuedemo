@@ -107,12 +107,11 @@ button.toast-close-button {
     -webkit-appearance: none;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 1s
+
+.fadex-enter-active, .fadex-leave-active {
+  transition: opacity .5s
+}
+.fadex-enter, .fadex-leave-active {
+  opacity: 0
 }
 
-.fade-enter,
-.fade-leave-active {
-    opacity: 0
-}
