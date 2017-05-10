@@ -129,7 +129,7 @@ export default new Router({
 				}, {
 					path: 'userpck',
 					name: "fix.auth.userpck",
-					component: authUser
+					component: resolve => require(['../views/system/auth/userpck/userpck.vue'], resolve)
 				}, {
 					path: 'menu',
 					name: "fix.auth.menu",

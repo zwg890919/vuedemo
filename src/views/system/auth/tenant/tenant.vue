@@ -13,7 +13,7 @@
                         </span>
                     </div>
                     <div>
-                        <Table on-select="selectTable" :context="self" stripe :columns="columns" size="small" :data="tenantData" @on-row-click="rowClick"></Table>
+                        <Table @on-select="selectTable" :context="self" stripe :columns="columns" size="small" :data="tenantData" @on-row-click="rowClick"></Table>
                         <Page :current="pageConf.pageNum" :total="pageConf.total" :page-size="pageConf.pageSize" class-name="tentant-page" @on-change="changCurrentPage"></Page>
                         <select v-model="pageConf.pageSize" class="tenant-page__select" @change="changPage">
                             <option :value="5">每页显示5条</option>
@@ -180,9 +180,6 @@ export default {
         selectTable(selection,row){
             console.log(selection)
         },
-        selectAll(allvue){
-            console.log(allvue)
-        }
     }
 }
 </script>

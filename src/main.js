@@ -51,11 +51,11 @@ axios.interceptors.response.use(  //请求拦截
 
 // 路由拦截实现缺省
 router.beforeEach((to, from, next) => {
-    // if (to.matched.length > 0) {
+    if (to.matched.length > 0) {
         next()
-    // } else {
-    //     next("/app")
-    // }
+    } else {
+        next("/app")
+    }
 })
 
 /* eslint-disable no-new */
