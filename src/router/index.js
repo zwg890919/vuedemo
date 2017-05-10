@@ -77,6 +77,10 @@ export default new Router({
                     path:"buttons",
                     name:"app.ui.buttons",
                     component:resolve => require(['../views/example/ui/buttons.vue'], resolve)
+                }, {
+                    path:"dialog",
+                    name:"app.ui.dialog",
+                    component:resolve => require(['../views/example/ui/dialog.vue'], resolve)
                 }]
             }]
 		}, {
