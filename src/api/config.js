@@ -13,5 +13,7 @@ module.exports = {
     globalMenu: "/auth/menu/global",
     itemList:"/auth/item/list",
     authMenu:"/auth/menu",
-    authItem:"/auth/item"
+    authItem:"/auth/item",
+    /****租户管理****/
+    tenantList:"/auth/tenant/list",
 }
