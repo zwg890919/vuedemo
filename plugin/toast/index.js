@@ -6,16 +6,19 @@ var toastInt = function (type, tips, Vue) {
     let toastTpl = Vue.extend({
         data() {
             return {
-                toastshow: true
+                toastshow: false
             }
         },
         mounted() {
+            setTimeout(() => {
+                this.toastshow = true;
+            }, 100);
             setTimeout(() => {
                 this.toastshow = false;
             }, 2500);
         },
         template: `
-            <transition name="fade">
+            <transition name="fadex">
                 <div class="jyc-toast jyc-toast-${type}" v-if="toastshow">
                     <button class="toast-close-button" @click="toastshow= false">×</button>
                     <p class="toast-title">${tips.title}</p>

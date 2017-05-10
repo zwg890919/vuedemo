@@ -4,7 +4,7 @@
             <div class="wrapper">
                 <Card :shadow="true">
                     <div slot="title">
-                        <Button type="success">新增</Button>
+                        <Button type="success" @click="showtao">新增</Button>
                         <Button type="ghost">删除</Button>
                         <span class="fr">
                             <Input v-model="value" placeholder="请输入账号" style="width: 150px"></Input>
@@ -14,6 +14,7 @@
                     </div>
                     <div>
                         <Table stripe :columns="columns4" size="small" :data="data1"></Table>
+                        <Page :total="100" class-name="tentant-page"></Page>
                     </div>
                 </Card>
             </div>
@@ -26,6 +27,8 @@ import api from "@/api"
 export default {
     data() {
         return {
+            show: false,
+            value: "",
             columns4: [
                 {
                     type: 'selection',
@@ -91,13 +94,19 @@ export default {
             ]
         }
     },
-    created(){
+    created() {
         this.getTenantList()
     },
-    methods:{
-        async getTenantList(){
+    methods: {
+        async getTenantList() {
             const data = await api.get(api.config.tenantList)
             console.log(data)
+        },
+        showtao() {
+            this.$totast.success({
+                title: "123",
+                message: "1231"
+            })
         }
     }
 }
@@ -119,6 +128,10 @@ export default {
             padding: 15px;
         }
     }
-    .tenant-filtrate {}
+    .tentant-page {
+        width:-webkit-fit-content;
+        margin-top:15px;
+        width:fit-content;
+    }
 }
 </style>
