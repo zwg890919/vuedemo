@@ -6,6 +6,7 @@ import Login from '@/views/login/login'
 
 const authUser = resolve => require(['../views/system/auth/user.vue'], resolve)
 const authMenu = resolve => require(['../views/system/auth/menu/menu.vue'], resolve)
+const authTenant = resolve => require(['../views/system/auth/tenant.vue'], resolve)
 
 const tableStatic = resolve => require(['../views/example/table/tableStatic.vue'], resolve)
 const dataTable = resolve => require(['../views/example/table/dataTable.vue'], resolve)
@@ -60,6 +61,17 @@ export default new Router({
 					component: elements
 				}]
 			},{
+                path:"tree",
+                name:"app.tree",
+                component:{
+                    template: "<keep-alive><router-view></router-view></keep-alive>",
+                },
+                children:[{
+                    path:"navtree",
+                    name:"app.tree.navtree",
+                    component:resolve => require(['../views/example/tree/navtree.vue'], resolve)
+                }]
+            },{
                 path:"ui",
                 name:"app.ui",
                 component:{
@@ -85,6 +97,14 @@ export default new Router({
                     path:"toaster",
                     name:"app.ui.toaster",
                     component:resolve => require(['../views/example/ui/toaster.vue'], resolve)
+                }, {
+                    path:"grids",
+                    name:"app.ui.grids",
+                    component:resolve => require(['../views/example/ui/grids.vue'], resolve)
+                }, {
+                    path:"fonts",
+                    name:"app.ui.fonts",
+                    component:resolve => require(['../views/example/ui/fonts.vue'], resolve)
                 }]
             }]
 		}, {
@@ -118,7 +138,7 @@ export default new Router({
 				}, {
 					path: 'tenant',
 					name: "fix.auth.tenant",
-					component:resolve => require(['../views/system/auth/tenant/tenant.vue'], resolve)
+					component: authTenant
 				}]
 			}]
 		}
