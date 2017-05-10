@@ -114,7 +114,7 @@ export default {
     }
 }
 </script>
-<style scope lang="scss">
+<style scoped lang="scss">
 .wrap {
     h2 {
         padding: 20px;

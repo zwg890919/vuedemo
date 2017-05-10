@@ -6,13 +6,15 @@ import Login from '@/views/login/login'
 
 const authUser = resolve => require(['../views/system/auth/user.vue'], resolve)
 const authMenu = resolve => require(['../views/system/auth/menu/menu.vue'], resolve)
-const authTenant = resolve => require(['../views/system/auth/tenant.vue'], resolve)
 
 const tableStatic = resolve => require(['../views/example/table/tableStatic.vue'], resolve)
 const dataTable = resolve => require(['../views/example/table/dataTable.vue'], resolve)
 
 const slider = resolve => require(['../views/example/form/slider.vue'], resolve)
 const elements = resolve => require(['../views/example/form/elements.vue'], resolve)
+const fileUpload = resolve => require(['../views/example/form/fileUpload.vue'], resolve)
+const select = resolve => require(['../views/example/form/select.vue'], resolve)
+const validation = resolve => require(['../views/example/form/validation.vue'], resolve)
 
 
 Vue.use(Router)
@@ -59,6 +61,18 @@ export default new Router({
 					path: 'elements',
 					name: "app.form.elements",
 					component: elements
+				}, {
+					path: 'fileupload',
+					name: "app.form.fileupload",
+					component: fileUpload
+				}, {
+					path: 'select',
+					name: "app.form.select",
+					component: select
+				}, {
+					path: 'validation',
+					name: "app.form.validation",
+					component: validation
 				}]
 			},{
                 path:"tree",
@@ -134,7 +148,7 @@ export default new Router({
 				}, {
 					path: 'userpck',
 					name: "fix.auth.userpck",
-					component: authUser
+					component: resolve => require(['../views/system/auth/userpck/userpck.vue'], resolve)
 				}, {
 					path: 'menu',
 					name: "fix.auth.menu",
@@ -142,25 +156,25 @@ export default new Router({
 				}, {
 					path: 'tenant',
 					name: "fix.auth.tenant",
-					component: authTenant
+					component: resolve => require(['../views/system/auth/tenant/tenant.vue'], resolve)
 				}]
 			}]
 		}
 	],
-    mode: 'history',
-    scrollBehavior (to, from, savedPosition) {
-        if (savedPosition) {
-            return savedPosition
-        } else {
-            const position = {}
-            if (to.hash) {
-            position.selector = to.hash
-            }
-            if (to.matched.some(m => m.meta.scrollToTop)) {
-            position.x = 0
-            position.y = 0
-            }
-            return position
-        }
-    }
+	mode: 'history',
+	scrollBehavior(to, from, savedPosition) {
+		if (savedPosition) {
+			return savedPosition
+		} else {
+			const position = {}
+			if (to.hash) {
+				position.selector = to.hash
+			}
+			if (to.matched.some(m => m.meta.scrollToTop)) {
+				position.x = 0
+				position.y = 0
+			}
+			return position
+		}
+	}
 })
