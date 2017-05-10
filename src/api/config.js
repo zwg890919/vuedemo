@@ -12,5 +12,6 @@ module.exports = {
     /****全局菜单****/
     globalMenu: "/auth/menu/global",
     itemList:"/auth/item/list",
-    authMenu:"/auth/menu"
+    authMenu:"/auth/menu",
+    authItem:"/auth/item"
 }

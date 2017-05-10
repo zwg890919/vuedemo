@@ -22,18 +22,18 @@
             <ul>
                 <li class="row-row bg-white">
                     <div>
-                        <menu-info :itemdata="itemList" :selectItem="selectData"></menu-info>
+                        <menu-info v-on:closeMenuModal="closeMenuModal" :modalOpen="functionType" :itemdata="itemList" :selectItem="selectData"></menu-info>
                     </div>
                 </li>
                 <li class="menu-bottom ltr">
-                    <Button type="success">
+                    <Button type="success" @click="addFunction">
                         <Icon type="plus" size="16px"></Icon>
                         新增功能
                     </Button>
                 </li>
             </ul>
         </div>
-        <Modal title="新增菜单" v-model="addMenu" width="600" @on-ok="submitMenu">
+        <Modal :title="modalType == 'add'? '新建菜单' : '修改菜单'" v-model="addMenu" width="600" @on-ok="submitMenu">
             <div class="model-wrap">
                 <Row :gutter="20">
                     <Col span="12">
@@ -90,7 +90,8 @@ export default {
             selectData:{},
             addMenu: false,
             itemList: {},
-            modalType:"add"
+            modalType:"add",
+            functionType:false,
         }
     },
     created() {
@@ -98,6 +99,12 @@ export default {
         this.getItemList()
     },
     methods: {
+        addFunction(){
+            this.functionType = true;
+        },
+        closeMenuModal(){
+            this.functionType = false
+        },
         async getMenu() {
             const data = await api.get(api.config.globalMenu)
             this.treedata = data.datas.result
