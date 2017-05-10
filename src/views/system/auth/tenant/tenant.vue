@@ -13,8 +13,16 @@
                         </span>
                     </div>
                     <div>
-                        <Table stripe :columns="columns4" size="small" :data="data1"></Table>
-                        <Page :total="100" class-name="tentant-page"></Page>
+                        <Table stripe :columns="columns" size="small" :data="tenantData"></Table>
+                        <Page :current="pageConf.pageNum" :total="pageConf.total" :page-size="pageConf.pageSize" class-name="tentant-page" @on-change="changCurrentPage"></Page>
+                        <select v-model="pageConf.pageSize" class="tenant-page__select" @change="changPage">
+                            <option :value="5">每页显示5条</option>
+                            <option :value="10">每页显示10条</option>
+                            <option :value="15">每页显示15条</option>
+                            <option :value="20">每页显示20条</option>
+                            <option :value="30">每页显示30条</option>
+                            <option :value="50">每页显示50条</option>
+                        </select>
                     </div>
                 </Card>
             </div>
@@ -29,7 +37,7 @@ export default {
         return {
             show: false,
             value: "",
-            columns4: [
+            columns: [
                 {
                     type: 'selection',
                     width: 60,
@@ -37,61 +45,52 @@ export default {
                 },
                 {
                     title: '账号',
-                    key: 'name',
+                    width: 70,
+                    key: 'tenantCode',
                     sortable: true
                 },
                 {
                     title: '简称',
-                    key: 'age',
+                    width: 130,
+                    key: 'tenantShortname',
                     sortable: true
                 },
                 {
                     title: '全称',
-                    key: 'address',
+                    width:240,
+                    key: 'tenantName',
                     sortable: true
                 },
                 {
                     title: '电话',
-                    key: 'address',
+                    width:120,
+                    key: 'tenantPhone',
                     sortable: true
                 },
                 {
                     title: '注册时间',
-                    key: 'address',
-                    sortable: true
+                    width:115,
+                    key: 'tenantCreatedon',
+                    sortable: true,
+                    render (row, column, index) {
+                        return new Date(row.tenantCreatedon).format('yyyy-MM-dd');
+                    }
                 },
                 {
                     title: '状态',
-                    key: 'address',
+                    key: 'tenantStatus',
                     sortable: true
                 },
                 {
                     title: '操作',
-                    key: 'address'
+                    key: 'tenantId'
                 },
             ],
-            data1: [
-                {
-                    name: '王小明',
-                    age: 18,
-                    address: '北京市朝阳区芍药居'
-                },
-                {
-                    name: '张小刚',
-                    age: 25,
-                    address: '北京市海淀区西二旗'
-                },
-                {
-                    name: '李小红',
-                    age: 30,
-                    address: '上海市浦东新区世纪大道'
-                },
-                {
-                    name: '周小伟',
-                    age: 26,
-                    address: '深圳市南山区深南大道'
-                }
-            ]
+            tenantData:[],
+            pageConf:{
+                pageSize : 10,
+		        pageNum : 1,
+            }
         }
     },
     created() {
@@ -99,14 +98,24 @@ export default {
     },
     methods: {
         async getTenantList() {
-            const data = await api.get(api.config.tenantList)
-            console.log(data)
+            const data = await api.post(api.config.tenantList,this.pageConf)
+            this.tenantData = data.datas.result
+            this.pageConf = data.datas.pagebar
+            // console.log(this.pageConf)
         },
         showtao() {
             this.$totast.success({
                 title: "123",
                 message: "1231"
             })
+        },
+        changPage(){
+            this.pageConf.pageNum = 1
+            this.getTenantList()
+        },
+        changCurrentPage(page){
+            this.pageConf.pageNum = page
+            this.getTenantList()
         }
     }
 }
@@ -133,6 +142,15 @@ export default {
         width: -moz-fit-content;
         width: fit-content;
         margin: 15px auto;
+
+    }
+    .tenant-page__select{
+        position: absolute;
+        right:25px;
+        bottom:30px;
+        width:200px;
+        height:30px;
+        line-height: 30px;
     }
 }
 </style>
