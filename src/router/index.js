@@ -81,6 +81,10 @@ export default new Router({
                     path:"dialog",
                     name:"app.ui.dialog",
                     component:resolve => require(['../views/example/ui/dialog.vue'], resolve)
+                }, {
+                    path:"toaster",
+                    name:"app.ui.toaster",
+                    component:resolve => require(['../views/example/ui/toaster.vue'], resolve)
                 }]
             }]
 		}, {
