@@ -13,6 +13,7 @@ import VueCookie from 'vue-cookie'
 // Tell Vue to use the plugin
 import axios from 'axios'
 
+// import 'iview/dist/styles/iview.css'
 import '../my-theme/dist/iview.css';
 import './assets/css/base.css'
 import '../plugin/toast/index.css'
