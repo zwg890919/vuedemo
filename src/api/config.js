@@ -15,5 +15,7 @@ module.exports = {
     authMenu:"/auth/menu",
     authItem:"/auth/item",
     /****租户管理****/
+    authTenant:"auth/tenant",
     tenantList:"/auth/tenant/list",
+    tenantStatus:"/auth/tenant/status"
 }

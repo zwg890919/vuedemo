@@ -4,8 +4,8 @@
             <div class="wrapper">
                 <Card :shadow="true">
                     <div slot="title">
-                        <Button type="success" @click="showtao">新增</Button>
-                        <Button type="ghost">删除</Button>
+                        <Button type="success">新增</Button>
+                        <Button type="ghost" @click="delTenant">删除</Button>
                         <span class="fr">
                             <Input v-model="value" placeholder="请输入账号" style="width: 150px"></Input>
                             <Input v-model="value" placeholder="请输入名称" style="width: 150px"></Input>
@@ -13,7 +13,7 @@
                         </span>
                     </div>
                     <div>
-                        <Table stripe :columns="columns" size="small" :data="tenantData"></Table>
+                        <Table on-select="selectTable" :context="self" stripe :columns="columns" size="small" :data="tenantData" @on-row-click="rowClick"></Table>
                         <Page :current="pageConf.pageNum" :total="pageConf.total" :page-size="pageConf.pageSize" class-name="tentant-page" @on-change="changCurrentPage"></Page>
                         <select v-model="pageConf.pageSize" class="tenant-page__select" @change="changPage">
                             <option :value="5">每页显示5条</option>
@@ -27,7 +27,36 @@
                 </Card>
             </div>
         </div>
-        <div class="cell"></div>
+        <div class="cell">
+            <div class="wrapper b-b">
+                <h5>{{currentData.tenantName}}</h5>
+            </div>
+            <div class="wrapper tenant-info">
+                <p>
+                    <label>租户帐号</label>{{currentData.tenantCode}}
+                </p>
+                <p>
+                    <label>租户简称</label>{{currentData.tenantShortname}}
+                </p>
+                <p>
+                    <label>联系电话</label>{{currentData.tenantPhone}}
+                </p>
+                <p>
+                    <label>详细地址</label>{{currentData.tenantAddress}}
+                </p>
+                <p>
+                    <label>注册时间</label>{{currentData.tenantCreatedon}}
+                </p>
+                <p>
+                    <label>更新时间</label>{{currentData.tenantModifiedon}}
+                </p>
+                <p>
+                    <label>当前状态</label>
+                    <i-switch v-model="currentData.tenantStatus" @on-change="changeStatus">
+                    </i-switch>
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -35,6 +64,7 @@ import api from "@/api"
 export default {
     data() {
         return {
+            self: this,
             show: false,
             value: "",
             columns: [
@@ -57,39 +87,53 @@ export default {
                 },
                 {
                     title: '全称',
-                    width:240,
+
                     key: 'tenantName',
                     sortable: true
                 },
                 {
                     title: '电话',
-                    width:120,
+                    width: 120,
                     key: 'tenantPhone',
                     sortable: true
                 },
                 {
                     title: '注册时间',
-                    width:115,
+                    width: 115,
                     key: 'tenantCreatedon',
                     sortable: true,
-                    render (row, column, index) {
+                    render(row, column, index) {
                         return new Date(row.tenantCreatedon).format('yyyy-MM-dd');
                     }
                 },
                 {
                     title: '状态',
                     key: 'tenantStatus',
-                    sortable: true
+                    width: 80,
+                    sortable: true,
+                    render(row, column, index) {
+                        if (row.tenantStatus) {
+                            return '<Tag color="blue">启用中</Tag>'
+                        } else {
+                            return '<Tag>已禁用</Tag>'
+                        }
+                    }
                 },
                 {
                     title: '操作',
-                    key: 'tenantId'
+                    key: 'tenantId',
+                    width: 50,
+                    render(row, column, index) {
+                        return `<a style="cursor:pointer;color:#7266ba" @click="selectRow(${index})" >菜单</a>`;
+                    }
+
                 },
             ],
-            tenantData:[],
-            pageConf:{
-                pageSize : 10,
-		        pageNum : 1,
+            tenantData: [],
+            currentData: {},
+            pageConf: {
+                pageSize: 10,
+                pageNum: 1,
             }
         }
     },
@@ -98,24 +142,46 @@ export default {
     },
     methods: {
         async getTenantList() {
-            const data = await api.post(api.config.tenantList,this.pageConf)
+            const data = await api.post(api.config.tenantList, this.pageConf)
             this.tenantData = data.datas.result
+            this.currentData = data.datas.result[0]
             this.pageConf = data.datas.pagebar
-            // console.log(this.pageConf)
         },
-        showtao() {
-            this.$totast.success({
-                title: "123",
-                message: "1231"
-            })
-        },
-        changPage(){
+        changPage() {
             this.pageConf.pageNum = 1
             this.getTenantList()
         },
-        changCurrentPage(page){
+        changCurrentPage(page) {
             this.pageConf.pageNum = page
             this.getTenantList()
+        },
+        selectRow(index) {
+            this.currentData = this.tenantData[index]
+        },
+        rowClick(item) {
+            this.currentData = item
+        },
+        async changeStatus(val){
+            const data = await api.put(api.config.tenantStatus,{
+                tenantId : this.currentData.tenantId,
+                tenantStatus : val
+            })
+            this.tenantData.map(item =>{
+                if(this.currentData.tenantId == item.tenantId){
+                    item.tenantStatus = val
+                }
+            })
+        },
+        async delTenant(){
+            const data = await api.delete(api.config.authTenant,{
+                tenantId : this.currentData.tenantId,
+            })
+        },
+        selectTable(selection,row){
+            console.log(selection)
+        },
+        selectAll(allvue){
+            console.log(allvue)
         }
     }
 }
@@ -127,14 +193,37 @@ export default {
     height: 100%;
     border-spacing: 0;
     table-layout: fixed;
+    background-color: #edf1f2;
     .cell {
         display: table-cell;
+        float: none;
+        height: 100%;
+        vertical-align: top;
         &:nth-child(2) {
             width: 280px;
-            background: #ff0000
+            background: #f3f5f6;
+            .b-b {
+                border-bottom: 1px solid #dee5e7;
+            }
+            h5 {
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 1.1;
+                color: #58666e;
+            }
         }
         .wrapper {
             padding: 15px;
+        }
+        .tenant-info {
+            p {
+                margin-bottom:15px;
+                &>label {
+                    color: #98a6ad;
+                    width: 60px;
+                    margin-right:15px;
+                }
+            }
         }
     }
     .tentant-page {
@@ -142,14 +231,13 @@ export default {
         width: -moz-fit-content;
         width: fit-content;
         margin: 15px auto;
-
     }
-    .tenant-page__select{
+    .tenant-page__select {
         position: absolute;
-        right:25px;
-        bottom:30px;
-        width:200px;
-        height:30px;
+        right: 25px;
+        bottom: 30px;
+        width: 200px;
+        height: 30px;
         line-height: 30px;
     }
 }
