@@ -12,6 +12,9 @@ const dataTable = resolve => require(['../views/example/table/dataTable.vue'], r
 
 const slider = resolve => require(['../views/example/form/slider.vue'], resolve)
 const elements = resolve => require(['../views/example/form/elements.vue'], resolve)
+const fileUpload = resolve => require(['../views/example/form/fileUpload.vue'], resolve)
+const select = resolve => require(['../views/example/form/select.vue'], resolve)
+const validation = resolve => require(['../views/example/form/validation.vue'], resolve)
 
 
 Vue.use(Router)
@@ -58,23 +61,35 @@ export default new Router({
 					path: 'elements',
 					name: "app.form.elements",
 					component: elements
+				}, {
+					path: 'fileupload',
+					name: "app.form.fileupload",
+					component: fileUpload
+				}, {
+					path: 'select',
+					name: "app.form.select",
+					component: select
+				}, {
+					path: 'validation',
+					name: "app.form.validation",
+					component: validation
 				}]
-			},{
-                path:"ui",
-                name:"app.ui",
-                component:{
-                    template: "<keep-alive><router-view></router-view></keep-alive>",
-                },
-                children:[{
-                    path:"css",
-                    name:"app.ui.css",
-                    component:resolve => require(['../views/example/ui/css.vue'], resolve)
-                }, {
-                    path:"timeline",
-                    name:"app.ui.timeline",
-                    component:resolve => require(['../views/example/ui/timeline.vue'], resolve)
-                }]
-            }]
+			}, {
+				path: "ui",
+				name: "app.ui",
+				component: {
+					template: "<keep-alive><router-view></router-view></keep-alive>",
+				},
+				children: [{
+					path: "css",
+					name: "app.ui.css",
+					component: resolve => require(['../views/example/ui/css.vue'], resolve)
+				}, {
+					path: "timeline",
+					name: "app.ui.timeline",
+					component: resolve => require(['../views/example/ui/timeline.vue'], resolve)
+				}]
+			}]
 		}, {
 			path: '/fix',
 			name: 'fix',
@@ -111,20 +126,20 @@ export default new Router({
 			}]
 		}
 	],
-    mode: 'history',
-    scrollBehavior (to, from, savedPosition) {
-        if (savedPosition) {
-            return savedPosition
-        } else {
-            const position = {}
-            if (to.hash) {
-            position.selector = to.hash
-            }
-            if (to.matched.some(m => m.meta.scrollToTop)) {
-            position.x = 0
-            position.y = 0
-            }
-            return position
-        }
-    }
+	mode: 'history',
+	scrollBehavior(to, from, savedPosition) {
+		if (savedPosition) {
+			return savedPosition
+		} else {
+			const position = {}
+			if (to.hash) {
+				position.selector = to.hash
+			}
+			if (to.matched.some(m => m.meta.scrollToTop)) {
+				position.x = 0
+				position.y = 0
+			}
+			return position
+		}
+	}
 })
