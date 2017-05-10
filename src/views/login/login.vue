@@ -8,27 +8,27 @@
 		</div>
 		<div class="login-wrap">
 			<p class="login-box__error"></p>
-			<i-input 
-				type="text" 
-				class="login-wrap__input" 
-				v-model="formInline.userMobile" 
+			<i-input
+				type="text"
+				class="login-wrap__input"
+				v-model="formInline.userMobile"
 				size="large"
 				placeholder="请输入用户名">
 			</i-input>
-			<i-input 
-				type="password" 
-				class="login-wrap__input password" 
-				v-model="formInline.userPassword" 
-				size="large" 
+			<i-input
+				type="password"
+				class="login-wrap__input password"
+				v-model="formInline.userPassword"
+				size="large"
 				placeholder="请输入密码">
 			</i-input>
 			<Row :gutter="20">
 				<Col span="16">
-					<i-input 
-						type="text" 
-						class="login-wrap__input validate" 
-						v-model="formInline.verifyCode" 
-						size="large" 
+					<i-input
+						type="text"
+						class="login-wrap__input validate"
+						v-model="formInline.verifyCode"
+						size="large"
 						placeholder="请输入验证码">
 					</i-input>
 				</Col>
@@ -64,7 +64,7 @@ export default {
 		window.localStorage.removeItem('menuId');
 	},
 	methods: {
-		async getToken() { 
+		async getToken() {
 			var data = await api.login(this.formInline)
 			if(data.success){
 			  // console.log(this.$totast)
@@ -72,6 +72,7 @@ export default {
 			// title:"一条提示信息啊",
 			// message:"这是一条提示信息啊一条提示信息啊"
 			// })
+                window.localStorage.clear("menuId")
 				this.$router.push("app");
 			}
 		}

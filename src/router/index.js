@@ -118,7 +118,7 @@ export default new Router({
 				}, {
 					path: 'tenant',
 					name: "fix.auth.tenant",
-					component: authUser
+					component:resolve => require(['../views/system/auth/tenant/tenant.vue'], resolve)
 				}]
 			}]
 		}
