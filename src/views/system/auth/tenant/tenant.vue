@@ -129,9 +129,10 @@ export default {
         }
     }
     .tentant-page {
-        width:-webkit-fit-content;
-        margin-top:15px;
-        width:fit-content;
+        width: -webkit-fit-content;
+        width: -moz-fit-content;
+        width: fit-content;
+        margin: 15px auto;
     }
 }
 </style>
