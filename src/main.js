@@ -12,6 +12,7 @@ import jycTree from '../plugin/tree'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
 
+
 import "@/assets/js/prototype"
 
 import '../my-theme/dist/iview.css';
@@ -22,7 +23,6 @@ Vue.use(iView)
 Vue.use(VueCookie)
 Vue.use(vueToast)
 Vue.use(jycTree)
-
 Vue.config.productionTip = false
 
 axios.interceptors.response.use(  //请求拦截

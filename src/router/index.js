@@ -72,6 +72,10 @@ export default new Router({
                     component:resolve => require(['../views/example/tree/navtree.vue'], resolve)
                 }]
             },{
+                path:"chart",
+                name:"app.chart",
+                component:resolve => require(['../views/example/chart/chart.vue'], resolve),
+            },{
                 path:"ui",
                 name:"app.ui",
                 component:{
