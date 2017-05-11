@@ -9,7 +9,19 @@
             </div>
             <div class="userlist">
                 <div class="userlist-wrap">
-
+                    <p v-for="item in userFilte(userList)" @click="selectUser(item)" :class="{'active':currentUser.userId == item.userId}">
+                        {{item.userName}}
+                        <em>({{item.userCode}})</em>
+                        <Tooltip content="平台管理员" class="fr" placement="left" v-if="item.userRole==1">
+                            <Icon type="flag" size="18" color="#f05050"></Icon>
+                        </Tooltip>
+                        <Tooltip content="管理员" class="fr" placement="left" v-if="item.userRole==2">
+                            <Icon type="flag" size="18" color="#f05050"></Icon>
+                        </Tooltip>
+                        <Tooltip content="操作员" class="fr" placement="left" v-if="item.userRole==3">
+                            <Icon type="flag" size="18" color="#f05050"></Icon>
+                        </Tooltip>
+                    </p>
                 </div>
             </div>
         </div>
@@ -22,11 +34,14 @@
             </div>
             <div class="grouplist">
                 <div class="grouplist-wrap">
-
+                    <p v-for="item in itempckFilte(itempackList)">
+                        {{item}}
+                    </p>
                 </div>
             </div>
             <div class="menu-bottom ltr">
-                <Button type="success" >
+                <Input v-model="pckName" v-focus="addPck" placeholder="请输入..." v-show="!addPck" @on-blur="pckNameAdd"></Input>
+                <Button type="success" @click="addPck = false" v-show="addPck">
                     <Icon type="plus" size="16px"></Icon>
                     新增用户组
                 </Button>
@@ -40,11 +55,82 @@
     </div>
 </template>
 <script>
+import api from "@/api"
     export default{
         data(){
             return{
+                pckName:"",
+                addPck:true,
                 userFilter:"",
-                groupFilter:""
+                groupFilter:"",
+                userList:[],
+                currentUser:{},
+                itempackList:[]
+            }
+        },
+        created(){
+            this.getUserList()
+            this.getItempckList()
+        },
+        directives: {
+            focus: {
+                update(el,binding,vnode,oldVnode){
+                    var elinput = el.getElementsByTagName("input")
+                    if(!binding.value){
+                        setTimeout(() => {
+                            elinput[0].focus()
+                        }, 100);
+                        elinput[0].value = ""
+                    }
+                }
+            }
+        },
+        methods:{
+            async getUserList(){
+                const data = await api.post(api.config.userList)
+                this.userList = data.datas.result
+            },
+            async getItempckList(){
+                const data = await api.post(api.config.itempckList)
+                this.itempackList = data.datas.result
+                // console.log(data)
+            },
+            async pckNameAdd(){
+                const data = await api.post(api.config.authItempck,{
+                    pckName: this.pckName
+                })
+                console.log(data)
+                // this.addPck = true
+            },
+            userFilte(userlist){
+                var filterList =[]
+                if(!this.userFilter){
+                    return userlist
+                }
+                var searchRegex = new RegExp(this.userFilter, 'i');
+                userlist.map(item => {
+                    if(item.userCode.indexOf(this.userFilter) >= 0){
+                        filterList.push(item)
+                    }
+                    if(searchRegex.test(item.userName)){
+                        filterList.push(item)
+                    }
+                })
+                return filterList
+            },
+            itempckFilte(groupList){
+                var filterList =[]
+                return groupList
+                // var searchRegex = new RegExp(this.groupFilter, 'i');
+                // userlist.map(item => {
+                //     if(searchRegex.test(item.userName)){
+                //         filterList.push(item)
+                //     }
+                // })
+                // return filterList
+            },
+            selectUser(item){
+                this.currentUser = item
             }
         }
     }
@@ -121,20 +207,35 @@
     padding: 10px;
     text-align: center;
 }
-.grouplist,.userlist{
+
+.grouplist,
+.userlist {
     position: absolute;
-    top:40px;
-    bottom:60px;
-    left:0px;
-    right:0px;
+    top: 40px;
+    bottom: 60px;
+    left: 0px;
+    right: 0px;
     overflow: hidden;
-    &-wrap{
+    &-wrap {
         width: 258px;
-        height:100%;
-        overflow-y: auto
+        height: 100%;
+        overflow-y: auto;
+        p {
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #e7ecee;
+            &.active {
+                background: #c5e4f5;
+            }
+            em {
+                color: #98a6ad;
+            }
+        }
     }
 }
-.userlist{
-   bottom:0px;
+
+.userlist {
+    bottom: 0px;
 }
 </style>
