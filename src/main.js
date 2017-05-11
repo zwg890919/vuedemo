@@ -15,7 +15,9 @@ import Vue2Filters from 'vue2-filters'
 
 import "@/assets/js/prototype"
 
-import '../my-theme/dist/iview.css';
+import '../my-theme/index.less';
+
+// import '../my-theme/dist/iview.css';
 import '@/assets/css/base.css'
 import '../plugin/toast/index.css'
 
