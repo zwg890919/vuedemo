@@ -11,7 +11,7 @@ import vueToast from '../plugin/toast/'
 import jycTree from '../plugin/tree'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
-
+import Vue2Filters from 'vue2-filters'
 
 import "@/assets/js/prototype"
 
@@ -23,6 +23,7 @@ Vue.use(iView)
 Vue.use(VueCookie)
 Vue.use(vueToast)
 Vue.use(jycTree)
+Vue.use(Vue2Filters)
 Vue.config.productionTip = false
 
 axios.interceptors.response.use(  //请求拦截
