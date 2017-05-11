@@ -49,7 +49,7 @@
         </div>
         <div class="cell">
             <div class="scroll-cell">
-                <Tree :data="menuList" show-checkbox></Tree>
+                <Tree :data="menuList" show-checkbox class="tree-wrap"></Tree>
             </div>
         </div>
     </div>
@@ -67,28 +67,9 @@ export default {
             userList: [],
             currentUser: {},
             itempackList: [],
-            menuList: [{
-                expand: true,
-                title: 'parent 1',
-                children: [{
-                    title: 'parent 1-0',
-                    expand: true,
-                    disabled: true,
-                    children: [{
-                        title: 'leaf',
-                        disableCheckbox: true
-                    }, {
-                        title: 'leaf',
-                    }]
-                }, {
-                    title: 'parent 1-1',
-                    expand: true,
-                    checked: true,
-                    children: [{
-                        title: '<span style="color: red">leaf</span>',
-                    }]
-                }]
-            }]
+            currentItempck: [],
+            menuList: [],
+            menuData:[]
         }
     },
     created() {
@@ -113,6 +94,12 @@ export default {
         selectGroup(item) {
             this.currentUser = {}
             this.currentUser.userRole = item.pckId
+            this.itempackList.map(xitem => {
+                if(xitem.pckId == this.currentUser.userRole){
+                    this.currentItempck = xitem.pckMenuId.split(",")
+                }
+            })
+            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
         },
         async getUserList() {
             const data = await api.post(api.config.userList)
@@ -121,6 +108,7 @@ export default {
         async getItempckList() {
             const data = await api.post(api.config.itempckList)
             this.itempackList = data.datas.result
+            // this.currentItempck = this.itempackList[0]
             // console.log(data)
         },
         async pckNameAdd() {
@@ -131,9 +119,9 @@ export default {
         },
         async getMenuList() {
             const data = await api.get(api.config.menuTeant)
-            const menuData = [data.datas.result]
-            // this.menuList = common.convertTreedata(menuData)
-            console.log(this.menuList)
+            this.menuData = [data.datas.result]
+            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
+            // console.log(this.menuList)
         },
         userFilte(userlist) {
             var filterList = []
@@ -164,6 +152,13 @@ export default {
         },
         selectUser(item) {
             this.currentUser = item
+            this.itempackList.map(xitem => {
+                if(xitem.pckId == this.currentUser.userRole){
+                    console.log(xitem)
+                    this.currentItempck = xitem.pckMenuId.split(",")
+                }
+            })
+            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
         }
     }
 }
@@ -272,3 +267,24 @@ export default {
     bottom: 0px;
 }
 </style>
+<style lang="scss">
+.tree-wrap {
+    padding: 15px;
+    font-size: 16px;
+    .ivu-tree-arrow {
+        padding: 0px 5px 0px 0px;
+        vertical-align: middle;
+        i{
+            font-size:16px;
+        }
+    }
+    .ivu-tree-title{
+        font-size:14px;
+        margin-top:-2px;
+    }
+    .ivu-checkbox-wrapper{
+        margin-right:0px;
+    }
+}
+</style>
+
