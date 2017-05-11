@@ -87,15 +87,6 @@
 .background{
 	background:#f5f7f9;
 }
-h3{
-	padding-left:20px;
-	padding-top: 20px;
-	font-size:30px;
-}
-p{
-	font-size:14px;
-	padding-top:20px;
-	padding-left:20px;
-    padding-right: 20px;
-}
+
+
 </style>
