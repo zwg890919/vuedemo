@@ -16,7 +16,7 @@ const fileUpload = resolve => require(['../views/example/form/fileUpload.vue'], 
 const select = resolve => require(['../views/example/form/select.vue'], resolve)
 const validation = resolve => require(['../views/example/form/validation.vue'], resolve)
 const wizard = resolve => require(['../views/example/form/wizard.vue'], resolve)
-
+const editor = resolve => require(['../views/example/form/editor.vue'], resolve)
 
 Vue.use(Router)
 
@@ -78,58 +78,62 @@ export default new Router({
 					path: 'wizard',
 					name: "app.form.wizard",
 					component: wizard
+				}, {
+					path: 'editor',
+					name: "app.form.editor",
+					component: editor
 				}]
-			},{
-                path:"tree",
-                name:"app.tree",
-                component:{
-                    template: "<keep-alive><router-view></router-view></keep-alive>",
-                },
-                children:[{
-                    path:"navtree",
-                    name:"app.tree.navtree",
-                    component:resolve => require(['../views/example/tree/navtree.vue'], resolve)
-                }]
-            },{
-                path:"chart",
-                name:"app.chart",
-                component:resolve => require(['../views/example/chart/chart.vue'], resolve),
-            },{
-                path:"ui",
-                name:"app.ui",
-                component:{
-                    template: "<keep-alive><router-view></router-view></keep-alive>",
-                },
-                children:[{
-                    path:"css",
-                    name:"app.ui.css",
-                    component:resolve => require(['../views/example/ui/css.vue'], resolve)
-                }, {
-                    path:"timeline",
-                    name:"app.ui.timeline",
-                    component:resolve => require(['../views/example/ui/timeline.vue'], resolve)
-                }, {
-                    path:"buttons",
-                    name:"app.ui.buttons",
-                    component:resolve => require(['../views/example/ui/buttons.vue'], resolve)
-                }, {
-                    path:"dialog",
-                    name:"app.ui.dialog",
-                    component:resolve => require(['../views/example/ui/dialog.vue'], resolve)
-                }, {
-                    path:"toaster",
-                    name:"app.ui.toaster",
-                    component:resolve => require(['../views/example/ui/toaster.vue'], resolve)
-                }, {
-                    path:"grids",
-                    name:"app.ui.grids",
-                    component:resolve => require(['../views/example/ui/grids.vue'], resolve)
-                }, {
-                    path:"fonts",
-                    name:"app.ui.fonts",
-                    component:resolve => require(['../views/example/ui/fonts.vue'], resolve)
-                }]
-            }]
+			}, {
+				path: "tree",
+				name: "app.tree",
+				component: {
+					template: "<keep-alive><router-view></router-view></keep-alive>",
+				},
+				children: [{
+					path: "navtree",
+					name: "app.tree.navtree",
+					component: resolve => require(['../views/example/tree/navtree.vue'], resolve)
+				}]
+			}, {
+				path: "chart",
+				name: "app.chart",
+				component: resolve => require(['../views/example/chart/chart.vue'], resolve),
+			}, {
+				path: "ui",
+				name: "app.ui",
+				component: {
+					template: "<keep-alive><router-view></router-view></keep-alive>",
+				},
+				children: [{
+					path: "css",
+					name: "app.ui.css",
+					component: resolve => require(['../views/example/ui/css.vue'], resolve)
+				}, {
+					path: "timeline",
+					name: "app.ui.timeline",
+					component: resolve => require(['../views/example/ui/timeline.vue'], resolve)
+				}, {
+					path: "buttons",
+					name: "app.ui.buttons",
+					component: resolve => require(['../views/example/ui/buttons.vue'], resolve)
+				}, {
+					path: "dialog",
+					name: "app.ui.dialog",
+					component: resolve => require(['../views/example/ui/dialog.vue'], resolve)
+				}, {
+					path: "toaster",
+					name: "app.ui.toaster",
+					component: resolve => require(['../views/example/ui/toaster.vue'], resolve)
+				}, {
+					path: "grids",
+					name: "app.ui.grids",
+					component: resolve => require(['../views/example/ui/grids.vue'], resolve)
+				}, {
+					path: "fonts",
+					name: "app.ui.fonts",
+					component: resolve => require(['../views/example/ui/fonts.vue'], resolve)
+				}]
+			}]
 		}, {
 			path: '/fix',
 			name: 'fix',
