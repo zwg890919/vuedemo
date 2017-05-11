@@ -16,7 +16,7 @@ const fileUpload = resolve => require(['../views/example/form/fileUpload.vue'], 
 const select = resolve => require(['../views/example/form/select.vue'], resolve)
 const validation = resolve => require(['../views/example/form/validation.vue'], resolve)
 const wizard = resolve => require(['../views/example/form/wizard.vue'], resolve)
-
+const editor = resolve => require(['../views/example/form/editor.vue'], resolve)
 
 Vue.use(Router)
 
@@ -78,6 +78,10 @@ export default new Router({
 					path: 'wizard',
 					name: "app.form.wizard",
 					component: wizard
+				}, {
+					path: 'editor',
+					name: "app.form.editor",
+					component: editor
 				}]
 			},{
                 path:"tree",
@@ -95,6 +99,10 @@ export default new Router({
                 name:"app.chart",
                 component:resolve => require(['../views/example/chart/chart.vue'], resolve),
             },{
+                path:"calendar",
+                name:"app.calendar",
+                component:resolve => require(['../views/example/calendar/calendar.vue'], resolve),
+            },{
                 path:"ui",
                 name:"app.ui",
                 component:{
@@ -109,6 +117,14 @@ export default new Router({
                     name:"app.ui.timeline",
                     component:resolve => require(['../views/example/ui/timeline.vue'], resolve)
                 }, {
+                    path:"portlet",
+                    name:"app.ui.portlet",
+                    component:resolve => require(['../views/example/ui/portlet.vue'], resolve)
+                }, {
+                    path:"sortable",
+                    name:"app.ui.sortable",
+                    component:resolve => require(['../views/example/ui/sortable.vue'], resolve)
+                },{
                     path:"buttons",
                     name:"app.ui.buttons",
                     component:resolve => require(['../views/example/ui/buttons.vue'], resolve)
