@@ -34,8 +34,8 @@
             </div>
             <div class="grouplist">
                 <div class="grouplist-wrap">
-                    <p v-for="item in itempckFilte(itempackList)">
-                        {{item}}
+                    <p v-for="item in itempckFilte(itempackList)" :class="{'active':currentUser.userRole == item.pckId}" @click="selectGroup(item)">
+                        {{item.pckName}}
                     </p>
                 </div>
             </div>
@@ -65,12 +65,14 @@ import api from "@/api"
                 groupFilter:"",
                 userList:[],
                 currentUser:{},
-                itempackList:[]
+                itempackList:[],
+                menuList:[]
             }
         },
         created(){
             this.getUserList()
             this.getItempckList()
+            this.getMenuList()
         },
         directives: {
             focus: {
@@ -86,6 +88,10 @@ import api from "@/api"
             }
         },
         methods:{
+            selectGroup(item){
+                this.currentUser = {}
+                this.currentUser.userRole = item.pckId
+            },
             async getUserList(){
                 const data = await api.post(api.config.userList)
                 this.userList = data.datas.result
@@ -99,8 +105,11 @@ import api from "@/api"
                 const data = await api.post(api.config.authItempck,{
                     pckName: this.pckName
                 })
-                console.log(data)
-                // this.addPck = true
+                this.addPck = true
+            },
+            async getMenuList(){
+                const data = await api.get(api.config.menuTeant)
+                this.menuList = data.datas.result
             },
             userFilte(userlist){
                 var filterList =[]

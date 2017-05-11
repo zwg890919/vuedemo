@@ -22,4 +22,6 @@ module.exports = {
     authItempck:"/auth/itempck", //操作用户组
     userList:"/auth/user/list",  //用户列表
     itempckList:"/auth/itempck/list",  //用户组列表
+    menuTeant:"/auth/menu/tenant",  //租户菜单树
+
 }
