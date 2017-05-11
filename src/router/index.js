@@ -16,7 +16,7 @@ const fileUpload = resolve => require(['../views/example/form/fileUpload.vue'], 
 const select = resolve => require(['../views/example/form/select.vue'], resolve)
 const validation = resolve => require(['../views/example/form/validation.vue'], resolve)
 const wizard = resolve => require(['../views/example/form/wizard.vue'], resolve)
-
+const editor = resolve => require(['../views/example/form/editor.vue'], resolve)
 
 Vue.use(Router)
 
@@ -78,6 +78,10 @@ export default new Router({
 					path: 'wizard',
 					name: "app.form.wizard",
 					component: wizard
+				}, {
+					path: 'editor',
+					name: "app.form.editor",
+					component: editor
 				}]
 			},{
                 path:"tree",

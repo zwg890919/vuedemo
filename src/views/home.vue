@@ -2,7 +2,7 @@
 	<div class="layout" :class="{'minLayout':container}">
 		<layout-nav :asideIndent="asideIndent" :headerFixed="headerFixed" :asidefixed="Asidefixed"></layout-nav>
 		<layout-aside :asideIndent="asideIndent" :headerFixed="headerFixed" :Asidefixed="Asidefixed"></layout-aside>
-		<div class="layout-content" :class="{'fixed-padding-t': headerFixed}">
+		<div class="layout-content">
 			<keep-alive>
 				<router-view></router-view>
 			</keep-alive>
@@ -54,9 +54,6 @@ export default {
 </script>
 <style lang="scss">
 @import "../assets/css/layout.scss";
-.fixed-padding-t {
-	padding-top: 50px;
-}
 .jyc-wrap {
 	// ivew样式覆盖
 	.ivu-card{
