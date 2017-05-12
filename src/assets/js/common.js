@@ -1,29 +1,57 @@
 
-function convertTreedata(data, itemPcks, components) {
+function convertTreedata(data, checkdata, itemPcks, components) {
     components = components || []
     itemPcks = itemPcks || []
     if (data.length) {
         data.map((item, index) => {
             components[index] = {
+                id:item.id,
                 title: item.name,
-                disableCheckbox: true,
+                disableCheckbox: checkdata,
             }
 
             itemPcks.map(itempck => {
                 if(itempck == item.id){
-                    components[index].title= `<span style="color:#23b7e5">${item.name}</span>`,
+                    components[index].title= `<span style="color:#23b7e5">${item.id}</span>`,
                     components[index].checked = true
                 }
             })
             if (item.childrens.length) {
                 components[index].expand = true
-                components[index].children = convertTreedata(item.childrens,itemPcks, components[index].children)
+                components[index].children = convertTreedata(item.childrens,checkdata,itemPcks, components[index].children)
             }
         })
     }
     return components
 }
 
-export default {
-    convertTreedata
+function findComponentsDownward (context, componentName, components = []) {
+    const childrens = context.$children;
+    if (childrens.length) {
+        childrens.forEach(child => {
+            const name = child.$options.name;
+            const childs = child.$children;
+
+            if (name === componentName){
+                if(child.data.checked){
+                    components.push(child.data.id);
+                }else{
+                    if(child.indeterminate){
+                        components.push(child.data.id);
+                    }
+                }
+            }
+            if (childs.length) {
+                const findChilds = findComponentsDownward(child, componentName, components);
+                if (findChilds) components.concat(findChilds);
+            }
+        });
+    }
+    return components;
+}
+
+
+export {
+    convertTreedata,
+    findComponentsDownward
 }
