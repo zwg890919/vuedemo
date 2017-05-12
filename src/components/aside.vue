@@ -24,7 +24,7 @@
                     <ul>
                         <li v-for="subitem in item.childrens" :key="subitem.id">
                             <router-link :to="subitem.menuHref | transformUrl" active-class="active">
-                                {{subitem.name}} {{subitem.menuHref}}
+                                {{subitem.name}}
                             </router-link>
                         </li>
                     </ul>

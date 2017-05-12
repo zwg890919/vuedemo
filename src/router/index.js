@@ -149,6 +149,10 @@ export default new Router({
                     path:"fonts",
                     name:"app.ui.fonts",
                     component:resolve => require(['../views/example/ui/fonts.vue'], resolve)
+                }, {
+                    path:"bootstrap",
+                    name:"app.ui.bootstrap",
+                    component:resolve => require(['../views/example/ui/bootstrap.vue'], resolve)
                 }]
             }]
 		}, {

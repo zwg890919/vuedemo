@@ -17,15 +17,18 @@ import "@/assets/js/prototype"
 
 import '../my-theme/index.less';
 
-// import '../my-theme/dist/iview.css';
 import '@/assets/css/base.css'
 import '../plugin/toast/index.css'
+
+
 
 Vue.use(iView)
 Vue.use(VueCookie)
 Vue.use(vueToast)
 Vue.use(jycTree)
 Vue.use(Vue2Filters)
+
+
 Vue.config.productionTip = false
 
 axios.interceptors.response.use(  //请求拦截
