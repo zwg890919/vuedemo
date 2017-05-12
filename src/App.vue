@@ -20,7 +20,7 @@ html {
 }
 
 body {
-  background-color: none
+  background-color: none; 
 }
 
 #app {
