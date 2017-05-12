@@ -1,167 +1,141 @@
 <template>
     <div class="userpck-wrap">
-        <div class="cell">
-            <div class="search-item">
-                <span>
-                    <Icon type="ios-search-strong" size="22" style=""></Icon>
-                </span>
-                <input type="text" placeholder="输入关键字查询" v-model="userFilter">
-            </div>
-            <div class="userlist">
-                <div class="userlist-wrap">
-                    <p v-for="item in userFilte(userList)" @click="selectUser(item)" :class="{'active':currentUser.userId == item.userId}">
-                        {{item.userName}}
-                        <em>({{item.userCode}})</em>
-                        <Tooltip content="平台管理员" class="fr" placement="left" v-if="item.userRole==1">
-                            <Icon type="flag" size="18" color="#f05050"></Icon>
-                        </Tooltip>
-                        <Tooltip content="管理员" class="fr" placement="left" v-if="item.userRole==2">
-                            <Icon type="flag" size="18" color="#f05050"></Icon>
-                        </Tooltip>
-                        <Tooltip content="操作员" class="fr" placement="left" v-if="item.userRole==3">
-                            <Icon type="flag" size="18" color="#f05050"></Icon>
-                        </Tooltip>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="cell">
-            <div class="search-item">
-                <span>
-                    <Icon type="ios-search-strong" size="22" style=""></Icon>
-                </span>
-                <input type="text" placeholder="输入关键字查询" v-model="groupFilter">
-            </div>
-            <div class="grouplist">
-                <div class="grouplist-wrap">
-                    <p v-for="item in itempckFilte(itempackList)" :class="{'active':currentUser.userRole == item.pckId}" @click="selectGroup(item)">
-                        {{item.pckName}}
-                    </p>
-                </div>
-            </div>
-            <div class="menu-bottom ltr">
-                <Input v-model="pckName" v-focus="addPck" placeholder="请输入..." v-show="!addPck" @on-blur="pckNameAdd"></Input>
-                <Button type="success" @click="addPck = false" v-show="addPck">
-                    <Icon type="plus" size="16px"></Icon>
-                    新增用户组
-                </Button>
-            </div>
-        </div>
-        <div class="cell">
-            <div class="scroll-cell">
-                <Tree :data="menuList" show-checkbox class="tree-wrap"></Tree>
-            </div>
-        </div>
+        <userpck-user></userpck-user>
+        <userpck-group></userpck-group>
+        <userpck-tree></userpck-tree>
     </div>
 </template>
 <script>
 import api from "@/api"
 import common from "@/assets/js/common.js"
-export default {
-    data() {
+import userpckUser from "./userpck-user.vue"
+import userpckGroup from "./userpck-group.vue"
+import userpckTree from "./userpck-tree.vue"
+
+export default{
+    name:'userpcl',
+    data(){
         return {
-            pckName: "",
-            addPck: true,
-            userFilter: "",
-            groupFilter: "",
-            userList: [],
-            currentUser: {},
-            itempackList: [],
-            currentItempck: [],
-            menuList: [],
-            menuData:[]
         }
     },
-    created() {
-        this.getUserList()
-        this.getItempckList()
-        this.getMenuList()
-    },
-    directives: {
-        focus: {
-            update(el, binding, vnode, oldVnode) {
-                var elinput = el.getElementsByTagName("input")
-                if (!binding.value) {
-                    setTimeout(() => {
-                        elinput[0].focus()
-                    }, 100);
-                    elinput[0].value = ""
-                }
-            }
-        }
-    },
-    methods: {
-        selectGroup(item) {
-            this.currentUser = {}
-            this.currentUser.userRole = item.pckId
-            this.itempackList.map(xitem => {
-                if(xitem.pckId == this.currentUser.userRole){
-                    this.currentItempck = xitem.pckMenuId.split(",")
-                }
-            })
-            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
-        },
-        async getUserList() {
-            const data = await api.post(api.config.userList)
-            this.userList = data.datas.result
-        },
-        async getItempckList() {
-            const data = await api.post(api.config.itempckList)
-            this.itempackList = data.datas.result
-            // this.currentItempck = this.itempackList[0]
-            // console.log(data)
-        },
-        async pckNameAdd() {
-            const data = await api.post(api.config.authItempck, {
-                pckName: this.pckName
-            })
-            this.addPck = true
-        },
-        async getMenuList() {
-            const data = await api.get(api.config.menuTeant)
-            this.menuData = [data.datas.result]
-            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
-            // console.log(this.menuList)
-        },
-        userFilte(userlist) {
-            var filterList = []
-            if (!this.userFilter) {
-                return userlist
-            }
-            var searchRegex = new RegExp(this.userFilter, 'i');
-            userlist.map(item => {
-                if (item.userCode.indexOf(this.userFilter) >= 0) {
-                    filterList.push(item)
-                }
-                if (searchRegex.test(item.userName)) {
-                    filterList.push(item)
-                }
-            })
-            return filterList
-        },
-        itempckFilte(groupList) {
-            var filterList = []
-            return groupList
-            // var searchRegex = new RegExp(this.groupFilter, 'i');
-            // userlist.map(item => {
-            //     if(searchRegex.test(item.userName)){
-            //         filterList.push(item)
-            //     }
-            // })
-            // return filterList
-        },
-        selectUser(item) {
-            this.currentUser = item
-            this.itempackList.map(xitem => {
-                if(xitem.pckId == this.currentUser.userRole){
-                    console.log(xitem)
-                    this.currentItempck = xitem.pckMenuId.split(",")
-                }
-            })
-            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
-        }
+    components:{
+        userpckUser,
+        userpckGroup,
+        userpckTree
     }
 }
+// import userpckGroup from "./userpck-group.vue"
+// import userpckTree from "./userpck-tree.vue"
+// export default {
+//     data() {
+//         return {
+//             pckName: "",
+//             addPck: true,
+//             userFilter: "",
+//             groupFilter: "",
+//             userList: [],
+//             currentUser: {},
+//             itempackList: [],
+//             currentItempck: [],
+//             menuList: [],
+//             menuData:[]
+//         }
+//     },
+//     components:{
+//         userpckUser,
+//         // userpckGroup,
+//         // userpckTree
+//     },
+//     created() {
+//         this.getUserList()
+//         this.getItempckList()
+//         this.getMenuList()
+//     },
+//     directives: {
+//         focus: {
+//             update(el, binding, vnode, oldVnode) {
+//                 var elinput = el.getElementsByTagName("input")
+//                 if (!binding.value) {
+//                     setTimeout(() => {
+//                         elinput[0].focus()
+//                     }, 100);
+//                     elinput[0].value = ""
+//                 }
+//             }
+//         }
+//     },
+//     methods: {
+//         selectGroup(item) {
+//             this.currentUser = {}
+//             this.currentUser.userRole = item.pckId
+//             this.itempackList.map(xitem => {
+//                 if(xitem.pckId == this.currentUser.userRole){
+//                     this.currentItempck = xitem.pckMenuId.split(",")
+//                 }
+//             })
+//             this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
+//         },
+//         async getUserList() {
+//             const data = await api.post(api.config.userList)
+//             this.userList = data.datas.result
+//         },
+//         async getItempckList() {
+//             const data = await api.post(api.config.itempckList)
+//             this.itempackList = data.datas.result
+//             // this.currentItempck = this.itempackList[0]
+//             // console.log(data)
+//         },
+//         async pckNameAdd() {
+//             const data = await api.post(api.config.authItempck, {
+//                 pckName: this.pckName
+//             })
+//             this.addPck = true
+//         },
+//         async getMenuList() {
+//             const data = await api.get(api.config.menuTeant)
+//             this.menuData = [data.datas.result]
+//             this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
+//             // console.log(this.menuList)
+//         },
+//         userFilte(userlist) {
+//             var filterList = []
+//             if (!this.userFilter) {
+//                 return userlist
+//             }
+//             var searchRegex = new RegExp(this.userFilter, 'i');
+//             userlist.map(item => {
+//                 if (item.userCode.indexOf(this.userFilter) >= 0) {
+//                     filterList.push(item)
+//                 }
+//                 if (searchRegex.test(item.userName)) {
+//                     filterList.push(item)
+//                 }
+//             })
+//             return filterList
+//         },
+//         itempckFilte(groupList) {
+//             var filterList = []
+//             return groupList
+//             // var searchRegex = new RegExp(this.groupFilter, 'i');
+//             // userlist.map(item => {
+//             //     if(searchRegex.test(item.userName)){
+//             //         filterList.push(item)
+//             //     }
+//             // })
+//             // return filterList
+//         },
+//         selectUser(item) {
+//             this.currentUser = item
+//             this.itempackList.map(xitem => {
+//                 if(xitem.pckId == this.currentUser.userRole){
+//                     console.log(xitem)
+//                     this.currentItempck = xitem.pckMenuId.split(",")
+//                 }
+//             })
+//             this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
+//         }
+//     }
+// }
 </script>
 <style lang="scss" scoped>
 .userpck-wrap {
@@ -171,35 +145,9 @@ export default {
     border-spacing: 0;
     table-layout: fixed;
     background-color: #edf1f2;
-    .cell {
-        display: table-cell;
-        float: none;
-        height: 100%;
-        vertical-align: top;
-        position: relative;
-        &:nth-child(1),
-        &:nth-child(2) {
-            width: 240px;
-        }
-        &:nth-child(2) {
-            background-color: #f6f8f8;
-        }
-        &:nth-child(3) {
-            background-color: #fff;
-        }
-    }
 }
-
-.scroll-cell {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    overflow: hidden;
-    overflow-y: auto;
-}
-
+</style>
+<style lang="scss">
 .search-item {
     display: table;
     width: 100%;
@@ -224,16 +172,6 @@ export default {
         background: none;
         border: none
     }
-}
-
-.menu-bottom {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    border-top: 1px solid #dee5e7;
-    padding: 10px;
-    text-align: center;
 }
 
 .grouplist,
@@ -266,8 +204,7 @@ export default {
 .userlist {
     bottom: 0px;
 }
-</style>
-<style lang="scss">
+
 .tree-wrap {
     padding: 15px;
     font-size: 16px;
