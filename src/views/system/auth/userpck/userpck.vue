@@ -49,100 +49,119 @@
         </div>
         <div class="cell">
             <div class="scroll-cell">
-                <div style="height:1500px;"></div>
+                <Tree :data="menuList" show-checkbox class="tree-wrap"></Tree>
             </div>
         </div>
     </div>
 </template>
 <script>
 import api from "@/api"
-    export default{
-        data(){
-            return{
-                pckName:"",
-                addPck:true,
-                userFilter:"",
-                groupFilter:"",
-                userList:[],
-                currentUser:{},
-                itempackList:[],
-                menuList:[]
-            }
-        },
-        created(){
-            this.getUserList()
-            this.getItempckList()
-            this.getMenuList()
-        },
-        directives: {
-            focus: {
-                update(el,binding,vnode,oldVnode){
-                    var elinput = el.getElementsByTagName("input")
-                    if(!binding.value){
-                        setTimeout(() => {
-                            elinput[0].focus()
-                        }, 100);
-                        elinput[0].value = ""
-                    }
+import common from "@/assets/js/common.js"
+export default {
+    data() {
+        return {
+            pckName: "",
+            addPck: true,
+            userFilter: "",
+            groupFilter: "",
+            userList: [],
+            currentUser: {},
+            itempackList: [],
+            currentItempck: [],
+            menuList: [],
+            menuData:[]
+        }
+    },
+    created() {
+        this.getUserList()
+        this.getItempckList()
+        this.getMenuList()
+    },
+    directives: {
+        focus: {
+            update(el, binding, vnode, oldVnode) {
+                var elinput = el.getElementsByTagName("input")
+                if (!binding.value) {
+                    setTimeout(() => {
+                        elinput[0].focus()
+                    }, 100);
+                    elinput[0].value = ""
                 }
-            }
-        },
-        methods:{
-            selectGroup(item){
-                this.currentUser = {}
-                this.currentUser.userRole = item.pckId
-            },
-            async getUserList(){
-                const data = await api.post(api.config.userList)
-                this.userList = data.datas.result
-            },
-            async getItempckList(){
-                const data = await api.post(api.config.itempckList)
-                this.itempackList = data.datas.result
-                // console.log(data)
-            },
-            async pckNameAdd(){
-                const data = await api.post(api.config.authItempck,{
-                    pckName: this.pckName
-                })
-                this.addPck = true
-            },
-            async getMenuList(){
-                const data = await api.get(api.config.menuTeant)
-                this.menuList = data.datas.result
-            },
-            userFilte(userlist){
-                var filterList =[]
-                if(!this.userFilter){
-                    return userlist
-                }
-                var searchRegex = new RegExp(this.userFilter, 'i');
-                userlist.map(item => {
-                    if(item.userCode.indexOf(this.userFilter) >= 0){
-                        filterList.push(item)
-                    }
-                    if(searchRegex.test(item.userName)){
-                        filterList.push(item)
-                    }
-                })
-                return filterList
-            },
-            itempckFilte(groupList){
-                var filterList =[]
-                return groupList
-                // var searchRegex = new RegExp(this.groupFilter, 'i');
-                // userlist.map(item => {
-                //     if(searchRegex.test(item.userName)){
-                //         filterList.push(item)
-                //     }
-                // })
-                // return filterList
-            },
-            selectUser(item){
-                this.currentUser = item
             }
         }
+    },
+    methods: {
+        selectGroup(item) {
+            this.currentUser = {}
+            this.currentUser.userRole = item.pckId
+            this.itempackList.map(xitem => {
+                if(xitem.pckId == this.currentUser.userRole){
+                    this.currentItempck = xitem.pckMenuId.split(",")
+                }
+            })
+            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
+        },
+        async getUserList() {
+            const data = await api.post(api.config.userList)
+            this.userList = data.datas.result
+        },
+        async getItempckList() {
+            const data = await api.post(api.config.itempckList)
+            this.itempackList = data.datas.result
+            // this.currentItempck = this.itempackList[0]
+            // console.log(data)
+        },
+        async pckNameAdd() {
+            const data = await api.post(api.config.authItempck, {
+                pckName: this.pckName
+            })
+            this.addPck = true
+        },
+        async getMenuList() {
+            const data = await api.get(api.config.menuTeant)
+            this.menuData = [data.datas.result]
+            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
+            // console.log(this.menuList)
+        },
+        userFilte(userlist) {
+            var filterList = []
+            if (!this.userFilter) {
+                return userlist
+            }
+            var searchRegex = new RegExp(this.userFilter, 'i');
+            userlist.map(item => {
+                if (item.userCode.indexOf(this.userFilter) >= 0) {
+                    filterList.push(item)
+                }
+                if (searchRegex.test(item.userName)) {
+                    filterList.push(item)
+                }
+            })
+            return filterList
+        },
+        itempckFilte(groupList) {
+            var filterList = []
+            return groupList
+            // var searchRegex = new RegExp(this.groupFilter, 'i');
+            // userlist.map(item => {
+            //     if(searchRegex.test(item.userName)){
+            //         filterList.push(item)
+            //     }
+            // })
+            // return filterList
+        },
+        selectUser(item) {
+            this.currentUser = item
+            this.itempackList.map(xitem => {
+                if(xitem.pckId == this.currentUser.userRole){
+                    console.log(xitem)
+                    this.currentItempck = xitem.pckMenuId.split(",")
+                }
+            })
+            this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
+        }
     }
+}
 </script>
 <style lang="scss" scoped>
 .userpck-wrap {
@@ -248,3 +267,24 @@ import api from "@/api"
     bottom: 0px;
 }
 </style>
+<style lang="scss">
+.tree-wrap {
+    padding: 15px;
+    font-size: 16px;
+    .ivu-tree-arrow {
+        padding: 0px 5px 0px 0px;
+        vertical-align: middle;
+        i{
+            font-size:16px;
+        }
+    }
+    .ivu-tree-title{
+        font-size:14px;
+        margin-top:-2px;
+    }
+    .ivu-checkbox-wrapper{
+        margin-right:0px;
+    }
+}
+</style>
+

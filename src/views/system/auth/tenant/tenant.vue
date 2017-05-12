@@ -71,37 +71,35 @@ export default {
                 {
                     type: 'selection',
                     width: 60,
-                    align: 'center'
+                    align: 'center',
                 },
                 {
                     title: '账号',
-                    width: 70,
+                    width: 80,
                     key: 'tenantCode',
                     sortable: true
                 },
                 {
                     title: '简称',
-                    width: 130,
                     key: 'tenantShortname',
                     sortable: true
                 },
                 {
                     title: '全称',
-
                     key: 'tenantName',
+                    className:'tenantName',
                     sortable: true
                 },
                 {
                     title: '电话',
-                    width: 120,
                     key: 'tenantPhone',
                     sortable: true
                 },
                 {
                     title: '注册时间',
-                    width: 115,
                     key: 'tenantCreatedon',
                     sortable: true,
+                     width: 120,
                     render(row, column, index) {
                         return new Date(row.tenantCreatedon).format('yyyy-MM-dd');
                     }
@@ -109,8 +107,8 @@ export default {
                 {
                     title: '状态',
                     key: 'tenantStatus',
-                    width: 80,
                     sortable: true,
+                    width: 80,
                     render(row, column, index) {
                         if (row.tenantStatus) {
                             return '<Tag color="blue">启用中</Tag>'
@@ -122,7 +120,7 @@ export default {
                 {
                     title: '操作',
                     key: 'tenantId',
-                    width: 50,
+                    width: 60,
                     render(row, column, index) {
                         return `<a style="cursor:pointer;color:#7266ba" @click="selectRow(${index})" >菜单</a>`;
                     }
@@ -237,5 +235,8 @@ export default {
         height: 30px;
         line-height: 30px;
     }
+}
+.tenantName{
+    min-width:220px!important;
 }
 </style>
