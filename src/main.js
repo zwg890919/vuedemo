@@ -12,19 +12,14 @@ import jycTree from '../plugin/tree'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
 import Vue2Filters from 'vue2-filters'
-import BootstrapVue from 'bootstrap-vue';
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import "@/assets/js/prototype"
 
 import '../my-theme/index.less';
 
-// import '../my-theme/dist/iview.css';
 import '@/assets/css/base.css'
 import '../plugin/toast/index.css'
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 
 
 Vue.use(iView)
@@ -32,7 +27,8 @@ Vue.use(VueCookie)
 Vue.use(vueToast)
 Vue.use(jycTree)
 Vue.use(Vue2Filters)
-Vue.use(BootstrapVue)
+
+
 Vue.config.productionTip = false
 
 axios.interceptors.response.use(  //请求拦截
