@@ -17,6 +17,7 @@ const select = resolve => require(['../views/example/form/select.vue'], resolve)
 const validation = resolve => require(['../views/example/form/validation.vue'], resolve)
 const wizard = resolve => require(['../views/example/form/wizard.vue'], resolve)
 const editor = resolve => require(['../views/example/form/editor.vue'], resolve)
+const imageCrop = resolve => require(['../views/example/form/imageCrop.vue'], resolve)
 
 Vue.use(Router)
 
@@ -82,6 +83,10 @@ export default new Router({
 					path: 'editor',
 					name: "app.form.editor",
 					component: editor
+				}, {
+					path: 'imageCrop',
+					name: "app.form.imageCrop",
+					component: imageCrop
 				}]
 			},{
                 path:"tree",
