@@ -63,5 +63,10 @@ export default {
     position: relative;
     width: 240px;
 }
+.userlist-wrap{
+    P{
+        width: 240px;
+    }
+}
 </style>
 
