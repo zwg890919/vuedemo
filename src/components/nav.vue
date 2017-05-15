@@ -8,7 +8,7 @@
         </div>
         <div class="layout-nav__con" :class="{'layout-indent':asideIndent}">
             <a class="nav-btn" @click="changeIndent">
-                <Icon type="ios-browsers-outline"></Icon>
+                <Icon type="navicon-round"></Icon>
             </a>
             <a class="nav-btn">
                 <Icon type="ios-person-outline"></Icon>
@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         changeIndent() {
-            this.$store.commit("changeSetting", 4)
+            this.$store.commit("changeSetting", 3)
         },
         ...mapActions([
             'changeMenu'
