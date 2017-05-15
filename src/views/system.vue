@@ -2,7 +2,7 @@
     <div class="layout" :class="{'minLayout':container}">
         <layout-nav :asideIndent="asideIndent" :headerFixed="true" :asidefixed="true"></layout-nav>
         <layout-aside :asideIndent="asideIndent" :headerFixed="true" :Asidefixed="true"></layout-aside>
-        <div class="layout-content">
+        <div class="layout-content" :class="{'extend-content':asideIndent}">
             <keep-alive>
                 <router-view></router-view>
             </keep-alive>

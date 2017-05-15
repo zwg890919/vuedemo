@@ -12,7 +12,7 @@
                             <Button type="ghost">查询</Button>
                         </span>
                     </div>
-                    <div>
+                    <div class="tenant-table__wrap">
                         <Table @on-select="selectTable" :context="self" stripe :columns="columns" size="small" :data="tenantData" @on-row-click="rowClick"></Table>
                         <Page :current="pageConf.pageNum" :total="pageConf.total" :page-size="pageConf.pageSize" class-name="tentant-page" @on-change="changCurrentPage"></Page>
                         <select v-model="pageConf.pageSize" class="tenant-page__select" @change="changPage">
@@ -75,31 +75,34 @@ export default {
                 },
                 {
                     title: '账号',
-                    width: 80,
+                    width: 70,
                     key: 'tenantCode',
                     sortable: true
                 },
                 {
                     title: '简称',
                     key: 'tenantShortname',
-                    sortable: true
+                    sortable: true,
+                    ellipsis:true,
                 },
                 {
                     title: '全称',
                     key: 'tenantName',
                     className:'tenantName',
-                    sortable: true
+                    sortable: true,
+                    ellipsis:true,
                 },
                 {
                     title: '电话',
                     key: 'tenantPhone',
+                    width: 100,
                     sortable: true
                 },
                 {
                     title: '注册时间',
                     key: 'tenantCreatedon',
                     sortable: true,
-                     width: 120,
+                    width: 90,
                     render(row, column, index) {
                         return new Date(row.tenantCreatedon).format('yyyy-MM-dd');
                     }
@@ -238,5 +241,9 @@ export default {
 }
 .tenantName{
     min-width:220px!important;
+}
+.ivu-table-cell{
+    padding-left:10px;
+    padding-right:10px;
 }
 </style>

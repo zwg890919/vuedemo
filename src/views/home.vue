@@ -2,7 +2,7 @@
 	<div class="layout" :class="{'minLayout':container}">
 		<layout-nav :asideIndent="asideIndent" :headerFixed="headerFixed" :asidefixed="Asidefixed"></layout-nav>
 		<layout-aside :asideIndent="asideIndent" :headerFixed="headerFixed" :Asidefixed="Asidefixed"></layout-aside>
-		<div class="layout-content">
+		<div class="layout-content" :class="{'extend-content':asideIndent}">
 			<keep-alive>
 				<router-view></router-view>
 			</keep-alive>
@@ -92,7 +92,7 @@ export default {
         padding-top:20px;
         padding-left:20px;
         padding-right: 20px;
-    }  
+    }
 }
 </style>
 
