@@ -14,7 +14,7 @@
 
                     <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
                     <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
-                        <a @click="drowpDown(item)">
+                        <a @click="drowpDown(item,$event)">
                             <Icon type="ios-paper"></Icon>
                             <span v-show="!asideIndent">{{item.name}}</span>
                             <span class="fr" v-show="!asideIndent">
@@ -39,6 +39,7 @@
                 </ul>
             </div>
         </div>
+        <ul></ul>
     </div>
 </template>
 <script>
@@ -58,7 +59,8 @@ export default {
     },
     props: ['asideIndent', 'Asidefixed', 'headerFixed'],
     methods: {
-        drowpDown(item) {
+        drowpDown(item,el) {
+            console.log(item,el)
             if (this.lastmenu == item.id) {
                 this.lastmenu = ""
                 window.localStorage.setItem("menuId", "")
@@ -97,6 +99,7 @@ export default {
     .layout-aside__item{
         a{
             padding:0px;
+            height:50px;
             i{
                 display: block;
                 float: none;
@@ -169,7 +172,7 @@ export default {
         a {
             position: relative;
             display: block;
-            height:50px;
+            height:40px;
             padding: 10px 20px;
             font-weight: normal;
             text-transform: none;
