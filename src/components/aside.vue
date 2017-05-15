@@ -2,21 +2,21 @@
     <div class="layout-aside" :class="{'asideIndent':asideIndent,'layout-fixed':Asidefixed,'aside-fixed':!Asidefixed&&headerFixed}">
         <div class="nav_warp">
             <ul>
-                <li class="layout-aside__title">快捷菜单</li>
+                <li class="layout-aside__title" v-show="!asideIndent">快捷菜单</li>
                 <li class="layout-aside__item layout-aside__quick">
                     <a href="">
                         <Icon type="ios-paper"></Icon>
-                        应用主页
+                        <span v-show="!asideIndent">应用主页</span>
                     </a>
                 </li>
                 <li class="line"></li>
 
-                <li class="layout-aside__title">{{currentMenu.name}}</li>
+                <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
                 <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
                     <a @click="drowpDown(item)">
                         <Icon type="ios-paper"></Icon>
-                        <span>{{item.name}}</span>
-                        <span class="fr">
+                        <span v-show="!asideIndent">{{item.name}}</span>
+                        <span class="fr" v-show="!asideIndent">
                             <Icon type="chevron-right" v-show="item.id != lastmenu"></Icon>
                             <Icon type="chevron-down" v-show="item.id == lastmenu"></Icon>
                         </span>
@@ -32,13 +32,49 @@
                 <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
                     <router-link :to="item.menuHref | transformUrl">
                         <Icon type="ios-paper"></Icon>
-                        <span>{{item.name}}</span>
+                        <span v-show="!asideIndent">{{item.name}}</span>
                     </router-link>
                 </li>
             </ul>
         </div>
     </div>
 </template>
+<script>
+export default {
+    data() {
+        return {
+            lastmenu: window.localStorage.getItem("menuId")
+        }
+    },
+    computed: {
+        activeName() {
+            let url = this.$route.path.substring(1);
+            url = url.replace(/\//g, ".")
+            return url
+        },
+        currentMenu: v => v.$store.state.appMenu.currentApp,
+    },
+    props: ['asideIndent', 'Asidefixed', 'headerFixed'],
+    methods: {
+        drowpDown(item) {
+            if (this.lastmenu == item.id) {
+                this.lastmenu = ""
+                window.localStorage.setItem("menuId", "")
+            } else {
+                this.lastmenu = item.id
+                window.localStorage.setItem("menuId", item.id)
+            }
+
+        },
+    },
+    filters: {
+        transformUrl(val) {
+            val = "/" + val.replace(/\./g, "/")
+            return val
+        }
+    }
+}
+</script>
 <style lang="scss" scoped>
 .asideTitle {
     color: #5c798f;
@@ -52,7 +88,30 @@
     overflow-x: hidden;
     overflow-y: scroll;
 }
-
+.asideIndent{
+    .nav_warp{
+        width:77px;
+    }
+    .layout-aside__item{
+        a{
+            padding:0px;
+            i{
+                display: block;
+                float: none;
+                width: auto;
+                margin: 0;
+                font-size: 16px;
+                line-height: 50px;
+                border: none !important;
+            }
+        }
+        ul{
+            position: absolute;
+            left:100%;
+            top:0px;
+        }
+    }
+}
 .layout-aside {
     .line {
         width: 100%;
@@ -108,6 +167,7 @@
         a {
             position: relative;
             display: block;
+            height:50px;
             padding: 10px 20px;
             font-weight: normal;
             text-transform: none;
@@ -138,39 +198,3 @@
     }
 }
 </style>
-<script>
-export default {
-    data() {
-        return {
-            lastmenu: window.localStorage.getItem("menuId")
-        }
-    },
-    computed: {
-        activeName() {
-            let url = this.$route.path.substring(1);
-            url = url.replace(/\//g, ".")
-            return url
-        },
-        currentMenu: v => v.$store.state.appMenu.currentApp,
-    },
-    props: ['asideIndent', 'Asidefixed', 'headerFixed'],
-    methods: {
-        drowpDown(item) {
-            if (this.lastmenu == item.id) {
-                this.lastmenu = ""
-                window.localStorage.setItem("menuId", "")
-            } else {
-                this.lastmenu = item.id
-                window.localStorage.setItem("menuId", item.id)
-            }
-
-        },
-    },
-    filters: {
-        transformUrl(val) {
-            val = "/" + val.replace(/\./g, "/")
-            return val
-        }
-    }
-}
-</script>
