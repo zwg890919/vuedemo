@@ -24,7 +24,6 @@
             left: 0;
             z-index: 1000;
             width: 200px;
-            overflow: hidden;
         }
     }
     &-nav {
@@ -155,7 +154,7 @@
         color: #7793a7;
         float: left;
         background-color: #1c2b36;
-        overflow: hidden;
+        // overflow: hidden;
         &.asideIndent {
             width: 60px;
         }
@@ -198,4 +197,24 @@
 }
 .extend-content{
     left: 60px;
+}
+
+.aside-con{
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    width: 200px;
+    overflow: hidden;
+}
+.minLayout{
+    .aside-con{
+        left:inherit;
+    }
+}
+.asideIndent{
+    .aside-con{
+        width:60px;
+    }
 }

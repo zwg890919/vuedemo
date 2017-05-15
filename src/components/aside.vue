@@ -1,41 +1,43 @@
 <template>
     <div class="layout-aside" :class="{'asideIndent':asideIndent,'layout-fixed':Asidefixed,'aside-fixed':!Asidefixed&&headerFixed}">
-        <div class="nav_warp">
-            <ul>
-                <li class="layout-aside__title" v-show="!asideIndent">快捷菜单</li>
-                <li class="layout-aside__item layout-aside__quick">
-                    <a href="">
-                        <Icon type="ios-paper"></Icon>
-                        <span v-show="!asideIndent">应用主页</span>
-                    </a>
-                </li>
-                <li class="line"></li>
+        <div class="aside-con">
+            <div class="nav_warp">
+                <ul>
+                    <li class="layout-aside__title" v-show="!asideIndent">快捷菜单</li>
+                    <li class="layout-aside__item layout-aside__quick">
+                        <a href="">
+                            <Icon type="ios-paper"></Icon>
+                            <span v-show="!asideIndent">应用主页</span>
+                        </a>
+                    </li>
+                    <li class="line"></li>
 
-                <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
-                <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
-                    <a @click="drowpDown(item)">
-                        <Icon type="ios-paper"></Icon>
-                        <span v-show="!asideIndent">{{item.name}}</span>
-                        <span class="fr" v-show="!asideIndent">
-                            <Icon type="chevron-right" v-show="item.id != lastmenu"></Icon>
-                            <Icon type="chevron-down" v-show="item.id == lastmenu"></Icon>
-                        </span>
-                    </a>
-                    <ul>
-                        <li v-for="subitem in item.childrens" :key="subitem.id">
-                            <router-link :to="subitem.menuHref | transformUrl" active-class="active">
-                                {{subitem.name}}
-                            </router-link>
-                        </li>
-                    </ul>
-                </li>
-                <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
-                    <router-link :to="item.menuHref | transformUrl">
-                        <Icon type="ios-paper"></Icon>
-                        <span v-show="!asideIndent">{{item.name}}</span>
-                    </router-link>
-                </li>
-            </ul>
+                    <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
+                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
+                        <a @click="drowpDown(item)">
+                            <Icon type="ios-paper"></Icon>
+                            <span v-show="!asideIndent">{{item.name}}</span>
+                            <span class="fr" v-show="!asideIndent">
+                                <Icon type="chevron-right" v-show="item.id != lastmenu"></Icon>
+                                <Icon type="chevron-down" v-show="item.id == lastmenu"></Icon>
+                            </span>
+                        </a>
+                        <ul>
+                            <li v-for="subitem in item.childrens" :key="subitem.id">
+                                <router-link :to="subitem.menuHref | transformUrl" active-class="active">
+                                    {{subitem.name}}
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
+                        <router-link :to="item.menuHref | transformUrl">
+                            <Icon type="ios-paper"></Icon>
+                            <span v-show="!asideIndent">{{item.name}}</span>
+                        </router-link>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
