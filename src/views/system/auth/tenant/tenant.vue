@@ -75,7 +75,7 @@ export default {
                 },
                 {
                     title: '账号',
-                    width: 70,
+                    width: 90,
                     key: 'tenantCode',
                     sortable: true
                 },

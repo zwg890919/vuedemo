@@ -18,6 +18,9 @@
     right: 0px;
     overflow-y: auto;
 }
+.extend-content{
+    left:60px;
+}
 </style>
 <script>
 import layoutNav from "../components/nav.vue"
