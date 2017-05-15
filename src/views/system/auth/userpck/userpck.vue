@@ -6,8 +6,7 @@
     </div>
 </template>
 <script>
-import api from "@/api"
-import common from "@/assets/js/common.js"
+
 import userpckUser from "./userpck-user.vue"
 import userpckGroup from "./userpck-group.vue"
 import userpckTree from "./userpck-tree.vue"
@@ -206,7 +205,7 @@ export default{
 }
 
 .tree-wrap {
-    padding: 15px;
+    padding: 8px 15px;
     font-size: 16px;
     .ivu-tree-arrow {
         padding: 0px 5px 0px 0px;

@@ -1,16 +1,69 @@
 <template>
     <div class="cell">
         <div class="scroll-cell">
-            <!--<Tree :data="menuList" show-checkbox class="tree-wrap"></Tree>-->
+            <div class="tree-title" v-show="!checkDisable">
+                <Input v-model="pckName" placeholder="请输入..." style="width: 300px"></Input>
+                <span class="fr">
+                    <Button type="success" size="small" @click="updataItempck">确认提交</Button>
+                    <Button type="info" size="small">取消</Button>
+                </span>
+            </div>
+            <Tree ref="tree" :data="treeList" show-checkbox class="tree-wrap"></Tree>
         </div>
     </div>
 </template>
 <script>
+import api from "@/api"
+import { mapState, mapGetters } from 'vuex'
+import {findComponentsDownward} from '@/assets/js/common.js'
 export default {
-    name:'userpck-tree',
-    data(){
-        return{
-
+    name: 'userpck-tree',
+    data() {
+        return {
+            treeList: [],
+            pckName: ""
+        }
+    },
+    computed: {
+        ...mapState({
+            currentUser: state => state.userPck.currentUser,
+            currentGroup: state => state.userPck.currentGroup,
+            menuData: state => state.userPck.menuData,
+            checkDisable: state => state.userPck.checkDisable,
+            groupPckname: state => state.userPck.currentGroup.pckName,
+        }),
+        ...mapGetters([
+            'menuList'
+        ])
+    },
+    watch: {
+        menuList(value) {
+            this.treeList = value
+        },
+        currentGroup(value) {
+            this.pckName = value.pckName || this.groupPckname
+        }
+    },
+    created() {
+        this.getMenuList()
+    },
+    methods: {
+        async getMenuList() {
+            const data = await api.get(api.config.menuTeant)
+            this.$store.commit('setMenuData', [data.datas.result])
+        },
+        async updataItempck() {
+            var menuIds = String(findComponentsDownward(this.$refs.tree, 'TreeNode'))
+            const data = await api.put(api.config.authItempck, {
+                pckId: this.currentGroup.pckId,
+                pckName: this.pckName,
+                pckMenuId: menuIds.slice(0, -1)
+            })
+            this.$store.commit('updataGroup', {
+                pckName: this.pckName,
+                pckMenuId: menuIds.slice(0, -1)
+            })
+            this.$store.commit("modifiyMenu",true)
         }
     }
 }
@@ -34,5 +87,16 @@ export default {
     bottom: 0px;
     overflow: hidden;
     overflow-y: auto;
+}
+
+.tree-title {
+    border-bottom: 1px solid #dee5e7;
+    padding: 10px;
+    span {
+        padding-top: 5px;
+        button {
+            margin-right: 10px;
+        }
+    }
 }
 </style>

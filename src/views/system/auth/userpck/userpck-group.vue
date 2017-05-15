@@ -8,7 +8,7 @@
         </div>
         <div class="grouplist">
             <div class="grouplist-wrap">
-                <p v-for="item in filterBy(itempackList,groupFilter,'pckName')" :class="{'active':currentUser.userRole == item.pckId}" @click="selectGroup(item)">
+                <p v-for="item in filterBy(itempackList,groupFilter,'pckName')" :class="{'active':currentUser.userRole == item.pckId}" @click="selectGroup(item)" @dblclick="modifyGroup(item)">
                     {{item.pckName}}
                     <Icon type="close-round" size="16px" class="fr" @click.native="delPck(item)"></Icon>
                 </p>
@@ -32,14 +32,15 @@ export default {
     data() {
         return {
             groupFilter: "",
-            itempackList: [],
             pckName: "",
             addPck: true,
         }
     },
     computed: mapState({
         currentUser: state => state.userPck.currentUser,
-        currentGroup: state => state.userPck.currentGroup
+        currentGroup: state => state.userPck.currentGroup,
+        itempackList: state => state.userPck.itempackList,
+        checkDisable: state => state.userPck.checkDisable,
     }),
     created() {
         this.getItempckList()
@@ -51,10 +52,11 @@ export default {
             })
             this.currentUser.userRole = item.pckId
             this.$store.dispatch('selectGroup', item)
+            this.$store.commit("modifiyMenu",true)
         },
         async getItempckList() {
             const data = await api.post(api.config.itempckList)
-            this.itempackList = data.datas.result
+            this.$store.commit("setItempackList",data.datas.result)
         },
         async pckNameAdd() {
             const data = await api.post(api.config.authItempck, {
@@ -69,6 +71,11 @@ export default {
             if (data) {
                 this.getItempckList()
             }
+        },
+        modifyGroup(item){
+            this.$store.dispatch('selectGroup', item)
+            this.$store.commit("modifiyMenu",false)
+
         }
     },
     directives: {
