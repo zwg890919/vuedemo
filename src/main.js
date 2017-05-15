@@ -20,7 +20,7 @@ import '../my-theme/index.less';
 import '@/assets/css/base.css'
 import '../plugin/toast/index.css'
 
-
+require('font-awesome-webpack');
 
 Vue.use(iView)
 Vue.use(VueCookie)

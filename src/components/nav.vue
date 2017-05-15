@@ -30,7 +30,7 @@
                     <Icon type="ios-bell-outline"></Icon>
                 </a>
                 <a class="nav-btn" @click="settingshow = !settingshow">
-                    <Icon type="ios-gear-outline"></Icon>
+                    <Icon type="ios-gear" class="fa-spin"></Icon>
                 </a>
             </div>
         </div>
