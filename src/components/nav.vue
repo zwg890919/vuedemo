@@ -11,7 +11,7 @@
                 <Icon size="20" type="navicon-round"></Icon>
             </span>
             <span>
-                <Icon size="20" type="ios-person-outline"></Icon>
+                <Icon size="20"  type="person"></Icon>
             </span>
             <div class="layout-nav-dropdown" :class="{active : dropdown}" @click="dropdown = !dropdown">
                 <a>
