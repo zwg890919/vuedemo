@@ -34,127 +34,133 @@ export default new Router({
 			path: '/app',
 			name: 'app',
 			component: Home,
-			children: [{
-				path: 'table',
-				name: "app.table",
-				component: {
-					template: "<keep-alive><router-view></router-view></keep-alive>",
+			children: [
+				{
+					path: '/',
+					name: "home",
+					component: require('../views/example/index.vue')
 				},
-				children: [{
-					path: 'tablestatic',
-					name: "app.table.tablestatic",
-					component: tableStatic
+				{
+					path: 'table',
+					name: "app.table",
+					component: {
+						template: "<keep-alive><router-view></router-view></keep-alive>",
+					},
+					children: [{
+						path: 'tablestatic',
+						name: "app.table.tablestatic",
+						component: tableStatic
+					}, {
+						path: 'datatable',
+						name: "app.table.datatable",
+						component: dataTable
+					}]
 				}, {
-					path: 'datatable',
-					name: "app.table.datatable",
-					component: dataTable
+					path: 'form',
+					name: "app.form",
+					component: {
+						template: "<keep-alive><router-view></router-view></keep-alive>",
+					},
+					children: [{
+						path: 'slider',
+						name: "app.form.slider",
+						component: slider
+					}, {
+						path: 'elements',
+						name: "app.form.elements",
+						component: elements
+					}, {
+						path: 'fileupload',
+						name: "app.form.fileupload",
+						component: fileUpload
+					}, {
+						path: 'select',
+						name: "app.form.select",
+						component: select
+					}, {
+						path: 'validation',
+						name: "app.form.validation",
+						component: validation
+					}, {
+						path: 'wizard',
+						name: "app.form.wizard",
+						component: wizard
+					}, {
+						path: 'editor',
+						name: "app.form.editor",
+						component: editor
+					}, {
+						path: 'imageCrop',
+						name: "app.form.imageCrop",
+						component: imageCrop
+					}]
+				}, {
+					path: "tree",
+					name: "app.tree",
+					component: {
+						template: "<keep-alive><router-view></router-view></keep-alive>",
+					},
+					children: [{
+						path: "navtree",
+						name: "app.tree.navtree",
+						component: resolve => require(['../views/example/tree/navtree.vue'], resolve)
+					}]
+				}, {
+					path: "chart",
+					name: "app.chart",
+					component: resolve => require(['../views/example/chart/chart.vue'], resolve),
+				}, {
+					path: "calendar",
+					name: "app.calendar",
+					component: resolve => require(['../views/example/calendar/calendar.vue'], resolve),
+				}, {
+					path: "ui",
+					name: "app.ui",
+					component: {
+						template: "<keep-alive><router-view></router-view></keep-alive>",
+					},
+					children: [{
+						path: "css",
+						name: "app.ui.css",
+						component: resolve => require(['../views/example/ui/css.vue'], resolve)
+					}, {
+						path: "timeline",
+						name: "app.ui.timeline",
+						component: resolve => require(['../views/example/ui/timeline.vue'], resolve)
+					}, {
+						path: "portlet",
+						name: "app.ui.portlet",
+						component: resolve => require(['../views/example/ui/portlet.vue'], resolve)
+					}, {
+						path: "sortable",
+						name: "app.ui.sortable",
+						component: resolve => require(['../views/example/ui/sortable.vue'], resolve)
+					}, {
+						path: "buttons",
+						name: "app.ui.buttons",
+						component: resolve => require(['../views/example/ui/buttons.vue'], resolve)
+					}, {
+						path: "dialog",
+						name: "app.ui.dialog",
+						component: resolve => require(['../views/example/ui/dialog.vue'], resolve)
+					}, {
+						path: "toaster",
+						name: "app.ui.toaster",
+						component: resolve => require(['../views/example/ui/toaster.vue'], resolve)
+					}, {
+						path: "grids",
+						name: "app.ui.grids",
+						component: resolve => require(['../views/example/ui/grids.vue'], resolve)
+					}, {
+						path: "fonts",
+						name: "app.ui.fonts",
+						component: resolve => require(['../views/example/ui/fonts.vue'], resolve)
+					}, {
+						path: "bootstrap",
+						name: "app.ui.bootstrap",
+						component: resolve => require(['../views/example/ui/bootstrap.vue'], resolve)
+					}]
 				}]
-			}, {
-				path: 'form',
-				name: "app.form",
-				component: {
-					template: "<keep-alive><router-view></router-view></keep-alive>",
-				},
-				children: [{
-					path: 'slider',
-					name: "app.form.slider",
-					component: slider
-				}, {
-					path: 'elements',
-					name: "app.form.elements",
-					component: elements
-				}, {
-					path: 'fileupload',
-					name: "app.form.fileupload",
-					component: fileUpload
-				}, {
-					path: 'select',
-					name: "app.form.select",
-					component: select
-				}, {
-					path: 'validation',
-					name: "app.form.validation",
-					component: validation
-				}, {
-					path: 'wizard',
-					name: "app.form.wizard",
-					component: wizard
-				}, {
-					path: 'editor',
-					name: "app.form.editor",
-					component: editor
-				}, {
-					path: 'imageCrop',
-					name: "app.form.imageCrop",
-					component: imageCrop
-				}]
-			},{
-                path:"tree",
-                name:"app.tree",
-                component:{
-                    template: "<keep-alive><router-view></router-view></keep-alive>",
-                },
-                children:[{
-                    path:"navtree",
-                    name:"app.tree.navtree",
-                    component:resolve => require(['../views/example/tree/navtree.vue'], resolve)
-                }]
-            },{
-                path:"chart",
-                name:"app.chart",
-                component:resolve => require(['../views/example/chart/chart.vue'], resolve),
-            },{
-                path:"calendar",
-                name:"app.calendar",
-                component:resolve => require(['../views/example/calendar/calendar.vue'], resolve),
-            },{
-                path:"ui",
-                name:"app.ui",
-                component:{
-                    template: "<keep-alive><router-view></router-view></keep-alive>",
-                },
-                children:[{
-                    path:"css",
-                    name:"app.ui.css",
-                    component:resolve => require(['../views/example/ui/css.vue'], resolve)
-                }, {
-                    path:"timeline",
-                    name:"app.ui.timeline",
-                    component:resolve => require(['../views/example/ui/timeline.vue'], resolve)
-                }, {
-                    path:"portlet",
-                    name:"app.ui.portlet",
-                    component:resolve => require(['../views/example/ui/portlet.vue'], resolve)
-                }, {
-                    path:"sortable",
-                    name:"app.ui.sortable",
-                    component:resolve => require(['../views/example/ui/sortable.vue'], resolve)
-                },{
-                    path:"buttons",
-                    name:"app.ui.buttons",
-                    component:resolve => require(['../views/example/ui/buttons.vue'], resolve)
-                }, {
-                    path:"dialog",
-                    name:"app.ui.dialog",
-                    component:resolve => require(['../views/example/ui/dialog.vue'], resolve)
-                }, {
-                    path:"toaster",
-                    name:"app.ui.toaster",
-                    component:resolve => require(['../views/example/ui/toaster.vue'], resolve)
-                }, {
-                    path:"grids",
-                    name:"app.ui.grids",
-                    component:resolve => require(['../views/example/ui/grids.vue'], resolve)
-                }, {
-                    path:"fonts",
-                    name:"app.ui.fonts",
-                    component:resolve => require(['../views/example/ui/fonts.vue'], resolve)
-                }, {
-                    path:"bootstrap",
-                    name:"app.ui.bootstrap",
-                    component:resolve => require(['../views/example/ui/bootstrap.vue'], resolve)
-                }]
-            }]
 		}, {
 			path: '/fix',
 			name: 'fix',
