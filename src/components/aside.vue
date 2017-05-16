@@ -92,10 +92,11 @@ export default {
             this.lastmenu = item.id
             window.localStorage.setItem("menuId", item.id)
             const react = el.target.getBoundingClientRect()
+            console.log(document.documentElement.scrollTop)
             if(this.asideIndent){
                 this.currentItem = item.childrens
                 this.currentStyle.left = react.left+60 +"px"
-                this.currentStyle.top = react.top-50 +"px"
+                this.currentStyle.top = react.top + document.documentElement.scrollTop +"px"
             }
         },
         hideCurrent(){
@@ -120,7 +121,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .currentItem{
-    position: absolute;
+    position: fixed;
     background:#131e26;
     width:200px;
     max-height:200px;
