@@ -39,9 +39,9 @@
                 </ul>
             </div>
         </div>
-        <div v-if="asideIndent && currentItem.length > 0" class="currentItem" :style="currentStyle"  @mouseleave="hideCurrent()">
+        <div v-if="asideIndent && currentItem.length > 0" class="currentItem" :style="currentStyle" @mouseleave="hideCurrent()">
             <ul>
-                <li v-for="subitem in currentItem" :key="subitem.id" >
+                <li v-for="subitem in currentItem" :key="subitem.id">
                     <router-link :to="subitem.menuHref | transformUrl" active-class="active">
                         {{subitem.name}}
                     </router-link>
@@ -55,8 +55,8 @@ export default {
     data() {
         return {
             lastmenu: window.localStorage.getItem("menuId"),
-            currentItem:[],
-            currentStyle:{
+            currentItem: [],
+            currentStyle: {
                 top: "0px",
                 left: "0px",
             }
@@ -73,9 +73,9 @@ export default {
     props: ['asideIndent', 'Asidefixed', 'headerFixed'],
     methods: {
         drowpDown(item) {
-            if(this.asideIndent){
+            if (this.asideIndent) {
                 this.currentItem = []
-            }else{
+            } else {
                 if (this.lastmenu == item.id) {
                     this.lastmenu = ""
                     window.localStorage.setItem("menuId", "")
@@ -85,26 +85,24 @@ export default {
                 }
             }
         },
-        showCurrent(item,el) {
-            if(!this.asideIndent){
-                return
-            }
-            this.lastmenu = item.id
-            window.localStorage.setItem("menuId", item.id)
-            const react = el.target.getBoundingClientRect()
-            console.log(document.documentElement.scrollTop)
-            if(this.asideIndent){
+        showCurrent(item, el) {
+            if (this.asideIndent) {
+                this.lastmenu = item.id
+                window.localStorage.setItem("menuId", item.id)
+                const react = el.target.getBoundingClientRect()
                 this.currentItem = item.childrens
-                this.currentStyle.left = react.left+60 +"px"
-                this.currentStyle.top = react.top + document.documentElement.scrollTop +"px"
+                this.currentStyle.left = react.left + 60 + "px"
+                this.currentStyle.top = react.top + document.documentElement.scrollTop + "px"
             }
         },
-        hideCurrent(){
-            this.lastmenu = ""
-            this.currentItem = []
-            window.localStorage.setItem("menuId", "")
+        hideCurrent() {
+            if (this.asideIndent) {
+                this.lastmenu = ""
+                this.currentItem = []
+                window.localStorage.setItem("menuId", "")
+            }
         },
-        selectedMenu(item){
+        selectedMenu(item) {
             this.lastmenu = item.id
             window.localStorage.setItem("menuId", item.id)
             var hrefUrl = "/" + item.menuHref.replace(/\./g, "/")
@@ -120,26 +118,27 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.currentItem{
+.currentItem {
     position: fixed;
-    background:#131e26;
-    width:200px;
-    max-height:200px;
+    background: #131e26;
+    width: 200px;
+    max-height: 200px;
     overflow: hidden;
-    z-index:9999999;
-    ul{
+    z-index: 9999999;
+    ul {
         width: 220px;
         max-height: 200px;
         overflow-x: hidden;
         overflow-y: scroll;
-        li{
-            a{
+        li {
+            a {
                 display: block;
                 width: 220px;
                 color: #869fb1;
-                padding:5px 15px;
+                padding: 5px 15px;
                 line-height: 40px;
-                &.active,&:hover{
+                &.active,
+                &:hover {
                     background-color: #16232d;
                     color: #fff;
                 }
@@ -147,6 +146,7 @@ export default {
         }
     }
 }
+
 .asideTitle {
     color: #5c798f;
     margin: 15px 15px 10px;
@@ -159,15 +159,16 @@ export default {
     overflow-x: hidden;
     overflow-y: scroll;
 }
-.asideIndent{
-    .nav_warp{
-        width:77px;
+
+.asideIndent {
+    .nav_warp {
+        width: 77px;
     }
-    .layout-aside__item{
-        a{
-            padding:0px;
-            height:50px;
-            i{
+    .layout-aside__item {
+        a {
+            padding: 0px;
+            height: 50px;
+            i {
                 display: block;
                 float: none;
                 width: auto;
@@ -176,15 +177,15 @@ export default {
                 line-height: 50px;
                 border: none !important;
             }
-
         }
-        ul{
+        ul {
             position: absolute;
-            left:100%;
-            top:0px;
+            left: 100%;
+            top: 0px;
         }
     }
 }
+
 .layout-aside {
     .line {
         width: 100%;
@@ -240,13 +241,13 @@ export default {
         a {
             position: relative;
             display: block;
-            height:40px;
+            height: 40px;
             padding: 10px 20px;
             font-weight: normal;
             text-transform: none;
             color: #869fb1;
-            &.active{
-                background:#131e26;
+            &.active {
+                background: #131e26;
             }
             i {
                 position: relative;

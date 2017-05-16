@@ -20,9 +20,9 @@
         &.layout-aside {
             top: 50px;
             bottom: 0;
-            padding-top:0px;
+            padding-top: 0px;
             left: 0;
-            z-index: 1000;
+            z-index: 103;
             width: 200px;
         }
     }
@@ -31,13 +31,13 @@
         height: 50px;
         text-align: left;
         background: #fff;
-        z-index: 9999;
+        z-index: 206;
         &__header {
             width: 200px;
             height: 50px;
             background-color: #1c2b36;
             float: left;
-            z-index:10001;
+            z-index: 10001;
             .navbar-brand {
                 display: inline-block;
                 float: none;
@@ -153,8 +153,7 @@
         width: 200px;
         color: #7793a7;
         float: left;
-        background-color: #1c2b36;
-        // overflow: hidden;
+        background-color: #1c2b36; // overflow: hidden;
         &.asideIndent {
             width: 60px;
         }
@@ -187,20 +186,28 @@
     }
     .layout-aside {
         left: inherit;
-        &:before{
+        &:before {
             left: inherit;
         }
     }
 }
-.aside-fixed{
-  margin-top:50px;
+
+.aside-fixed {
+    margin-top: 50px;
 }
-.extend-content{
+
+.extend-content {
     left: 60px;
 }
 
-.aside-con{
-    position: fixed;
+.layout-fixed {
+    .aside-con {
+        position: fixed;
+    }
+}
+
+.aside-con {
+    // position: fixed;
     top: 50px;
     bottom: 0;
     left: 0;
@@ -208,13 +215,15 @@
     width: 200px;
     overflow: hidden;
 }
-.minLayout{
-    .aside-con{
-        left:inherit;
+
+.minLayout {
+    .aside-con {
+        left: inherit;
     }
 }
-.asideIndent{
-    .aside-con{
-        width:60px;
+
+.asideIndent {
+    .aside-con {
+        width: 60px;
     }
 }
