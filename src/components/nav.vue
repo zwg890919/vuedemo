@@ -1,18 +1,18 @@
 <template>
     <div class="layout-nav" :class="{'layout-fixed':headerFixed}">
         <div class="layout-nav__header" :class="{'layout-indent':asideIndent,'layout-fixed':asidefixed||headerFixed}">
-            <a href="" class="navbar-brand">
+            <a href="javascript:;" class="navbar-brand">
                 <Icon type="ionic"></Icon>
                 <span v-show="!asideIndent">聚有财理财</span>
             </a>
         </div>
         <div class="layout-nav__con" :class="{'layout-indent':asideIndent}">
-            <a class="nav-btn" @click="changeIndent">
-                <Icon type="navicon-round"></Icon>
-            </a>
-            <a class="nav-btn">
-                <Icon type="ios-person-outline"></Icon>
-            </a>
+            <span @click="changeIndent">
+                <Icon size="20" type="navicon-round"></Icon>
+            </span>
+            <span>
+                <Icon size="20" type="ios-person-outline"></Icon>
+            </span>
             <div class="layout-nav-dropdown" :class="{active : dropdown}" @click="dropdown = !dropdown">
                 <a>
                     应用
@@ -21,17 +21,42 @@
                 <div class="dropdown-area" v-show="dropdown">
                     <div @click="changeMenu(userapp)" v-for="userapp in applist" :key="userapp.id">
                         <p>{{userapp.name}}</p>
-                        <img :src="'../../static'+userapp.menuIconclass" width="100" height="100" alt="">
+                        <img :src="'../../static'+userapp.menuIconclass" width="100" height="100">
                     </div>
                 </div>
             </div>
-            <div class="navbar-right">
-                <a class="nav-btn">
-                    <Icon type="ios-bell-outline"></Icon>
-                </a>
-                <a class="nav-btn" @click="settingshow = !settingshow">
-                    <Icon type="ios-gear" class="fa-spin"></Icon>
-                </a>
+            <div class="navbar-right fr">
+                <span>
+                    <Icon size="20" type="ios-bell-outline"></Icon>
+                </span>
+                <span @click="settingshow = !settingshow">
+                    <Icon size="20" type="ios-gear" class="fa-spin"></Icon>
+                </span>
+                <div class="layout-nav-dropdown navbar-right__user" @click="userShow = !userShow">
+                    <span>
+                        周文广
+                        <Icon type="arrow-down-b"></Icon>
+                    </span>
+                    <div class="head">
+                        <img src="../assets/images/a0.jpg" width="40" height="40">
+                    </div>
+                    <div class="user" v-show="userShow">
+                        <ul>
+                            <li>
+                                <a href="javascript:;">个人主页</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">修改密码</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">屏幕锁定</a>
+                            </li>
+                            <li @click="quit">
+                                <a href="javascript:;">退出登录</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <setting :settingshow="settingshow"></setting>
@@ -40,12 +65,14 @@
 <script>
 import setting from "./setting"
 import { mapActions } from 'vuex'
+import api from '@/api'
 
 export default {
     data() {
         return {
             dropdown: false,
             settingshow: false,
+            userShow: false
         }
     },
     props: ["asideIndent", 'headerFixed', 'asidefixed'],
@@ -59,6 +86,10 @@ export default {
         ...mapActions([
             'changeMenu'
         ]),
+        async quit() {
+            // const data = await api.get(api.config.logout);
+            this.$router.push("/login");
+        }
     },
     components: {
         setting
@@ -67,6 +98,44 @@ export default {
 </script>
 <style lang="scss">
 .navbar-right {
-    float: right;
+    font-size: 0;
+    .navbar-right__user {
+        position: relative;
+        padding: 4px 10px 0;
+        .head {
+            display: inline-block;
+            vertical-align: middle;
+            img {
+                border-radius: 100%;
+            }
+        }
+        .user {
+            position: absolute;
+            right: 0;
+            top: 52px;
+            z-index: 100;
+            min-width: 160px;
+            padding: 2px 0;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.175);
+            li {
+                a {
+                    display: block;
+                    padding: 8px 15px;
+                    &:hover {
+                        background: #edf1f2;
+                        color: #333;
+                    }
+                }
+                &:last-child {
+                    padding-top: 5px;
+                    margin-top: 5px;
+                    border-top: 1px solid #e5e5e5;
+                }
+            }
+        }
+    }
 }
 </style>

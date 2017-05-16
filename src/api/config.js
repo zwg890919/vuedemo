@@ -7,6 +7,7 @@ module.exports = {
         'Content-Type': 'application/x-www-form-urlencoded'
     },
     getToken: "/dologin",
+    logout: "logout",
     getMenu: "/auth/menu/user?pageid=10011",
 
     /****全局菜单****/
