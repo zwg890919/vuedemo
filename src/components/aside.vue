@@ -125,6 +125,7 @@ export default {
     width:200px;
     max-height:200px;
     overflow: hidden;
+    z-index:9999999;
     ul{
         width: 220px;
         max-height: 200px;
