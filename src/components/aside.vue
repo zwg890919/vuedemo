@@ -14,7 +14,7 @@
 
                     <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
                     <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
-                        <a @click="drowpDown(item,$event)">
+                        <a @click="drowpDown(item)" @mouseenter="showCurrent(item,$event)">
                             <Icon type="ios-paper"></Icon>
                             <span v-show="!asideIndent">{{item.name}}</span>
                             <span class="fr" v-show="!asideIndent">
@@ -22,7 +22,7 @@
                                 <Icon type="chevron-down" v-show="item.id == lastmenu"></Icon>
                             </span>
                         </a>
-                        <ul>
+                        <ul v-if="!asideIndent && currentItem.length == 0">
                             <li v-for="subitem in item.childrens" :key="subitem.id">
                                 <router-link :to="subitem.menuHref | transformUrl" active-class="active">
                                     {{subitem.name}}
@@ -31,22 +31,35 @@
                         </ul>
                     </li>
                     <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
-                        <router-link :to="item.menuHref | transformUrl">
+                        <a @click="selectedMenu(item)" @mouseenter="hideCurrent()" :class="{active:lastmenu == item.id}">
                             <Icon type="ios-paper"></Icon>
                             <span v-show="!asideIndent">{{item.name}}</span>
-                        </router-link>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <ul></ul>
+        <div v-if="asideIndent && currentItem.length > 0" class="currentItem" :style="currentStyle"  @mouseleave="hideCurrent()">
+            <ul>
+                <li v-for="subitem in currentItem" :key="subitem.id" >
+                    <router-link :to="subitem.menuHref | transformUrl" active-class="active">
+                        {{subitem.name}}
+                    </router-link>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            lastmenu: window.localStorage.getItem("menuId")
+            lastmenu: window.localStorage.getItem("menuId"),
+            currentItem:[],
+            currentStyle:{
+                top: "0px",
+                left: "0px",
+            }
         }
     },
     computed: {
@@ -59,17 +72,43 @@ export default {
     },
     props: ['asideIndent', 'Asidefixed', 'headerFixed'],
     methods: {
-        drowpDown(item,el) {
-            console.log(item,el)
-            if (this.lastmenu == item.id) {
-                this.lastmenu = ""
-                window.localStorage.setItem("menuId", "")
-            } else {
-                this.lastmenu = item.id
-                window.localStorage.setItem("menuId", item.id)
+        drowpDown(item) {
+            if(this.asideIndent){
+                this.currentItem = []
+            }else{
+                if (this.lastmenu == item.id) {
+                    this.lastmenu = ""
+                    window.localStorage.setItem("menuId", "")
+                } else {
+                    this.lastmenu = item.id
+                    window.localStorage.setItem("menuId", item.id)
+                }
             }
-
         },
+        showCurrent(item,el) {
+            if(!this.asideIndent){
+                return
+            }
+            this.lastmenu = item.id
+            window.localStorage.setItem("menuId", item.id)
+            const react = el.target.getBoundingClientRect()
+            if(this.asideIndent){
+                this.currentItem = item.childrens
+                this.currentStyle.left = react.left+60 +"px"
+                this.currentStyle.top = react.top-50 +"px"
+            }
+        },
+        hideCurrent(){
+            this.lastmenu = ""
+            this.currentItem = []
+            window.localStorage.setItem("menuId", "")
+        },
+        selectedMenu(item){
+            this.lastmenu = item.id
+            window.localStorage.setItem("menuId", item.id)
+            var hrefUrl = "/" + item.menuHref.replace(/\./g, "/")
+            this.$router.push(hrefUrl)
+        }
     },
     filters: {
         transformUrl(val) {
@@ -80,6 +119,32 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.currentItem{
+    position: absolute;
+    background:#131e26;
+    width:200px;
+    max-height:200px;
+    overflow: hidden;
+    ul{
+        width: 220px;
+        max-height: 200px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        li{
+            a{
+                display: block;
+                width: 220px;
+                color: #869fb1;
+                padding:5px 15px;
+                line-height: 40px;
+                &.active,&:hover{
+                    background-color: #16232d;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
 .asideTitle {
     color: #5c798f;
     margin: 15px 15px 10px;
@@ -109,6 +174,7 @@ export default {
                 line-height: 50px;
                 border: none !important;
             }
+
         }
         ul{
             position: absolute;
@@ -177,6 +243,9 @@ export default {
             font-weight: normal;
             text-transform: none;
             color: #869fb1;
+            &.active{
+                background:#131e26;
+            }
             i {
                 position: relative;
                 float: left;
