@@ -1,6 +1,33 @@
 <template>
     <div class="layout-aside" :class="{'asideIndent':asideIndent,'layout-fixed':Asidefixed,'aside-fixed':!Asidefixed&&headerFixed}">
         <div class="aside-con">
+            <div class="layout-aside-user" v-show="asideUserShow" :class="{'layout-aside-user__s': asideIndent}">
+                <div class="head">
+                    <img src="../assets/images/a0.jpg" width="96" height="96" v-show="!asideIndent">
+                    <img src="../assets/images/a0.jpg" width="30" height="30" v-show="asideIndent">
+                </div>
+                <div class="user" @click="userShow = !userShow" v-show="!asideIndent">
+                    <span>周文广</span>
+                    <Icon size="12" type="arrow-down-b"></Icon>
+                    <p>行政服务中心</p>
+                </div>
+                <div class="user__win" v-show="userShow">
+                    <ul>
+                        <li>
+                            <a href="javascript:;">个人主页</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">修改密码</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">登陆历史</a>
+                        </li>
+                        <li @click="quit">
+                            <a href="javascript:;">退出登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="nav_warp">
                 <ul>
                     <li class="layout-aside__title" v-show="!asideIndent">快捷菜单</li>
@@ -30,11 +57,15 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
-                        <a @click="selectedMenu(item)" @mouseenter="hideCurrent()" :class="{active:lastmenu == item.id}">
+                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1" @mouseenter="hideCurrent()">
+                        <router-link :to="item.menuHref | transformUrl" active-class="active" class="itemMenu">
                             <Icon type="ios-paper"></Icon>
                             <span v-show="!asideIndent">{{item.name}}</span>
-                        </a>
+                        </router-link>
+                        <!--<a @click="selectedMenu(item)" @mouseenter="hideCurrent()" :class="{active:lastmenu == item.id}">
+                            <Icon type="ios-paper"></Icon>
+                            <span v-show="!asideIndent">{{item.name}}</span>
+                        </a>-->
                     </li>
                 </ul>
             </div>
@@ -59,7 +90,8 @@ export default {
             currentStyle: {
                 top: "0px",
                 left: "0px",
-            }
+            },
+            userShow: false
         }
     },
     computed: {
@@ -69,6 +101,7 @@ export default {
             return url
         },
         currentMenu: v => v.$store.state.appMenu.currentApp,
+        asideUserShow: v => v.$store.state.systemSetting.asideUserShow
     },
     props: ['asideIndent', 'Asidefixed', 'headerFixed'],
     methods: {
@@ -107,6 +140,10 @@ export default {
             window.localStorage.setItem("menuId", item.id)
             var hrefUrl = "/" + item.menuHref.replace(/\./g, "/")
             this.$router.push(hrefUrl)
+        },
+        async quit() {
+            // const data = await api.get(api.config.logout);
+            this.$router.push("/login");
         }
     },
     filters: {
@@ -147,6 +184,72 @@ export default {
     }
 }
 
+.layout-aside-user {
+    position: relative;
+    width: 200px;
+    padding: 15px 15px 25px;
+    text-align: center;
+    border-bottom: 2px solid #131e26;
+    .head {
+        padding-top: 10px;
+        img {
+            border-radius: 100%;
+        }
+    }
+    .user {
+        padding-top: 10px;
+        font-size: 0;
+        cursor: pointer;
+        span {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 12px;
+            color: #c4d0d9;
+        }
+        i {
+            margin: 4px 0 0 6px;
+            vertical-align: middle;
+        }
+        p {
+            line-height: 18px;
+            font-size: 12px;
+        }
+    }
+    .user__win {
+        position: absolute;
+        right: 0;
+        bottom: -140px;
+        z-index: 100;
+        min-width: 200px;
+        padding: 2px 0;
+        text-align: left;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.175);
+        li {
+            a {
+                display: block;
+                padding: 8px 15px;
+                &:hover {
+                    background: #edf1f2;
+                    color: #333;
+                }
+            }
+            &:last-child {
+                padding-top: 5px;
+                margin-top: 5px;
+                border-top: 1px solid #e5e5e5;
+            }
+        }
+    }
+}
+
+.layout-aside-user__s {
+    width: 60px;
+    border-bottom: 0 none;
+}
+
 .asideTitle {
     color: #5c798f;
     margin: 15px 15px 10px;
@@ -171,11 +274,11 @@ export default {
             i {
                 display: block;
                 float: none;
-                width: auto;
+                width: 60px;
                 margin: 0;
                 font-size: 16px;
                 line-height: 50px;
-                border: none !important;
+                border: none!important;
             }
         }
         ul {
@@ -273,5 +376,8 @@ export default {
             color: #23b7e5;
         }
     }
+}
+.itemMenu:hover{
+    background: #131e26
 }
 </style>
