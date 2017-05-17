@@ -10,8 +10,8 @@
             <span @click="changeIndent">
                 <Icon size="20" type="navicon-round"></Icon>
             </span>
-            <span>
-                <Icon size="20" type="ios-person-outline"></Icon>
+            <span @click="showUser">
+                <Icon size="20" type="person"></Icon>
             </span>
             <div class="layout-nav-dropdown" :class="{active : dropdown}" @click="dropdown = !dropdown">
                 <a>
@@ -84,7 +84,8 @@ export default {
             this.$store.commit("changeSetting", 3)
         },
         ...mapActions([
-            'changeMenu'
+            'changeMenu',
+            'showUser'
         ]),
         async quit() {
             // const data = await api.get(api.config.logout);

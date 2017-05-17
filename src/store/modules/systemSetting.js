@@ -1,9 +1,10 @@
-var state = {
+let state = {
     'headerFixed': false,
     'Asidefixed': false,
     'container': false,
     'asideIndent': false,
     'themeID': "1",
+    'asideUserShow': false
 }
 
 
@@ -15,10 +16,15 @@ if (localStorage.getItem("settings")) {
 
 
 const actions = {
-
+    showUser({ commit, state }) {
+        commit('changeUserShow');
+    }
 }
 
 const mutations = {
+    changeUserShow(state) {
+        state.asideUserShow = !state.asideUserShow;
+    },
     changeSetting(state, type) {
         switch (type) {
             case 1:

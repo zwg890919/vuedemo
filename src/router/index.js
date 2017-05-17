@@ -32,12 +32,11 @@ export default new Router({
 			component: Login
 		}, {
 			path: '/app',
-			name: 'app',
 			component: Home,
 			children: [
 				{
 					path: '/',
-					name: "home",
+					name: 'app',
 					component: require('../views/example/index.vue')
 				},
 				{
@@ -163,19 +162,19 @@ export default new Router({
 				}]
 		}, {
 			path: '/fix',
-			name: 'fix',
 			component: System,
 			children: [{
 				path: '',
+				name: 'fix',
 				redirect: 'auth',
 			}, {
 				path: 'auth',
-				name: "app.auth",
 				component: {
 					template: "<keep-alive><router-view></router-view></keep-alive>",
 				},
 				children: [{
 					path: '',
+					name: "app.auth",
 					redirect: 'user',
 				}, {
 					path: 'user',
