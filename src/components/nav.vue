@@ -10,13 +10,8 @@
             <span @click="changeIndent">
                 <Icon size="20" type="navicon-round"></Icon>
             </span>
-<<<<<<< HEAD
-            <span>
-                <Icon size="20"  type="person"></Icon>
-=======
             <span @click="showUser">
                 <Icon size="20" type="person"></Icon>
->>>>>>> zhengshang
             </span>
             <div class="layout-nav-dropdown" :class="{active : dropdown}" @click="dropdown = !dropdown">
                 <a>
