@@ -1,33 +1,33 @@
 <template>
     <div class="layout-aside" :class="{'asideIndent':asideIndent,'layout-fixed':Asidefixed,'aside-fixed':!Asidefixed&&headerFixed}">
-        <div class="layout-aside-user" v-show="asideUserShow" :class="{'layout-aside-user__s': asideIndent}">
-            <div class="head">
-                <img src="../assets/images/a0.jpg" width="96" height="96" v-show="!asideIndent">
-                <img src="../assets/images/a0.jpg" width="30" height="30" v-show="asideIndent">
-            </div>
-            <div class="user" @click="userShow = !userShow" v-show="!asideIndent">
-                <span>周文广</span>
-                <Icon size="12" type="arrow-down-b"></Icon>
-                <p>行政服务中心</p>
-            </div>
-            <div class="user__win" v-show="userShow">
-                <ul>
-                    <li>
-                        <a href="javascript:;">个人主页</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">修改密码</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">登陆历史</a>
-                    </li>
-                    <li @click="quit">
-                        <a href="javascript:;">退出登录</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
         <div class="aside-con">
+            <div class="layout-aside-user" v-show="asideUserShow" :class="{'layout-aside-user__s': asideIndent}">
+                <div class="head">
+                    <img src="../assets/images/a0.jpg" width="96" height="96" v-show="!asideIndent">
+                    <img src="../assets/images/a0.jpg" width="30" height="30" v-show="asideIndent">
+                </div>
+                <div class="user" @click="userShow = !userShow" v-show="!asideIndent">
+                    <span>周文广</span>
+                    <Icon size="12" type="arrow-down-b"></Icon>
+                    <p>行政服务中心</p>
+                </div>
+                <div class="user__win" v-show="userShow">
+                    <ul>
+                        <li>
+                            <a href="javascript:;">个人主页</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">修改密码</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">登陆历史</a>
+                        </li>
+                        <li @click="quit">
+                            <a href="javascript:;">退出登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="nav_warp">
                 <ul>
                     <li class="layout-aside__title" v-show="!asideIndent">快捷菜单</li>
@@ -240,7 +240,8 @@ export default {
         }
     }
 }
-.layout-aside-user__s{
+
+.layout-aside-user__s {
     width: 60px;
     border-bottom: 0 none;
 }
