@@ -7,6 +7,7 @@ import Qs from 'Qs'
  * @return {[object]} response
  */
 function checkStatus(response) {
+    return response.data;
     if (response.status == 200) {
         return response.data;
     } else {
