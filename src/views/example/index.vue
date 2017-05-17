@@ -25,8 +25,8 @@
                     </Col>
                     <Col span="12">
                         <div class="col bg-white">
-                            <h3 class="cl-bl">Webpack</h3>
-                            <p>构建工具</p>
+                            <h3 class="cl-bl">SASS</h3>
+                            <p>CSS预处理器</p>
                         </div>
                     </Col>
                     <Col span="24">

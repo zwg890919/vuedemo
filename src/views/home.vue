@@ -34,21 +34,7 @@ export default {
 		layoutAside
 	},
 	created() {
-		this.getMenu()
-	},
-	methods: {
-		async getMenu() {
-			const data = await api.get(api.config.getMenu);
-			var applist = [];
-			data.datas.result.childrens.forEach(function (node, index) {
-				if (node.id > 10019) {
-					applist.push(node)
-				}
-			}, this);
-			const currentApp = applist[0]
-			var state = { applist, currentApp }
-			this.$store.dispatch("getMenu", state)
-		}
+		this.$store.dispatch("getMenu", state)
 	}
 }
 </script>
