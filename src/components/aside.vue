@@ -38,7 +38,7 @@
                         </a>
                     </li>
                     <li class="line"></li>
-    
+
                     <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
                     <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
                         <a @click="drowpDown(item)" @mouseenter="showCurrent(item,$event)">
@@ -57,11 +57,15 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1">
-                        <a @click="selectedMenu(item)" @mouseenter="hideCurrent()" :class="{active:lastmenu == item.id}">
+                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1" @mouseenter="hideCurrent()">
+                        <router-link :to="item.menuHref | transformUrl" active-class="active" class="itemMenu">
                             <Icon type="ios-paper"></Icon>
                             <span v-show="!asideIndent">{{item.name}}</span>
-                        </a>
+                        </router-link>
+                        <!--<a @click="selectedMenu(item)" @mouseenter="hideCurrent()" :class="{active:lastmenu == item.id}">
+                            <Icon type="ios-paper"></Icon>
+                            <span v-show="!asideIndent">{{item.name}}</span>
+                        </a>-->
                     </li>
                 </ul>
             </div>
@@ -269,7 +273,7 @@ export default {
             i {
                 display: block;
                 float: none;
-                width: auto;
+                width: 60px;
                 margin: 0;
                 font-size: 16px;
                 line-height: 50px;
@@ -371,5 +375,8 @@ export default {
             color: #23b7e5;
         }
     }
+}
+.itemMenu:hover{
+    background: #131e26
 }
 </style>
