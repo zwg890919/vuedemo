@@ -2,7 +2,7 @@
     <div class="jyc-wrap">
         <h2>Chart</h2>
         <h3>vue-echarts-v3</h3>
-        <p><a class="link" href="https://github.com/xlsdg/vue-echarts-v3">https://github.com/xlsdg/vue-echarts-v3 </a>Vue.js(v2.x+) component wrap for ECharts.js(v3.x+) <a class="link" href="http://echarts.baidu.com/">http://echarts.baidu.com/</a></p>
+        <p class="detail"><a class="link" href="https://github.com/xlsdg/vue-echarts-v3">https://github.com/xlsdg/vue-echarts-v3 </a>Vue.js(v2.x+) component wrap for ECharts.js(v3.x+) <a class="link" href="http://echarts.baidu.com/">http://echarts.baidu.com/</a></p>
         <Card>
             <div class="line"></div>
             <Row :gutter="16">

@@ -2,7 +2,7 @@
 	<div class="jyc-wrap">
         <h2>Css base</h2>
         <h3>色彩</h3>
-        <p>iView 推荐使用以下调色板的颜色作为设计和开发规范，以保证页面和组件之间的视觉一致。</p>
+        <p class="detail">iView 推荐使用以下调色板的颜色作为设计和开发规范，以保证页面和组件之间的视觉一致。</p>
     	<Card>
     		<div class="line"></div>
 			<Row :gutter="16">
@@ -31,7 +31,7 @@
         	</Row>
     	</Card>
     	<h3>Font 字体</h3>
-        <p>iView 的 CSS 对字体进行了统一规范，力求在不同平台、浏览器下能显示出其最佳的效果。我们推荐  macOS（iOS）优先的策略，在不支持苹方字体的情况，使用备用字体。</p>
+        <p class="detail">iView 的 CSS 对字体进行了统一规范，力求在不同平台、浏览器下能显示出其最佳的效果。我们推荐  macOS（iOS）优先的策略，在不支持苹方字体的情况，使用备用字体。</p>
     	<Card>
 			<img style="width:100%;" src="https://file.iviewui.com/dist/aac43973c6b6d72bf7aa852ecb2302c5.png" alt="">
     	</Card>

@@ -1,7 +1,7 @@
 <template>
 	<div class="jyc-wrap">
         <h2>Calendar</h2>
-        <p>More infomation <a href="https://github.com/Wanderxx/vue-fullcalendar"> https://github.com/Wanderxx/vue-fullcalendar</a></p>
+        <p class="detail">More infomation <a href="https://github.com/Wanderxx/vue-fullcalendar"> https://github.com/Wanderxx/vue-fullcalendar</a></p>
         <div class="ca-box" style="margin-top:20px;">
             <full-calendar :events="fcEvents" locale="en"></full-calendar>   
         </div>

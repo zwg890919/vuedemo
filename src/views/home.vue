@@ -73,7 +73,7 @@ export default {
     	padding-top: 20px;
     	font-size:30px;
     }
-    p{
+    p.detail{
         font-size:14px;
         padding-top:20px;
         padding-left:20px;

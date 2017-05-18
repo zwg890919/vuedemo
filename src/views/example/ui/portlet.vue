@@ -1,7 +1,7 @@
 <template>
 	<div class="jyc-wrap">
         <h2>Portlet</h2>
-        <p>More infomation <a href="https://github.com/SortableJS/Vue.Draggable"> https://github.com/SortableJS/Vue.Draggable</a></p>
+        <p class="detail">More infomation <a href="https://github.com/SortableJS/Vue.Draggable"> https://github.com/SortableJS/Vue.Draggable</a></p>
         <div class="drag-box">
             <draggable v-model="myArray" :options="{group:'people'}" @start="drag=true" @end="drag=false">
                 <div class="item" v-for="element in myArray">{{element.name}}</div>
