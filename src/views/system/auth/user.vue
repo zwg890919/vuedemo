@@ -5,16 +5,21 @@
                 <li class="row-row">
                     <div>
                         <div class="scroll-cell">
-                            <jyc-tree :treedata="treedata" :showCheckbox="false" @tree-dbclick="treedbclick" @tree-click="treeClick" @tree-close="treeClose">
+                            <jyc-tree :treedata="treedata" :showCheckbox="false" @tree-dbclick="treedbclick" @tree-click="treeClick" @tree-close="treeClose" >
                             </jyc-tree>
                         </div>
                     </div>
                 </li>
                 <li class="menu-bottom">
-                    <Button type="success" @click="resetCurrentData">
+                    <Button v-if="addshow1" type="success" @click="toggleAddShow1">
                         <Icon type="plus" size="16px"></Icon>
                         新增部门
                     </Button>
+                    <div v-else>
+                    	<Input v-model="addDept.orgName" placeholder="请输入..." style="width: 200px"></Input>
+                    	<Button  type="primary" @click="submitDept">提交</Button>
+                    	<Button type="ghost" @click="toggleAddShow1">返回</Button>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -35,7 +40,7 @@
                     </div>
                 </li>
                 <li class="menu-bottom">
-                    <Button type="success" @click="addFunction">
+                    <Button  type="success" @click="addFunction">
                         <Icon type="plus" size="16px"></Icon>
                         新增联系人
                     </Button>
@@ -56,6 +61,7 @@
 							<p>{{x.userName}}</p>
 						</div>
 					</div>
+
 					<div class="l-info_group">
 						<div class="l-row">
 							<label>用户账号</label>
@@ -67,7 +73,7 @@
 						</div>
 						<div class="l-row">
 							<label>用户状态</label>
-							<span>{{x.userStatus}}</span>
+							<i-switch v-model="x.userStatus" @on-change="changeStatus"></i-switch>
 						</div>
 						<div class="l-row">
 							<label>用户角色</label>
@@ -86,11 +92,13 @@
     </div>
 </template>
 <script>
-	import api from "@/api/"
+import api from "@/api/"
 import menuInfo from "@/views/system/auth/menu/menuinfo"
 export default {
     data() {
         return {
+        	addshow1:true,
+        	addshow2:true,
         	showAll:true,
 			showid:'',
             treedata: [],
@@ -101,6 +109,11 @@ export default {
             functionType:false,
             userList:[],
             index:0,
+            addDept:{
+            	pageid:10013,
+            	orgId:'',
+            	orgName:'',
+            }
         }
     },
     created() {
@@ -109,6 +122,31 @@ export default {
     },
 
     methods: {
+    	async submitDept(){
+    		if(this.orgId == ''){
+    			this.$totast.warning({
+                    title:"操作提示",
+                    message:"请先选择一个父级部门"
+                })
+    		} else if(this.addDept.orgName == ''){
+    			this.$totast.warning({
+                    title:"操作提示",
+                    message:"请先输入组织名称，后提交"
+                })
+    		} else{
+    			const data = await api.post(api.config.orgBattch, this.addDept);
+    			console.log(data);
+    		}
+    	},
+    	toggleAddShow1(){
+    		this.addshow1 = !this.addshow1;
+    	},
+    	async changeStatus(status){
+    		const data = await api.put(api.config.userStatus, {
+    			pageid:10031,
+    			userStatus:status
+    		})
+    	},
     	userClick(i, data){
     		this.index = i;
     		console.log(data);
@@ -164,6 +202,7 @@ export default {
         	return arr;
         },
         treeClick(data) {
+        	this.addDept.orgId = data.id;
         	// 浙江聚有财金融服务外包有限公司
         	if(data.id == 2){
         		this.index = 0;
@@ -177,16 +216,18 @@ export default {
         	for(let x in this.userList){
         		if(this.userList[x].userOrgId == data.id){
         			this.index = x;
-        			console.log(this.index)
+        			// console.log(this.index)
         			return;
         		}
         	}
 
         },
         treeClose(data) {
+        	console.log(data.id);
+        	console.log(data.name);
             this.$Modal.confirm({
                 title: '操作确认',
-                content: "<p>您确定要删除'删除用户组'，及下属所有的菜单?</p>",
+                content: "<p>您确定要删除"+data.name+"，及下属所有的用户?</p>",
                 onOk: () => {
                     this.delMenu(data)
                 },
@@ -217,15 +258,18 @@ export default {
                 this.addMenu = false
             }
         },
-        async delMenu(data){
+        async delMenu(obj){
             const param = {
-                menuId : data.id
+                pageid : 10031,
+                userDel: true,
+                orgId : obj.id
             };
-            const resdata = await api.delete(api.config.authMenu,param)
-            this.$totast.success({
-                title:"系统提示",
-                message:"删除成功"
-            })
+            const data = await api.delete(api.config.authOrg,param);
+            console.log(data);
+            // this.$totast.success({
+            //     title:"系统提示",
+            //     message:"删除成功"
+            // })
         },
         cancle(){
             this.addMenu = false;

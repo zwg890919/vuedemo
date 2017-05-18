@@ -27,5 +27,6 @@ module.exports = {
     /****用户管理****/
     orgTree:'/auth/org/tree?pageid=10031', // 获取部门列表
     orgBattch:'/auth/org/battch', // 新增部门
-
+    userStatus: '/auth/user/status', // 切换用户状态
+    authOrg: '/auth/org' // 删除部门
 }
