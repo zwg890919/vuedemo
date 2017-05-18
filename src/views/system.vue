@@ -45,7 +45,7 @@ export default {
         layoutAside
     },
     created() {
-		this.$store.dispatch("getMenu", state)
+		this.$store.dispatch("getMenu")
 	}
 }
 </script>
