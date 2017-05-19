@@ -31,11 +31,11 @@
 				            <span>
 				                <Icon type="ios-search-strong" size="22" style=""></Icon>
 				            </span>
-				            <input type="text" placeholder="输入关键字查询">
+				            <input type="text" placeholder="输入关键字查询" v-model="itemFilter">
 
 				        </div>
 				        <div class="l-list">
-				        	<a @click="userClick(i, x)" v-show="x.userOrgId == showid || showAll" :class="{select:index == i}" v-for="(x,i) in userList">{{x.userName}}({{x.userCode}})</a>
+				        	<a @click="userClick(i, x)" v-show="x.userOrgId == showid || showAll" :class="{select: selectUser== x}" v-for="(x,i) in filtrate(userList)">{{x.userName}}({{x.userCode}})</a>
 				        </div>
                     </div>
                 </li>
@@ -50,7 +50,10 @@
         <div class="" v-show="i == index" v-for="(x,i) in userList">
         	<div class="l-info">
         		<div class="l-info_title">
-        			<Button type="primary" size="small">编辑</Button>
+        			<Button @click="editUser" v-show="editStatus == 1" type="primary" size="small">编辑</Button>
+                    <Button @click="submitEditUser" v-show="editStatus == 2" type="primary" size="small">完成</Button>
+                    <Button @click="editStatus = 1" v-show="editStatus == 2" size="small">取消</Button>
+                    <Button style="float:right" size="small" @click="delUser"><Icon type="close" /></Button>
         		</div>	
 				<div class="l-info_content">
 					<div class="l-info_hbox">
@@ -58,30 +61,40 @@
 							<img src="../../../assets/images/a0.jpg" alt="">
 						</div>
 						<div class="hbox2">
-							<p>{{x.userName}}</p>
+							<p v-show="editStatus == 1">{{selectUser.userName}}</p>
+                            <Input v-model="editData.userName" v-show="editStatus == 2" style="width: 180px"></Input>
 						</div>
 					</div>
 
 					<div class="l-info_group">
 						<div class="l-row">
 							<label>用户账号</label>
-							<span>{{x.userCode}}</span>
+							<span v-show="editStatus == 1">{{selectUser.userCode}}</span>
+                            <Input v-model="editData.userCode" v-show="editStatus == 2" style="width: 180px"></Input>
 						</div>
 						<div class="l-row">
 							<label>手机号码</label>
-							<span>{{x.userMobile}}</span>
+							<span v-show="editStatus == 1">{{selectUser.userMobile}}</span>
+                            <Input v-model="editData.userMobile" v-show="editStatus == 2" style="width: 180px"></Input>
 						</div>
+                        <div class="l-row">
+                            <label>邮箱地址</label>
+                            <span v-show="editStatus == 1">{{selectUser.userEmail}}</span>
+                            <Input v-model="editData.userEmail" v-show="editStatus == 2" style="width: 180px"></Input>
+                        </div>
 						<div class="l-row">
 							<label>用户状态</label>
-							<i-switch v-model="x.userStatus" @on-change="changeStatus"></i-switch>
+							<i-switch v-model="selectUser.userStatus" @on-change="changeStatus"></i-switch>
 						</div>
 						<div class="l-row">
 							<label>用户角色</label>
-							<span>{{x.userRole | filterUserRole}}</span>
+							<span>{{selectUser.userRole | filterUserRole}}</span>
 						</div>
 						<div class="l-row">
 							<label>所在部门</label>
-							<span>{{x.userOrgId | filterUserOrgId}}</span>
+							<span v-show="editStatus == 1">{{selectUser.userOrgId | filterUserOrgId}}</span>
+                            <Input v-model="editData.userOrgId" v-show="editStatus == 2" style="width: 180px"></Input>
+
 						</div>
 					</div>
 				</div>
@@ -97,6 +110,8 @@ import menuInfo from "@/views/system/auth/menu/menuinfo"
 export default {
     data() {
         return {
+            itemFilter:'',
+            editStatus:1,
         	addshow1:true,
         	addshow2:true,
         	showAll:true,
@@ -109,10 +124,23 @@ export default {
             functionType:false,
             userList:[],
             index:0,
+            operate:'',
             addDept:{
             	pageid:10013,
             	orgId:'',
             	orgName:'',
+            },
+            editData:{
+                userName:'',
+                userCode:'',
+                userMobile:'',
+                userOrgId:'',
+                userEmail:'',
+                userId:'',
+                userRole:''
+            },
+            selectUser:{
+
             }
         }
     },
@@ -122,6 +150,88 @@ export default {
     },
 
     methods: {
+        filtrate(itemlist){
+            var CurrentArray = [];
+            if(itemlist.length>0 && this.itemFilter != ""){
+                var searchRegex = new RegExp(this.itemFilter, 'i');
+                for (var item of itemlist) {
+                    if(searchRegex.test(item.userCode) || searchRegex.test(item.userName)){
+                        CurrentArray.push(item)
+                    }
+                }
+                return CurrentArray
+            }else{
+                return itemlist
+            }
+        },
+        addFunction(){
+            this.editData.userName = '';
+            this.editData.userCode = '';
+            this.editData.userMobile = '';
+            this.editData.userOrgId = '';
+            this.editData.userEmail = '';
+            //这两个不能改
+            this.editData.userId = '';
+            this.editData.userRole = '';
+            this.operate = 'edit';
+            this.editStatus = 2;
+        },
+        editUser(){
+            this.operate = 'edit';
+            let currentUser = this.userList[this.index];
+            console.log(currentUser)
+            this.editStatus = 2;
+            this.editData.userName = currentUser.userName;
+            this.editData.userCode = currentUser.userCode;
+            this.editData.userMobile = currentUser.userMobile;
+            this.editData.userOrgId = currentUser.userOrgId;
+            this.editData.userEmail = currentUser.userEmail;
+            //这两个不能改
+            this.editData.userId = currentUser.userId;
+            this.editData.userRole = currentUser.userRole;
+            
+        },
+        async submitEditUser(){
+            if(this.operate == 'edit'){
+                const data = await api.put(api.config.authUser,this.editData)
+            }else{
+                const data = await api.post(api.config.authUser,this.editData)
+            }
+            if(data){
+                this.$totast.success({
+                    title:"系统提示",
+                    message:"操作成功"
+                });
+                // 刷新用户
+                this.getUserList();
+            }
+            console.log(data);
+        },
+        // 删除用户弹框
+        delUser(){
+             this.$Modal.confirm({
+                title: '操作确认',
+                content: "<p>您确定要删除用户?</p>",
+                onOk: () => {
+                    this.excuteDelUser()
+                },
+            });
+        },
+        // 删除用户
+        async excuteDelUser(){
+            const data = await api.delete(api.config.authUser,{
+                userId:this.userList[this.index].userId
+            });
+            if(data){
+                this.$totast.success({
+                    title:"系统提示",
+                    message:"操作成功"
+                });
+                // 刷新用户
+                this.getUserList();
+            }
+        },
+        // 删除部门
     	async submitDept(){
     		if(this.orgId == ''){
     			this.$totast.warning({
@@ -135,28 +245,40 @@ export default {
                 })
     		} else{
     			const data = await api.post(api.config.orgBattch, this.addDept);
-    			console.log(data);
+                if(data){
+                    this.$totast.success({
+                        title:"系统提示",
+                        message:"操作成功"
+                    });
+                    // 刷新菜单
+                    this.getMenu();
+                }
     		}
     	},
     	toggleAddShow1(){
     		this.addshow1 = !this.addshow1;
     	},
+        // 切换用户状态
     	async changeStatus(status){
     		const data = await api.put(api.config.userStatus, {
-    			pageid:10031,
     			userStatus:status
     		})
+            if(data){
+                this.$totast.success({
+                    title:"系统提示",
+                    message:"操作成功"
+                });
+            }
     	},
+        // 点击用户列表
     	userClick(i, data){
-    		this.index = i;
+            // console.log(data)
+    		// this.index = i;
     		console.log(data);
+            this.selectUser = data;
     	},
-        addFunction(){
-            this.functionType = true;
-        },
-        closeMenuModal(){
-            this.functionType = false
-        },
+
+
         async getMenu() {
         	let arr = new Array();
         	const data = await api.get(api.config.orgTree)
@@ -168,12 +290,10 @@ export default {
             		y.level = 3;
             	}
             }
-            // console.log(arr);
             this.treedata = arr;
         },
         async getUserList() {
             const data = await api.post(api.config.userList)
-            // console.log(data);
             this.userList = data.datas.result;
         },
         treedbclick(data) {
@@ -288,7 +408,6 @@ export default {
     		}
     	},
     	filterUserOrgId(value){
-    		// return value;
     		let map = {
     			'2':'浙江聚有财金融服务外包有限公司',
     			'10020':'技术研发中心',
