@@ -110,7 +110,7 @@ export default {
         },
         messageOther(type) {
             switch (type) {
-                case 1: 
+                case 1:
                     this.$totast.success({
                         title: 'title',
                         message: 'message'
@@ -122,19 +122,19 @@ export default {
                         message: 'message'
                     });
                     break;
-                case 3: 
+                case 3:
                     this.$totast.wait({
                         title: 'title',
                         message: 'message'
                     });
                     break;
-                case 4: 
+                case 4:
                     this.$totast.error({
                         title: 'title',
                         message: 'message'
                     });
                     break;
-                case 5: 
+                case 5:
                     this.$totast.warning({
                         title: 'title',
                         message: 'message'

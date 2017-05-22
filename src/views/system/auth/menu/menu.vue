@@ -22,7 +22,7 @@
             <ul>
                 <li class="row-row bg-white">
                     <div>
-                        <menu-info v-on:closeMenuModal="closeMenuModal" :modalOpen="functionType" :itemdata="itemList" :selectItem="selectData"></menu-info>
+                        <menu-info v-on:resetItemlist="getItemList" v-on:closeMenuModal="closeMenuModal" :modalOpen="functionType" :itemdata="itemList" :selectItem="selectData"></menu-info>
                     </div>
                 </li>
                 <li class="menu-bottom ltr">
@@ -33,50 +33,56 @@
                 </li>
             </ul>
         </div>
-        <Modal :title="modalType == 'add'? '新建菜单' : '修改菜单'" v-model="addMenu" width="600" @on-ok="submitMenu">
+        <Modal :title="modalType == 'add'? '新建菜单' : '修改菜单'" v-model="addMenu" width="600" @on-ok="submitMenu" @on-cancel="cancle" :mask-closable="false">
             <div class="model-wrap">
-                <Row :gutter="20">
-                    <Col span="12">
-                    <p>菜单名称</p>
-                    <Input v-model="currentData.name" placeholder="请输入..."></Input>
-                    <p>排序号</p>
-                    <Input v-model="currentData.menuSerialNo" placeholder="请输入..."></Input>
-                    <p>菜单类型</p>
-                    <Select v-model="currentData.menuType">
-                        <Option :value="1">框架菜单</Option>
-                        <Option :value="2">页面菜单</Option>
-                        <Option :value="3">功能菜单</Option>
-                    </Select>
-                    </Col>
-                    <Col span="12">
-                    <p>父级菜单</p>
-                    <input type="hidden" v-model="currentData.menuParentId" />
-                    <Input v-model="currentData.menuParentName" placeholder="请输入..."></Input>
-                    <p>菜单图标</p>
-                    <Input v-model="currentData.menuIconclass" placeholder="请输入..."></Input>
-                    <p>菜单路径</p>
-                    <Input v-model="currentData.menuHref" placeholder="请输入..."></Input>
-                    </Col>
-                    <Col span="24">
-                    <p>关联功能</p>
-                    <Select v-model="currentData.menuItemId" filterable>
-                        <Option value="不关联功能" key="">不关联功能</Option>
-                        <Option v-for="item in itemList" :key="item.itemId" :value="item.itemId">{{item.itemTab}} {{item.itemAllDesc}}</Option>
-                    </Select>
-                    </Col>
-                    <Col span="24">
-                    <p>
+                <Form ref="currentData" label-position="top" :model="currentData" :rules="ruleCustom">
+                    <Row :gutter="20">
+                        <Col span="12">
+                        <Form-item label="菜单名称" prop="name">
+                            <Input v-model="currentData.name" placeholder="请输入..."></Input>
+                        </Form-item>
+                        <Form-item label="排序号" prop="menuSerialNo">
+                            <Input v-model="currentData.menuSerialNo" placeholder="请输入..."></Input>
+                        </Form-item>
+                        <Form-item label="菜单类型" prop="menuType">
+                            <Select v-model="currentData.menuType">
+                                <Option :value="1">框架菜单</Option>
+                                <Option :value="2">页面菜单</Option>
+                                <Option :value="3">功能菜单</Option>
+                            </Select>
+                        </Form-item>
+                        </Col>
+                        <Col span="12">
+                        <Form-item label="父级菜单" prop="menuParentName">
+                            <input type="hidden" v-model="currentData.menuParentId" />
+                            <Input v-model="currentData.menuParentName" placeholder="请输入..."></Input>
+                        </Form-item>
+                        <Form-item label="菜单图标" prop="menuIconclass">
+                            <Input type="text" v-model="currentData.menuIconclass" number></Input>
+                        </Form-item>
+                        <Form-item label="菜单路径" prop="menuHref">
+                            <Input type="text" v-model="currentData.menuHref" number></Input>
+                        </Form-item>
+                        </Col>
+                        <Col span="24">
+                        <Form-item label="关联功能" prop="menuItemId">
+                            <Select v-model="currentData.menuItemId" filterable>
+                                <Option value="2" key="">不关联功能</Option>
+                                <Option v-for="item in itemList" :key="item.itemId" :value="item.itemId">{{item.itemTab}} {{item.itemAllDesc}}</Option>
+                            </Select>
+                        </Form-item>
+                        </Col>
+                        <Col span="24">
                         <Checkbox v-model="currentData.menuVisibility">此菜单不用分配权限即任何成员可见</Checkbox>
-                    </p>
-                    </Col>
-                </Row>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
             <div slot="footer">
                 <Button type="text" @click="cancle">取消</Button>
-                <Button type="primary" @click="submitMenu">提交</Button>
+                <Button type="primary" @click="submitMenu('currentData')">提交</Button>
             </div>
         </Modal>
-
     </div>
 </template>
 <script>
@@ -84,14 +90,55 @@ import api from "@/api/"
 import menuInfo from "@/views/system/auth/menu/menuinfo"
 export default {
     data() {
+        const validateMenuItemId = (rule, value, callback) => {
+            if (this.currentData.menuType === 3) {
+                if (!value || value === 2) {
+                    callback(new Error('功能按钮必须关联功能'));
+                } else {
+                    callback()
+                }
+            } else {
+                callback()
+            }
+        };
+        const validateMenuType = (rule, value, callback) => {
+            if (value === 3) {
+                if (this.currentData.menuItemId) {
+                    this.$refs.currentData.validateField('menuItemId');
+                }
+            } else {
+                this.$refs.currentData.validateField('menuItemId');
+            }
+            callback();
+        }
         return {
             treedata: {},
-            currentData: {},
-            selectData:{},
+            currentData: {
+                name: '',
+                menuSerialNo: '',
+                menuType: '',
+                menuParentName: '',
+                menuIconclass: '',
+                menuHref: '',
+                menuItemId: '',
+                menuVisibility: ''
+            },
+            selectData: {},
             addMenu: false,
             itemList: {},
-            modalType:"add",
-            functionType:false,
+            modalType: "add",
+            functionType: false,
+            ruleCustom: {
+                name: [
+                    { required: true, message: '菜单名称不能为空', trigger: 'blur' }
+                ],
+                menuType: [
+                    { validator: validateMenuType, trigger: 'change' }
+                ],
+                menuItemId: [
+                    { validator: validateMenuItemId, trigger: 'change' }
+                ]
+            }
         }
     },
     created() {
@@ -99,10 +146,10 @@ export default {
         this.getItemList()
     },
     methods: {
-        addFunction(){
+        addFunction() {
             this.functionType = true;
         },
-        closeMenuModal(){
+        closeMenuModal() {
             this.functionType = false
         },
         async getMenu() {
@@ -114,13 +161,15 @@ export default {
             this.itemList = data.datas.result
         },
         treedbclick(data) {
-            this.currentData = data
+            Object.assign(this.currentData, data)
             this.modalType = "edit"
             var _this = this
             this.eachNode(this.treedata, function (item) {
                 if (item.id == data.parentId) {
-                    _this.currentData.menuParentName = item.name;
-                    _this.currentData.menuParentId = item.id
+                    Object.assign(_this.currentData, {
+                        menuParentName: item.name,
+                        menuParentId: item.id
+                    })
                 }
             })
             this.addMenu = true
@@ -128,9 +177,7 @@ export default {
         treeClick(data) {
             this.currentData = {};
             this.selectData = data;
-            this.currentData.menuParentName = data.name
-            this.currentData.menuParentId = data.id
-            window.location.hash = "#"+data.menuItemId
+            window.location.hash = "#" + data.menuItemId
         },
         treeClose(data) {
             this.$Modal.confirm({
@@ -149,64 +196,79 @@ export default {
             })
         },
         resetCurrentData() {
-            const parentName = this.currentData.name
-            const parentId = this.currentData.id;
-            this.currentData = {};
-            this.currentData.menuParentName = parentName
-            this.currentData.menuParentId = parentId
+            // const parentName = this.currentData.name
+            // const parentId = this.currentData.id;
+            Object.assign(this.currentData, {
+                menuParentName: this.selectData.name,
+                menuParentId: this.selectData.id
+            })
             this.addMenu = true
             this.modalType = "add"
         },
-        submitMenu(){
-            var param ={
-                menuName : this.currentData.name,
-                menuParentId : this.currentData.menuParentId,
-                menuType : this.currentData.menuType,
-                menuAuthLevel : this.currentData.menuAuthLevel,
-                menuVisibility : this.currentData.menuVisibility,
-                menuSerialNo : this.currentData.menuSerialNo,
-                menuIconClass : this.currentData.menuIconclass,
-                menuItemId : this.currentData.menuItemId,
-                menuHref : this.currentData.menuHref
-            }
-            if(this.modalType =="edit"){
-                param.menuId = this.currentData.id;
-                this.updateMenu(param)
-            }else{
-                this.submitAddMenu(param)
-            }
-        },
-        async submitAddMenu(param){
-            const data = await api.post(api.config.authMenu,param)
-            if(data){
-                this.$totast.success({
-                    title:"系统提示",
-                    message:"提交成功"
-                })
-                this.addMenu = false
-            }
-        },
-        async updateMenu(param){
-            const data = await api.put(api.config.authMenu,param)
-            if(data){
-                this.$totast.success({
-                    title:"系统提示",
-                    message:"提交成功"
-                })
-                this.addMenu = false
-            }
-        },
-        async delMenu(data){
-            const param = {
-                menuId : data.id
-            };
-            const resdata = await api.delete(api.config.authMenu,param)
-            this.$totast.success({
-                title:"系统提示",
-                message:"删除成功"
+        submitMenu(name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    var param = {
+                        menuName: this.currentData.name,
+                        menuParentId: this.currentData.menuParentId,
+                        menuType: this.currentData.menuType,
+                        menuAuthLevel: this.currentData.menuAuthLevel,
+                        menuVisibility: this.currentData.menuVisibility,
+                        menuSerialNo: this.currentData.menuSerialNo,
+                        menuIconClass: this.currentData.menuIconclass,
+                        menuItemId: this.currentData.menuItemId,
+                        menuHref: this.currentData.menuHref
+                    }
+                    if (this.modalType == "edit") {
+                        param.menuId = this.currentData.id;
+                        this.updateMenu(param)
+                    } else {
+                        this.submitAddMenu(param)
+                    }
+                }
             })
+
         },
-        cancle(){
+        async submitAddMenu(param) {
+            const data = await api.post(api.config.authMenu, param)
+            if (data) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: "提交成功"
+                })
+                this.getMenu()
+                this.addMenu = false
+            }
+        },
+        async updateMenu(param) {
+            const data = await api.put(api.config.authMenu, param)
+            if (data) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: "修改成功"
+                })
+                this.getMenu()
+                this.addMenu = false
+            }
+        },
+        async delMenu(data) {
+            const param = {
+                menuId: data.id
+            };
+            const resdata = await api.delete(api.config.authMenu, param)
+            if (resdata) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: "删除成功"
+                })
+                this.getMenu()
+            }
+        },
+        cancle() {
+            // for (var key in this.currentData) {
+            //     this.currentData[key] = ''
+            // }
+            this.$refs['currentData'].resetFields();
             this.addMenu = false;
         }
     },
@@ -264,11 +326,11 @@ export default {
                     height: 100%;
                     overflow: hidden;
                 }
-                .search-item{
-                    padding:5px;
-                    height:40px;
+                .search-item {
+                    padding: 5px;
+                    height: 40px;
                     border-bottom: #dee5e7 1px solid;
-                    background:#f6f8f8;
+                    background: #f6f8f8;
                 }
                 .scroll-cell {
                     position: absolute;

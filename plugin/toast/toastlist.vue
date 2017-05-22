@@ -1,3 +1,59 @@
+<template>
+    <div class="toast-wrap">
+        <toast
+            v-for="toast in toastList"
+            :key="toast.name"
+            :duration="toast.duration"
+            :name="toast.name"
+            :type="toast.type"
+            :title="toast.options.title"
+            :message="toast.options.message"
+        ></toast>
+    </div>
+</template>
+<script>
+import toast from './toast'
+export default {
+    data() {
+        return {
+            toastList: []
+        }
+    },
+    created() {
+        // console.log(this)
+    },
+    methods: {
+        add(toast) {
+            // console.log(toast.name)
+            let notice = toast
+            this.toastList.push(notice)
+        },
+        close(name) {
+            const toastList = this.toastList
+            for (let i = 0; i < toastList.length; i++) {
+                if (toastList[i].name === name) {
+                    this.toastList.splice(i, 1);
+                    break
+                }
+            }
+
+        }
+    },
+    components: {
+        toast
+    }
+}
+</script>
+<style lang="scss">
+.toast-wrap {
+    position: fixed;
+    width: 320px;
+    margin-right: 10px;
+    z-index: 999999;
+    top: 60px;
+    right: 0px;
+}
+
 .jyc-toast {
     margin: 0 0 6px;
     padding: 15px 15px 15px 50px;
@@ -12,11 +68,7 @@
     box-shadow: 0 0 12px #999999;
     color: #ffffff;
     opacity: 0.8;
-    position: fixed;
     z-index: 999999;
-    top: 12px;
-    right: 12px;
-    font-size: 12px;
 }
 
 .jyc-toast:hover {
@@ -95,6 +147,9 @@
 }
 
 
+
+
+
 /*Additional properties for button version
  iOS requires the button element instead of an anchor tag.
  If you want the anchor version, it requires `href="#"`.*/
@@ -107,11 +162,13 @@ button.toast-close-button {
     -webkit-appearance: none;
 }
 
-
-.fadex-enter-active, .fadex-leave-active {
-  transition: opacity .5s
-}
-.fadex-enter, .fadex-leave-active {
-  opacity: 0
+.fadex-enter-active,
+.fadex-leave-active {
+    transition: opacity .5s
 }
 
+.fadex-enter,
+.fadex-leave-active {
+    opacity: 0
+}
+</style>

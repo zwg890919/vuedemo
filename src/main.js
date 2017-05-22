@@ -14,11 +14,8 @@ import axios from 'axios'
 import Vue2Filters from 'vue2-filters'
 
 import "@/assets/js/prototype"
-
 import '../my-theme/index.less';
-
 import '@/assets/css/base.css'
-import '../plugin/toast/index.css'
 
 require('font-awesome-webpack');
 

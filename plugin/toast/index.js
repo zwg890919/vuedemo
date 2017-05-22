@@ -1,54 +1,77 @@
+import Toaster from './toastlist.vue'
+import Vue from 'vue';
+
 var Toast = {};
-var toastInt = function (type, tips, Vue) {
-    if (document.getElementsByClassName('jyc-toast').length) {
-        return;
-    }
-    let toastTpl = Vue.extend({
-        data() {
-            return {
-                toastshow: false
-            }
-        },
-        mounted() {
-            setTimeout(() => {
-                this.toastshow = true;
-            }, 100);
-            setTimeout(() => {
-                this.toastshow = false;
-            }, 2500);
-        },
-        template: `
-            <transition name="fadex">
-                <div class="jyc-toast jyc-toast-${type}" v-if="toastshow">
-                    <button class="toast-close-button" @click="toastshow= false">×</button>
-                    <p class="toast-title">${tips.title}</p>
-                    <p class="toast-message">${tips.message}</p>
-                </div>
-            </transition>
-        `
+let top = 24;
+let defaultDuration = 4.5;
+let toasteInstance;
+let name = 1;
+
+function getToastInstance() {
+    toasteInstance = toasteInstance || Toaster.newInstance({
+        styles: {
+            top: `${top}px`,
+            right: 0
+        }
     });
-    var tpl = new toastTpl().$mount().$el;
-    document.body.appendChild(tpl);
+
+    return toasteInstance;
 }
+
+Toaster.newInstance = props => {
+    const div = document.createElement('div');
+    div.innerHTML = `<toaster>${props}></toaster>`;
+    document.body.appendChild(div);
+
+    const toastion = new Vue({
+        el: div,
+        data: props,
+        components: { Toaster }
+    }).$children[0];
+    return {
+        notice(toastProps) {
+            toastion.add(toastProps);
+        },
+        component: toastion,
+    };
+}
+
+
+function notice(type, options, duration) {
+    const title = options.title
+    const message = options.message || '';
+    name++;
+    let instance = getToastInstance();
+
+    instance.notice({
+        name: name.toString(),
+        type: type,
+        options: options,
+        styles: {},
+        duration: duration
+        // onClose: onClose,
+    });
+}
+
 Toast.install = function (Vue) {
 
     Vue.prototype.$totast = {
-        success(tips) {
-            toastInt("success", tips, Vue);
+        success(tips, duration) {
+            notice("success", tips, duration);
         },
-        info(tips) {
-            toastInt("info", tips, Vue);
+        info(tips, duration) {
+            notice("info", tips, duration);
         },
-        wait(tips) {
-            toastInt("wait", tips, Vue);
+        wait(tips, duration) {
+            notice("wait", tips, duration);
         },
-        error(tips) {
-            toastInt("error", tips, Vue);
+        error(tips, duration) {
+            notice("error", tips, duration);
         },
-        warning(tips) {
-            toastInt("warning", tips, Vue);
+        warning(tips, duration) {
+            notice("warning", tips, duration);
         },
     }
 }
 
-module.exports = Toast;
+export default Toast;

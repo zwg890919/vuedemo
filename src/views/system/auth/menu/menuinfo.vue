@@ -10,52 +10,70 @@
             <div class="api-details">
                 <a v-for="item in filtrate(currentList)" :id="item.itemId" :class="{select:item.itemId == selectItem.menuItemId}" @dblclick="editItem(item)">
                     <div>
-                        <span class="label">{{item.itemTab}}组</span> /**
-                        <br>&nbsp;*&nbsp;<span>{{item.itemAllDesc}}</span>
+                        <span class="label">{{item.itemTab}}</span> /**
+                        <br>&nbsp;*&nbsp;
+                        <span>{{item.itemAllDesc}}</span>
                         <br>
                         <span v-for="param in item.params">
-                                    &nbsp;* <span class="text-muted">@param</span>
-                        <span class="hightLight">{{param}}</span>
-                        <br>
+                            &nbsp;*
+                            <span class="text-muted">@param</span>
+                            <span class="hightLight">{{param}}</span>
+                            <br>
                         </span>
-                        &nbsp;*/<br>
-                        <span class="api-delete fr" @click="delItem(item)">
+                        &nbsp;*/
+                        <br>
+                        <span class="api-delete fr" @click="delMenuItem(item.itemId)">
                             <Icon type="trash-a" size="24"></Icon>
                         </span>
-                        @RequestMapping(value="<span class="hightLight">/{{item.itemUrl}}</span>"
-                        <span v-if="item.itemRequestmethod">, method=RequestMethod.<span class="hightLight"><em>{{item.itemRequestmethod}}</em></span></span>)
+                        @RequestMapping(value="
+                        <span class="hightLight">/{{item.itemUrl}}</span>"
+                        <span v-if="item.itemRequestmethod">, method=RequestMethod.
+                            <span class="hightLight">
+                                <em>{{item.itemRequestmethod}}</em>
+                            </span>
+                        </span>)
                     </div>
                 </a>
             </div>
         </div>
-        <Modal :title="modalModify == 'add'? '新增功能' : '修改功能'" v-model="addFunction" width="600" @on-ok="submitMenu">
+        <Modal :title="modalModify == 'add'? '新增功能' : '修改功能'" v-model="addFunction" width="600" @on-ok="submitMenu" @on-cancel="cancle" :mask-closable="false">
             <div class="model-wrap">
-                <Row :gutter="20" style="margin-bottom:15px">
-                    <Col span="8">
-                    <p class="modal-title">标签分类</p>
-                    <Input v-model="currentData.itemTab" placeholder="请输入..."></Input>
-                    </Col>
-                    <Col span="8">
-                    <p class="modal-title">功能URL</p>
-                    <Input v-model="currentData.itemUrl" placeholder="请输入..."></Input>
-                    </Col>
-                    <Col span="8">
-                    <p class="modal-title">请求类型</p>
-                    <Select v-model="currentData.itemRequestmethod">
-                        <Option value="">无限制</Option>
-                        <Option value="post">POST</Option>
-                        <Option value="GET">GET</Option>
-                        <Option value="DELETE">DELETE</Option>
-                        <Option value="PUT">PUT</Option>
-                    </Select>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                    <p class="modal-title">功能详细说明</p>
-                    <Input v-model="currentData.itemDescription" type="textarea" :rows="2" placeholder="例如：更新租户名称等信息{tenantId}{shortName:简称}"></Input>
-                    </Col>
-                </Row>
+                <Form ref="modalItem" label-position="top" :model="currentData" :rules="ruleCustom">
+                    <Row :gutter="20">
+                        <Col span="8">
+                        <Form-item label="标签分类" prop="itemTab">
+                            <Input v-model="currentData.itemTab" placeholder="请输入..."></Input>
+                        </Form-item>
+                        </Col>
+                        <Col span="8">
+                        <Form-item label="功能URL" prop="itemUrl">
+                            <Input v-model="currentData.itemUrl" placeholder="请输入..."></Input>
+                        </Form-item>
+                        </Col>
+                        <Col span="8">
+                        <Form-item label="请求类型" prop="itemRequestmethod">
+                            <Select v-model="currentData.itemRequestmethod">
+                                <Option value="">无限制</Option>
+                                <Option value="post">POST</Option>
+                                <Option value="GET">GET</Option>
+                                <Option value="DELETE">DELETE</Option>
+                                <Option value="PUT">PUT</Option>
+                            </Select>
+                        </Form-item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                        <Form-item label="功能详细说明" prop="itemDescription">
+                            <Input v-model="currentData.itemDescription" type="textarea" :rows="2" placeholder="例如：更新租户名称等信息{tenantId}{shortName:简称}"></Input>
+                        </Form-item>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
+            <div slot="footer">
+                <Button type="text" @click="cancle">取消</Button>
+                <Button type="primary" @click="submitMenu('currentData')">提交</Button>
             </div>
         </Modal>
     </div>
@@ -68,60 +86,122 @@ export default {
             itemFilter: "",
             modalModify: "add",
             addFunction: false,
-            currentList:{},
-            currentData: {}
+            currentList: {},
+            currentData: {
+                itemTab: '',
+                itemUrl: '',
+                itemDescription: '',
+                itemRequestmethod: '',
+            },
+            ruleCustom: {
+                itemTab: [
+                    { required: true, message: '标签分类不能为空', trigger: 'blur' }
+                ],
+                itemUrl: [
+                    { required: true, message: '功能URL不能为空', trigger: 'blur' }
+                ],
+                itemDescription: [
+                    { required: true, message: '功能详细说明不能为空', trigger: 'blur' }
+                ],
+            }
         }
     },
     props: ["itemdata", "selectItem", "modalOpen"],
     watch: {
-        itemdata(val){
+        itemdata(val) {
             this.currentList = val
         },
         modalOpen(val) {
             this.modalModify = "add"
             this.addFunction = true
-            this.currentData = {}
+            for (var key in this.currentData) {
+                this.currentData[key] = ''
+            }
         },
         addFunction(val) {
             this.$emit("closeMenuModal")
         }
     },
     methods: {
-        async delItem(item) {
-            // console.log(item.itemId)
-            const data = await api.delete(api.config.authItem,item)
+        delMenuItem(itemId) {
+            this.$Modal.confirm({
+                title: '操作确认',
+                content: "<p>您确定要删除此项功能?</p>",
+                onOk: () => {
+                    this.delItem(itemId)
+                },
+            });
+        },
+        async delItem(itemId) {
+            const data = await api.delete(api.config.authItem, {
+                itemId: itemId
+            })
+            if (data) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: "删除成功"
+                })
+                this.$emit("resetItemlist")
+            }
         },
         editItem(item) {
             this.modalModify = "edit"
-            console.log(item)
             this.addFunction = true;
-            this.currentData = item
+            Object.assign(this.currentData, item)
         },
         submitMenu() {
-            this.$emit("closeMenuModal")
-            if(this.modalModify == "add"){
-                this.submiteItem(this.currentData)
-            }else{
-                this.updateItem(this.currentData)
+            this.$refs['modalItem'].validate((valid) => {
+                if (valid) {
+                    // this.$emit("closeMenuModal")
+                    if (this.modalModify == "add") {
+                        this.submiteItem(this.currentData)
+                    } else {
+                        this.updateItem(this.currentData)
+                    }
+                }
+            })
+
+        },
+        cancle() {
+            this.$refs['modalItem'].resetFields();
+            this.addFunction = false;
+        },
+        async submiteItem(param) {
+            console.log(param)
+            const data = await api.post(api.config.authItem, param)
+            if (data) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: "提交成功"
+                })
+                this.$emit("resetItemlist")
+                this.$emit("closeMenuModal")
             }
+
         },
-        async submiteItem(param){
-            const data = await api.post(api.config.authItem,param)
+        async updateItem(param) {
+            const data = await api.put(api.config.authItem, param)
+            if (data) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: "修改成功"
+                })
+                this.$emit("resetItemlist")
+                this.$emit("closeMenuModal")
+            }
+
         },
-        async updateItem(param){
-            const data = await api.put(api.config.authItem,param)
-        },
-        filtrate(itemlist){
+        filtrate(itemlist) {
             var CurrentArray = [];
-            if(itemlist.length>0 && this.itemFilter != ""){
+            if (itemlist.length > 0 && this.itemFilter != "") {
                 var searchRegex = new RegExp(this.itemFilter, 'i');
                 for (var item of itemlist) {
-                    if(searchRegex.test(item.itemAllDesc)){
+                    if (searchRegex.test(item.itemAllDesc)) {
                         CurrentArray.push(item)
                     }
                 }
                 return CurrentArray
-            }else{
+            } else {
                 return itemlist
             }
         }

@@ -8,10 +8,10 @@
         </div>
         <div class="layout-nav__con" :class="{'layout-indent':asideIndent}">
             <span @click="changeIndent">
-                <Icon size="20" type="navicon-round"></Icon>
+                <i class="fa fa-outdent" style="font-size:14px;"></i>
             </span>
             <span @click="showUser">
-                <Icon size="20" type="person"></Icon>
+                <Icon size="18" type="person"></Icon>
             </span>
             <div class="layout-nav-dropdown" :class="{active : dropdown}" @click="dropdown = !dropdown">
                 <a>
