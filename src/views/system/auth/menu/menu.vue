@@ -15,6 +15,13 @@
                         <Icon type="plus" size="16px"></Icon>
                         新增菜单
                     </Button>
+                    <Tooltip placement="top"  class="tips">
+                        <Icon type="help" size="20px"></Icon>
+                        <div slot="content">
+                            <p>双击编</p>
+                            <p>辑菜单</p>
+                        </div>
+                    </Tooltip>
                 </li>
             </ul>
         </div>
@@ -30,6 +37,14 @@
                         <Icon type="plus" size="16px"></Icon>
                         新增功能
                     </Button>
+                    <Tooltip placement="top" class="tips">
+                        <Icon type="help" size="20px"></Icon>
+                        <div slot="content">
+                            <p>双击编</p>
+                            <p>辑功能</p>
+                        </div>
+                    </Tooltip>
+
                 </li>
             </ul>
         </div>
@@ -343,6 +358,11 @@ export default {
                 padding: 15px;
                 &.ltr {
                     background-color: #f6f8f8;
+                }
+                .tips{
+                    float: right;
+                    margin-top:10px;
+                    margin-right:30px;
                 }
             }
         }
