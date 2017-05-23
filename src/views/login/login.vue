@@ -72,7 +72,7 @@ export default {
 			// title:"一条提示信息啊",
 			// message:"这是一条提示信息啊一条提示信息啊"
 			// })
-                window.localStorage.clear("menuId")
+                window.localStorage.removeItem("menuId")
 				this.$router.push("app");
 			}
 		}

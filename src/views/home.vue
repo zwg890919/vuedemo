@@ -1,7 +1,7 @@
 <template>
 	<div class="layout" :class="{'minLayout':container}">
 		<layout-nav :asideIndent="asideIndent" :headerFixed="headerFixed" :asidefixed="Asidefixed"></layout-nav>
-		<layout-aside :asideIndent="asideIndent" :headerFixed="headerFixed" :Asidefixed="Asidefixed"></layout-aside>
+		<layout-aside :hisRoute="hisRoute" :asideIndent="asideIndent" :headerFixed="headerFixed" :Asidefixed="Asidefixed"></layout-aside>
 		<div class="layout-content" :class="{'extend-content':asideIndent}">
 			<keep-alive>
 				<router-view></router-view>
@@ -18,15 +18,30 @@ import api from "../api"
 export default {
 	data() {
 		return {
-
+			
 		}
 	},
+	beforeRouteUpdate (to, from, next) {
+		if(!from.name) return;
+		if(this.hisRoute.length == 2){
+			this.hisRoute.shift();
+		}
+		this.hisRoute.push({
+			name:from.name,
+			url:'3'
+		});
+		// console.log(this.hisRoute.his);
+		// console.log(this.hisRoute.his.lenght)
+		console.log(this.hisRoute)
+        next();
+    },
 	computed: {
 		...mapState({
 			headerFixed: state => state.systemSetting.headerFixed,
 			Asidefixed: state => state.systemSetting.Asidefixed,
 			container: state => state.systemSetting.container,
 			asideIndent: state => state.systemSetting.asideIndent,
+			hisRoute: state => state.systemSetting.hisRoute
 		}),
 	},
 	components: {
@@ -35,6 +50,8 @@ export default {
 	},
 	created() {
 		this.$store.dispatch("getMenu")
+        console.log(this.hisRoute);
+        console.log(this.asideIndent);
 	}
 }
 </script>
@@ -80,5 +97,6 @@ export default {
         padding-right: 20px;
     }
 }
+
 </style>
 

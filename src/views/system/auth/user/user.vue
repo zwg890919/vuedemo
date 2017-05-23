@@ -233,7 +233,7 @@ export default {
         },
         // 删除部门
     	async submitDept(){
-    		if(this.orgId == ''){
+    		if(this.addDept.orgId == ''){
     			this.$totast.warning({
                     title:"操作提示",
                     message:"请先选择一个父级部门"
