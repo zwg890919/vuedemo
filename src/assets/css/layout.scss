@@ -44,13 +44,13 @@
                 padding: 0 20px;
                 font-size: 20px;
                 font-weight: 700;
-                text-align: center;
+                text-align: left;
                 color: #c4d0d9;
                 span {
                     display: inline-block;
                     vertical-align: middle;
                     margin-left: 5px;
-                    font-size: 18px;
+                    font-size: 20px;
                 }
                 i {
                     vertical-align: middle;
@@ -83,7 +83,7 @@
                 display: inline-block;
                 vertical-align: middle;
                 height: 50px;
-                padding: 16px 20px 0;
+                padding: 19px 20px 0;
                 font-size: 12px;
                 cursor: pointer;
                 &:hover {

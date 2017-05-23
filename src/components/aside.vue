@@ -32,17 +32,18 @@
                 <ul>
                     <li class="layout-aside__title" v-show="!asideIndent">快捷菜单</li>
                     <li class="layout-aside__item layout-aside__quick">
-                        <a href="">
-                            <Icon type="ios-paper" size="16"></Icon>
+                        <router-link to="app" active-class="active">
+                            <Icon type="android-home" size="20" color="#23b7e5"></Icon>
                             <span v-show="!asideIndent">应用主页</span>
-                        </a>
+                        </router-link>
                     </li>
                     <li class="line"></li>
 
                     <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
                     <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
                         <a @click="drowpDown(item)" @mouseenter="showCurrent(item,$event)">
-                            <Icon type="ios-paper" size="16"></Icon>
+                            <Icon :type="item.menuIconclass" size="20"></Icon>
+                            <!--<i :class="item.menuIconclass" style="font-size:14px;"></i>-->
                             <span v-show="!asideIndent">{{item.name}}</span>
                             <span class="fr" v-show="!asideIndent">
                                 <Icon type="ios-arrow-forward" size="12" v-show="item.id != lastmenu"></Icon>
@@ -59,7 +60,7 @@
                     </li>
                     <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1" @mouseenter="hideCurrent()">
                         <router-link :to="item.menuHref | transformUrl" active-class="active" class="itemMenu">
-                            <Icon type="ios-paper" size="16"></Icon>
+                            <Icon :type="item.menuIconclass" size="20"></Icon>
                             <span v-show="!asideIndent">{{item.name}}</span>
                         </router-link>
                         <!--<a @click="selectedMenu(item)" @mouseenter="hideCurrent()" :class="{active:lastmenu == item.id}">
@@ -288,12 +289,11 @@ export default {
         }
     }
 }
-
 .layout-aside {
     .line {
         width: 100%;
         height: 2px;
-        margin: 10px 0;
+        margin: 10px 0px 0px;
         overflow: hidden;
         font-size: 0;
         background: #131e26;
@@ -303,7 +303,7 @@ export default {
         line-height: 48px;
         font-size: 12px;
         padding-left: 20px;
-        color: #657180;
+        color: #5c798f;
     }
     &__item {
         position: relative;
@@ -314,6 +314,7 @@ export default {
             }
             &>a {
                 background: #16232d;
+                color:#fff;
             }
         }
         ul {
@@ -344,12 +345,14 @@ export default {
             position: relative;
             display: block;
             height: 40px;
+            line-height:19px;
             padding: 10px 20px;
             font-weight: normal;
             text-transform: none;
             color: #869fb1;
             &.active {
                 background: #16232d;
+                color: #fff;
             }
             &:hover{
                 background: #16232d;
@@ -364,9 +367,6 @@ export default {
                 overflow: hidden;
                 line-height: 40px;
                 text-align: center;
-            }
-            span {
-                padding-left:10px;
             }
         }
     }

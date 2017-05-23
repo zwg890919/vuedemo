@@ -92,10 +92,7 @@ export default {
             url: config.api + config.getToken,
             data: data,
             timeout: config.timeout,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
+            headers: config.headers,
         }).then(checkStatus)
     },
 }

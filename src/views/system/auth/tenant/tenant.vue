@@ -7,9 +7,9 @@
                         <Button type="success">新增</Button>
                         <Button type="ghost" @click="delTenant">删除</Button>
                         <span class="fr">
-                            <Input v-model="value" placeholder="请输入账号" style="width: 150px"></Input>
-                            <Input v-model="value" placeholder="请输入名称" style="width: 150px"></Input>
-                            <Button type="ghost">查询</Button>
+                            <Input v-model="tenantCode" placeholder="请输入账号" style="width: 150px"></Input>
+                            <Input v-model="tenantName" placeholder="请输入名称" style="width: 150px"></Input>
+                            <Button type="ghost" @click="searchTenant">查询</Button>
                         </span>
                     </div>
                     <div class="tenant-table__wrap">
@@ -61,12 +61,15 @@
 </template>
 <script>
 import api from "@/api"
+import { filtrate } from '@/assets/js/common'
+
 export default {
     data() {
         return {
             self: this,
             show: false,
-            value: "",
+            tenantName: "",
+            tenantCode: "",
             columns: [
                 {
                     type: 'selection',
@@ -83,14 +86,14 @@ export default {
                     title: '简称',
                     key: 'tenantShortname',
                     sortable: true,
-                    ellipsis:true,
+                    ellipsis: true,
                 },
                 {
                     title: '全称',
                     key: 'tenantName',
-                    className:'tenantName',
+                    className: 'tenantName',
                     sortable: true,
-                    ellipsis:true,
+                    ellipsis: true,
                 },
                 {
                     title: '电话',
@@ -127,7 +130,6 @@ export default {
                     render(row, column, index) {
                         return `<a style="cursor:pointer;color:#7266ba" @click="selectRow(${index})" >菜单</a>`;
                     }
-
                 },
             ],
             tenantData: [],
@@ -142,6 +144,23 @@ export default {
         this.getTenantList()
     },
     methods: {
+        searchTenant() {
+            var codeData = []
+            var nameData = []
+            if (this.tenantCode && !this.tenantCode) {
+                this.tenantData.map(item => {
+                    if (item.tenantCode.indexOf(this.tenantCode) >= 0) {
+                        codeData.push(item)
+                    }
+                })
+            }
+            if (this.tenantShortname) {
+                nameData = filtrate(this.tenantData, this.tenantName, 'tenantName')
+            }
+            if (this.tenantShortname || this.tenantCode) {
+                this.tenantData = [...codeData]
+            }
+        },
         async getTenantList() {
             const data = await api.post(api.config.tenantList, this.pageConf)
             this.tenantData = data.datas.result
@@ -162,25 +181,40 @@ export default {
         rowClick(item) {
             this.currentData = item
         },
-        async changeStatus(val){
-            const data = await api.put(api.config.tenantStatus,{
-                tenantId : this.currentData.tenantId,
-                tenantStatus : val
+        async changeStatus(val) {
+            const data = await api.put(api.config.tenantStatus, {
+                tenantId: this.currentData.tenantId,
+                tenantStatus: val
             })
-            this.tenantData.map(item =>{
-                if(this.currentData.tenantId == item.tenantId){
+            this.tenantData.map(item => {
+                if (this.currentData.tenantId == item.tenantId) {
                     item.tenantStatus = val
                 }
             })
         },
-        async delTenant(){
-            const data = await api.delete(api.config.authTenant,{
-                tenantId : this.currentData.tenantId,
+        delTenant() {
+            this.$Modal.confirm({
+                title: '操作确认',
+                content: "<p>您确定要删除所选中的所有租户记录?</p>",
+                onOk: () => {
+                    this.delCompany()
+                },
+            });
+        },
+        async delCompany() {
+            const data = await api.delete(api.config.authTenant, {
+                tenantId: this.currentData.tenantId,
             })
+            if (data) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: "删除成功"
+                })
+            }
         },
-        selectTable(selection,row){
+        selectTable(selection, row) {
             console.log(selection)
-        },
+        }
     }
 }
 </script>
@@ -215,11 +249,11 @@ export default {
         }
         .tenant-info {
             p {
-                margin-bottom:15px;
+                margin-bottom: 15px;
                 &>label {
                     color: #98a6ad;
                     width: 60px;
-                    margin-right:15px;
+                    margin-right: 15px;
                 }
             }
         }
@@ -239,11 +273,13 @@ export default {
         line-height: 30px;
     }
 }
-.tenantName{
-    min-width:220px!important;
+
+.tenantName {
+    min-width: 220px!important;
 }
-.ivu-table-cell{
-    padding-left:10px;
-    padding-right:10px;
+
+.ivu-table-cell {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 </style>

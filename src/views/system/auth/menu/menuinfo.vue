@@ -11,25 +11,25 @@
                 <a v-for="item in filtrate(currentList)" :id="item.itemId" :class="{select:item.itemId == selectItem.menuItemId}" @dblclick="editItem(item)">
                     <div>
                         <span class="label">{{item.itemTab}}</span> /**
-                        <br>&nbsp;*&nbsp;
-                        <span>{{item.itemAllDesc}}</span>
+                        <br>&nbsp;*
+                        <span class="text-xs">{{item.itemAllDesc}}</span>
                         <br>
                         <span v-for="param in item.params">
                             &nbsp;*
                             <span class="text-muted">@param</span>
-                            <span class="hightLight">{{param}}</span>
+                            <span class="hightLight text-xs">{{param}}</span>
                             <br>
                         </span>
                         &nbsp;*/
                         <br>
                         <span class="api-delete fr" @click="delMenuItem(item.itemId)">
-                            <Icon type="trash-a" size="24"></Icon>
+                            <i class="fa fa-trash-o" aria-hidden="true" style="font-size:18px;"></i>
                         </span>
                         @RequestMapping(value="
                         <span class="hightLight">/{{item.itemUrl}}</span>"
                         <span v-if="item.itemRequestmethod">, method=RequestMethod.
                             <span class="hightLight">
-                                <em>{{item.itemRequestmethod}}</em>
+                                <em>{{item.itemRequestmethod | uppercase}}</em>
                             </span>
                         </span>)
                     </div>
@@ -250,6 +250,7 @@ export default {
 }
 
 .api-details {
+    font-family: Consolas;
     a {
         display: block;
         padding: 15px 20px;
@@ -285,6 +286,9 @@ export default {
         }
         .api-delete {
             display: none
+        }
+        .text-xs{
+            font-size:12px;
         }
     }
 }

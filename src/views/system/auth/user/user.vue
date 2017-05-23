@@ -54,11 +54,11 @@
                     <Button @click="submitEditUser" v-show="editStatus == 2" type="primary" size="small">完成</Button>
                     <Button @click="editStatus = 1" v-show="editStatus == 2" size="small">取消</Button>
                     <Button style="float:right" size="small" @click="delUser"><Icon type="close" /></Button>
-        		</div>	
+        		</div>
 				<div class="l-info_content">
 					<div class="l-info_hbox">
 						<div class="hbox1">
-							<img src="../../../assets/images/a0.jpg" alt="">
+							<img src="../../../../assets/images/a0.jpg" alt="">
 						</div>
 						<div class="hbox2">
 							<p v-show="editStatus == 1">{{selectUser.userName}}</p>
@@ -189,7 +189,7 @@ export default {
             //这两个不能改
             this.editData.userId = currentUser.userId;
             this.editData.userRole = currentUser.userRole;
-            
+
         },
         async submitEditUser(){
             if(this.operate == 'edit'){

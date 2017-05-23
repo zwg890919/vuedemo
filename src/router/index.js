@@ -4,7 +4,7 @@ import Home from '@/views/home'
 import System from '@/views/system'
 import Login from '@/views/login/login'
 
-const authUser = resolve => require(['../views/system/auth/user.vue'], resolve)
+const authUser = resolve => require(['../views/system/auth/user/user.vue'], resolve)
 const authMenu = resolve => require(['../views/system/auth/menu/menu.vue'], resolve)
 
 const tableStatic = resolve => require(['../views/example/table/tableStatic.vue'], resolve)

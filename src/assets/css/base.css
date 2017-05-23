@@ -133,13 +133,15 @@ caption,
 cite,
 code,
 dfn,
-em,
 th,
 var {
     font-style: normal;
     font-weight: 500;
 }
 
+em{
+    font-style: italic;
+}
 
 /* 去掉列表前的标识，li 会继承 */
 
@@ -197,7 +199,7 @@ sub {
 /* 让链接在 hover 状态下不显示下划线 */
 
 a {
-    color: #333
+    color: #363f44;
 }
 
 a:hover,

@@ -180,9 +180,10 @@ export default {
             window.location.hash = "#" + data.menuItemId
         },
         treeClose(data) {
+            console.log(data)
             this.$Modal.confirm({
                 title: '操作确认',
-                content: "<p>您确定要删除'删除用户组'，及下属所有的菜单?</p>",
+                content: `<p>您确定要删除${data.name}，及下属所有的菜单?</p>`,
                 onOk: () => {
                     this.delMenu(data)
                 },
@@ -196,8 +197,7 @@ export default {
             })
         },
         resetCurrentData() {
-            // const parentName = this.currentData.name
-            // const parentId = this.currentData.id;
+            this.$refs['currentData'].resetFields();
             Object.assign(this.currentData, {
                 menuParentName: this.selectData.name,
                 menuParentId: this.selectData.id
@@ -215,12 +215,13 @@ export default {
                         menuAuthLevel: this.currentData.menuAuthLevel,
                         menuVisibility: this.currentData.menuVisibility,
                         menuSerialNo: this.currentData.menuSerialNo,
-                        menuIconClass: this.currentData.menuIconclass,
+                        menuIconclass: this.currentData.menuIconclass,
                         menuItemId: this.currentData.menuItemId,
                         menuHref: this.currentData.menuHref
                     }
                     if (this.modalType == "edit") {
                         param.menuId = this.currentData.id;
+                        // console.log(param)
                         this.updateMenu(param)
                     } else {
                         this.submitAddMenu(param)
@@ -234,7 +235,7 @@ export default {
             if (data) {
                 this.$totast.success({
                     title: "系统提示",
-                    message: "提交成功"
+                    message: data.i18nMessage
                 })
                 this.getMenu()
                 this.addMenu = false
@@ -245,7 +246,7 @@ export default {
             if (data) {
                 this.$totast.success({
                     title: "系统提示",
-                    message: "修改成功"
+                    message: data.i18nMessage
                 })
                 this.getMenu()
                 this.addMenu = false
@@ -257,17 +258,10 @@ export default {
             };
             const resdata = await api.delete(api.config.authMenu, param)
             if (resdata) {
-                this.$totast.success({
-                    title: "系统提示",
-                    message: "删除成功"
-                })
                 this.getMenu()
             }
         },
         cancle() {
-            // for (var key in this.currentData) {
-            //     this.currentData[key] = ''
-            // }
             this.$refs['currentData'].resetFields();
             this.addMenu = false;
         }

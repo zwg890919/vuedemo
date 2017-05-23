@@ -36,7 +36,7 @@
 					<img src="api/verifycode" onclick="this.src='/verifycode?' + Math.random()"/>
 				</Col>
 			</Row>
-			<Button type="primary" long size="large" style="margin-top:15px;" @click="getToken">登陆</Button>
+			<Button type="info" long size="large" style="margin-top:15px;" @click="getToken">登陆</Button>
 			<p class="login-reg">
 				<a>立即注册</a>
 				<a>忘记密码？</a>
