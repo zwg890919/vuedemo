@@ -113,13 +113,15 @@ export default {
         },
         modalOpen(val) {
             this.modalModify = "add"
-            this.addFunction = true
+            this.addFunction = val
             for (var key in this.currentData) {
                 this.currentData[key] = ''
             }
         },
         addFunction(val) {
-            this.$emit("closeMenuModal")
+            if(!val){
+                this.$emit("closeMenuModal")
+            }
         }
     },
     methods: {
@@ -167,13 +169,13 @@ export default {
             this.addFunction = false;
         },
         async submiteItem(param) {
-            console.log(param)
             const data = await api.post(api.config.authItem, param)
             if (data) {
                 this.$totast.success({
                     title: "系统提示",
-                    message: "提交成功"
+                    message: data.i18nMessage
                 })
+                this.addFunction = false
                 this.$emit("resetItemlist")
                 this.$emit("closeMenuModal")
             }
@@ -184,8 +186,9 @@ export default {
             if (data) {
                 this.$totast.success({
                     title: "系统提示",
-                    message: "修改成功"
+                    message: data.i18nMessage
                 })
+                this.addFunction = false
                 this.$emit("resetItemlist")
                 this.$emit("closeMenuModal")
             }

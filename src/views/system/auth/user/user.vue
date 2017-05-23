@@ -250,7 +250,6 @@ export default {
                         title:"系统提示",
                         message:"操作成功"
                     });
-                    // 刷新菜单
                     this.getMenu();
                 }
     		}
