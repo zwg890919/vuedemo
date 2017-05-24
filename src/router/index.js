@@ -47,11 +47,11 @@ export default new Router({
 					},
 					children: [{
 						path: 'tablestatic',
-						name: "app.table.tablestatic",
+						name: "app.table.静态表格",
 						component: tableStatic
 					}, {
 						path: 'datatable',
-						name: "app.table.datatable",
+						name: "app.table.Datatable",
 						component: dataTable
 					}]
 				}, {
@@ -62,35 +62,35 @@ export default new Router({
 					},
 					children: [{
 						path: 'slider',
-						name: "app.form.slider",
+						name: "app.form.滑动拉杆",
 						component: slider
 					}, {
 						path: 'elements',
-						name: "app.form.elements",
+						name: "app.form.表单元素",
 						component: elements
 					}, {
 						path: 'fileupload',
-						name: "app.form.fileupload",
+						name: "app.form.文件上传",
 						component: fileUpload
 					}, {
 						path: 'select',
-						name: "app.form.select",
+						name: "app.form.选择下拉",
 						component: select
 					}, {
 						path: 'validation',
-						name: "app.form.validation",
+						name: "app.form.表单验证",
 						component: validation
 					}, {
 						path: 'wizard',
-						name: "app.form.wizard",
+						name: "app.form.向导表单",
 						component: wizard
 					}, {
 						path: 'editor',
-						name: "app.form.editor",
+						name: "app.form.文本编辑",
 						component: editor
 					}, {
 						path: 'imageCrop',
-						name: "app.form.imageCrop",
+						name: "app.form.头像裁剪",
 						component: imageCrop
 					}]
 				}, {
@@ -101,16 +101,16 @@ export default new Router({
 					},
 					children: [{
 						path: "navtree",
-						name: "app.tree.navtree",
+						name: "app.tree.树型组件",
 						component: resolve => require(['../views/example/tree/navtree.vue'], resolve)
 					}]
 				}, {
 					path: "chart",
-					name: "app.chart",
+					name: "app.统计图表",
 					component: resolve => require(['../views/example/chart/chart.vue'], resolve),
 				}, {
 					path: "calendar",
-					name: "app.calendar",
+					name: "app.记事日历",
 					component: resolve => require(['../views/example/calendar/calendar.vue'], resolve),
 				}, {
 					path: "ui",
@@ -120,15 +120,15 @@ export default new Router({
 					},
 					children: [{
 						path: "css",
-						name: "app.ui.css",
+						name: "app.ui.CSSBase3",
 						component: resolve => require(['../views/example/ui/css.vue'], resolve)
 					}, {
 						path: "timeline",
-						name: "app.ui.timeline",
+						name: "app.ui.Timeline",
 						component: resolve => require(['../views/example/ui/timeline.vue'], resolve)
 					}, {
 						path: "portlet",
-						name: "app.ui.portlet",
+						name: "app.ui.Portlet",
 						component: resolve => require(['../views/example/ui/portlet.vue'], resolve)
 					}, {
 						path: "sortable",
@@ -136,27 +136,27 @@ export default new Router({
 						component: resolve => require(['../views/example/ui/sortable.vue'], resolve)
 					}, {
 						path: "buttons",
-						name: "app.ui.buttons",
+						name: "app.ui.Buttons",
 						component: resolve => require(['../views/example/ui/buttons.vue'], resolve)
 					}, {
 						path: "dialog",
-						name: "app.ui.dialog",
+						name: "app.ui.Dialog",
 						component: resolve => require(['../views/example/ui/dialog.vue'], resolve)
 					}, {
 						path: "toaster",
-						name: "app.ui.toaster",
+						name: "app.ui.Toaster",
 						component: resolve => require(['../views/example/ui/toaster.vue'], resolve)
 					}, {
 						path: "grids",
-						name: "app.ui.grids",
+						name: "app.ui.Grids",
 						component: resolve => require(['../views/example/ui/grids.vue'], resolve)
 					}, {
 						path: "fonts",
-						name: "app.ui.fonts",
+						name: "app.ui.Fonts",
 						component: resolve => require(['../views/example/ui/fonts.vue'], resolve)
 					}, {
 						path: "bootstrap",
-						name: "app.ui.bootstrap",
+						name: "app.ui.Bootstrap",
 						component: resolve => require(['../views/example/ui/bootstrap.vue'], resolve)
 					}]
 				}]
@@ -178,19 +178,19 @@ export default new Router({
 					redirect: 'user',
 				}, {
 					path: 'user',
-					name: "fix.auth.user",
+					name: "fix.auth.用户管理",
 					component: authUser
 				}, {
 					path: 'userpck',
-					name: "fix.auth.userpck",
+					name: "fix.auth.权限分配",
 					component: resolve => require(['../views/system/auth/userpck/userpck.vue'], resolve)
 				}, {
 					path: 'menu',
-					name: "fix.auth.menu",
+					name: "fix.auth.菜单管理",
 					component: authMenu
 				}, {
 					path: 'tenant',
-					name: "fix.auth.tenant",
+					name: "fix.auth.租户管理",
 					component: resolve => require(['../views/system/auth/tenant/tenant.vue'], resolve)
 				}]
 			}]
