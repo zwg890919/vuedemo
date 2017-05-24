@@ -231,14 +231,15 @@ export default {
                 this.getUserList();
             }
         },
-        // 删除部门
+        // 添加部门
     	async submitDept(){
-    		if(this.orgId == ''){
+            console.log(this.orgId)
+    		if(!this.orgId){
     			this.$totast.warning({
                     title:"操作提示",
                     message:"请先选择一个父级部门"
                 })
-    		} else if(this.addDept.orgName == ''){
+    		} else if(!this.addDept.orgName){
     			this.$totast.warning({
                     title:"操作提示",
                     message:"请先输入组织名称，后提交"
@@ -330,7 +331,7 @@ export default {
         	}else{
         		this.showAll = false;
         	}
-        	console.log(data.id);
+        	// console.log(data.id);
         	this.showid = data.id;
         	for(let x in this.userList){
         		if(this.userList[x].userOrgId == data.id){
@@ -342,8 +343,6 @@ export default {
 
         },
         treeClose(data) {
-        	console.log(data.id);
-        	console.log(data.name);
             this.$Modal.confirm({
                 title: '操作确认',
                 content: "<p>您确定要删除"+data.name+"，及下属所有的用户?</p>",

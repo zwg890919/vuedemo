@@ -8,10 +8,13 @@ let state = {
 }
 
 
+console.log(localStorage.getItem("settings"))
 if (localStorage.getItem("settings")) {
+    console.log(213213)
     state = JSON.parse(localStorage.getItem("settings"))
 } else {
-    localStorage.setItem("settings", JSON.stringify(state))
+    console.log(789)
+    // localStorage.setItem("settings", JSON.stringify(state))
 }
 
 
