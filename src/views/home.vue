@@ -30,8 +30,6 @@ export default {
 			name:from.name,
 			url:'3'
 		});
-		// console.log(this.hisRoute.his);
-		// console.log(this.hisRoute.his.lenght)
 		console.log(this.hisRoute)
         next();
     },

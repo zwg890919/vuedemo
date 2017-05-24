@@ -34,10 +34,23 @@ export default {
 
         }
     },
+    beforeRouteUpdate (to, from, next) {
+        if(!from.name) return;
+        if(this.hisRoute.length == 2){
+            this.hisRoute.shift();
+        }
+        this.hisRoute.push({
+            name:from.name,
+            url:'3'
+        });
+        console.log(this.hisRoute)
+        next();
+    },
     computed: {
         ...mapState({
             container: state => state.systemSetting.container,
             asideIndent: state => state.systemSetting.asideIndent,
+            hisRoute: state => state.systemSetting.hisRoute
         }),
     },
     components: {
