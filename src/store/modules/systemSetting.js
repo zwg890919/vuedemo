@@ -4,17 +4,17 @@ let state = {
     'container': false,
     'asideIndent': false,
     'themeID': "1",
-    'asideUserShow': false
+    'asideUserShow': false,
+     'hisRoute':[]
 }
 
 
-console.log(localStorage.getItem("settings"))
+
 if (localStorage.getItem("settings")) {
-    console.log(213213)
+    
     state = JSON.parse(localStorage.getItem("settings"))
 } else {
-    console.log(789)
-    // localStorage.setItem("settings", JSON.stringify(state))
+    localStorage.setItem("settings", JSON.stringify(state))
 }
 
 

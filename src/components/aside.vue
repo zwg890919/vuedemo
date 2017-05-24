@@ -33,9 +33,15 @@
                     <li class="layout-aside__title" v-show="!asideIndent">快捷菜单</li>
                     <li class="layout-aside__item layout-aside__quick">
                         <router-link to="app" active-class="active">
-                            <Icon type="android-home" size="20" color="#23b7e5"></Icon>
+                            <Icon type="android-home" size="20" color="#564aa3"></Icon>
                             <span v-show="!asideIndent">应用主页</span>
                         </router-link>
+                        <router-link v-show="hisRoute.length == 2" to="app" active-class="active" v-for="(e, i) in hisRoute">
+                            <Icon v-show="i == 0" type="pricetags" size="20" color="#23c24c"></Icon>
+                            <Icon v-show="i == 1" type="pricetags" size="20" color="#23b7e5"></Icon>
+                            <span>{{e.name}}</span>
+                        </router-link>
+
                     </li>
                     <li class="line"></li>
 
@@ -83,6 +89,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -92,7 +99,7 @@ export default {
                 top: "0px",
                 left: "0px",
             },
-            userShow: false
+            userShow: false,
         }
     },
     computed: {
@@ -102,7 +109,11 @@ export default {
             return url
         },
         currentMenu: v => v.$store.state.appMenu.currentApp,
-        asideUserShow: v => v.$store.state.systemSetting.asideUserShow
+        asideUserShow: v => v.$store.state.systemSetting.asideUserShow,
+        ...mapState({
+            hisRoute: state => state.systemSetting.hisRoute
+        }),
+
     },
     props: ['asideIndent', 'Asidefixed', 'headerFixed'],
     methods: {

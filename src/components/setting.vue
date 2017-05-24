@@ -1,60 +1,62 @@
 <template>
-  <div class="settings" v-show="settingshow">
-    <div class="settings-switch">
-      <p>
-        <span>头部不滚动</span>
-        <label>
-          <i-switch v-model="headerFixed" @on-change="changSetting(1)">
-            <span slot="open">开</span>
-            <span slot="close">关</span>
-          </i-switch>
-        </label>
-      </p>
-      <p>
-        <span>菜单栏固定</span>
-        <label>
-          <i-switch v-model="Asidefixed" @on-change="changSetting(2)">
-            <span slot="open">开</span>
-            <span slot="close">关</span>
-          </i-switch>
-        </label>
-      </p>
-      <p>
-        <span>固定页面宽</span>
-        <label>
-          <i-switch v-model="container" @on-change="changSetting(4)">
-            <span slot="open">开</span>
-            <span slot="close">关</span>
-          </i-switch>
-        </label>
-      </p>
-      <p>
-        <span>菜单栏折叠</span>
-        <label>
-          <i-switch v-model="asideIndent" @on-change="changSetting(3)">
-            <span slot="open">开</span>
-            <span slot="close">关</span>
-          </i-switch>
-        </label>
-      </p>
+  <transition name="slide-fade">
+    <div class="settings" v-show="settingshow">
+      <div class="settings-switch">
+        <p>
+          <span>头部不滚动</span>
+          <label>
+            <i-switch v-model="headerFixed" @on-change="changSetting(1)">
+              <span slot="open">开</span>
+              <span slot="close">关</span>
+            </i-switch>
+          </label>
+        </p>
+        <p>
+          <span>菜单栏固定</span>
+          <label>
+            <i-switch v-model="Asidefixed" @on-change="changSetting(2)">
+              <span slot="open">开</span>
+              <span slot="close">关</span>
+            </i-switch>
+          </label>
+        </p>
+        <p>
+          <span>固定页面宽</span>
+          <label>
+            <i-switch v-model="container" @on-change="changSetting(4)">
+              <span slot="open">开</span>
+              <span slot="close">关</span>
+            </i-switch>
+          </label>
+        </p>
+        <p>
+          <span>菜单栏折叠</span>
+          <label>
+            <i-switch v-model="asideIndent" @on-change="changSetting(3)">
+              <span slot="open">开</span>
+              <span slot="close">关</span>
+            </i-switch>
+          </label>
+        </p>
 
+      </div>
+<!--       <div class="settings-theme">
+        <Row :gutter="20">
+          <Col span="12">
+          <span class="theme-item theme-1">
+                          <span>
+                            <i></i>
+                          </span>
+          <b class="header"></b>
+          <b class="header"></b>
+          <b></b>
+          </span>
+          </Col>
+          <Col span="12">col-12</Col>
+        </Row>
+      </div> -->
     </div>
-    <div class="settings-theme">
-      <Row :gutter="20">
-        <Col span="12">
-        <span class="theme-item theme-1">
-                        <span>
-                          <i></i>
-                        </span>
-        <b class="header"></b>
-        <b class="header"></b>
-        <b></b>
-        </span>
-        </Col>
-        <Col span="12">col-12</Col>
-      </Row>
-    </div>
-  </div>
+  </transition>
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -90,12 +92,13 @@ export default {
 }
 
 .settings {
-  position: fixed;
+  // position: fixed;
+  position:absolute;
   top: 50px;
-  right: -1px;
+  right: 0px;
   z-index: 1050;
   width: 240px;
-  height: 100%;
+  // height: 100%;
   background: #fff;
   border: 1px solid #dee5e7;
   &-switch {
