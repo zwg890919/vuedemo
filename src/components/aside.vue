@@ -36,7 +36,7 @@
                             <Icon type="android-home" size="20" color="#564aa3"></Icon>
                             <span v-show="!asideIndent">应用主页</span>
                         </router-link>
-                        <router-link v-show="hisRoute.length == 2" :to="e.route" active-class="active" v-for="(e, i) in hisRoute">
+                        <router-link v-show="hisRoute.length == 2" :to="e.route" active-class="active" v-for="(e, i) in hisRoute" :key="e.name">
                             <Icon v-show="i == 0" type="pricetags" size="20" color="#23c24c"></Icon>
                             <Icon v-show="i == 1" type="pricetags" size="20" color="#23b7e5"></Icon>
                             <span v-show="!asideIndent">{{e.name}}</span>
