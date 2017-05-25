@@ -56,16 +56,20 @@
                     <Button style="float:right" v-show="editStatus == 1" size="small" @click="delUser"><Icon type="close" /></Button>
         		</div>
 				<div class="l-info_content">
+                    <Form ref="editData" :model="editData" :rules="ruleValidate" :label-width="80">
 					<div class="l-info_hbox">
 						<div class="hbox1">
 							<img src="../../../../assets/images/a0.jpg" alt="">
 						</div>
 						<div class="hbox2">
 							<p v-show="editStatus == 1">{{selectUser.userName}}</p>
-                            <Input v-model="editData.userName" v-show="editStatus == 2" style="width: 180px"></Input>
+                            <!-- <Input v-model="editData.userName" v-show="editStatus == 2" style="width: 180px"></Input> -->
+                            <Form-item label="" prop="name">
+                                <Input v-model="editData.userName" placeholder="请输入姓名"></Input>
+                            </Form-item>
 						</div>
 					</div>
-
+                    </Form>
 					<div class="l-info_group">
 						<div class="l-row">
 							<label>用户账号</label>
@@ -110,6 +114,11 @@ import menuInfo from "@/views/system/auth/menu/menuinfo"
 export default {
     data() {
         return {
+            ruleValidate: {
+                name: [
+                        { required: true, message: '姓名不能为空', trigger: 'blur' }
+                    ],
+            },
             itemFilter:'',
             editStatus:1,
         	addshow1:true,
@@ -177,7 +186,6 @@ export default {
         editUser(){
             this.operate = 'edit';
             let currentUser = this.selectUser;
-            console.log(currentUser)
             this.editStatus = 2;
             this.editData.userName = currentUser.userName;
             this.editData.userCode = currentUser.userCode;
@@ -293,7 +301,6 @@ export default {
                     label:x.name,
                     value:x.id
                 })
-                console.log(x);
                 for(let y of x.childrens){
                    this.deptList.push({
                         label:y.name,
@@ -301,7 +308,6 @@ export default {
                     }) 
                 }
             }
-            console.log(data);
         },
         async getUserList() {
             const data = await api.post(api.config.userList)
@@ -310,9 +316,7 @@ export default {
         filterList(id){
         	let temp = this.userList
         	let arr = [];
-        	console.log(temp)
         	for(let x of temp){
-        		console.log(x);
         		if(x.userOrgId == id){
         			arr.push(x);
         		}
@@ -333,12 +337,10 @@ export default {
         	}else{
         		this.showAll = false;
         	}
-        	console.log(data.id);
         	this.showid = data.id;
         	for(let x in this.userList){
         		if(this.userList[x].userOrgId == data.id){
         			this.index = x;
-        			// console.log(this.index)
         			return;
         		}
         	}
@@ -346,8 +348,6 @@ export default {
         },
         // 点击部门删除按钮
         treeClose(data) {
-        	console.log(data.id);
-        	console.log(data.name);
             this.$Modal.confirm({
                 title: '操作确认',
                 content: "<p>您确定要删除"+data.name+"，及下属所有的用户?</p>",
