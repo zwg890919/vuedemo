@@ -5,7 +5,7 @@
             <Row :gutter="16">
                 <Col span="12">
                 <div class="jyc-wrap-space">
-                    <Button type="primary" @click="open(false)">打开提醒</Button>
+                    <Button type="info" @click="open(false)">打开提醒</Button>
                     <Button @click="open(true)">打开提醒（仅标题）</Button>
                 </div>
                 <div class="jyc-wrap-space">
@@ -24,12 +24,12 @@
                 </div>
                 <div class="jyc-wrap-space">
                     <div>不会自动关闭</div>
-                    <Button type="primary" @click="time">打开提醒</Button>
+                    <Button type="info" @click="time">打开提醒</Button>
                 </div>
                 </Col>
                 <Col span="12">
                 <div class="jyc-wrap-space">
-                    <Button type="primary" @click="messageInfo">显示普通提醒</Button>
+                    <Button type="info" @click="messageInfo">显示普通提醒</Button>
                 </div>
                 <div class="jyc-wrap-space">
                     <Button @click="messageSuccess">显示成功提示</Button>

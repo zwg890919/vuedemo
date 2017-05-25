@@ -5,7 +5,7 @@
                 <li class="row-row">
                     <div>
                         <div class="scroll-cell">
-                            <jyc-tree :treedata="treedata" :showCheckbox="false" @tree-dbclick="treedbclick" @tree-click="treeClick" @tree-close="treeClose" >
+                            <jyc-tree :treedata="treedata" :showCheckbox="false"  @tree-click="treeClick" @tree-close="treeClose" >
                             </jyc-tree>
                         </div>
                     </div>
@@ -17,7 +17,7 @@
                     </Button>
                     <div v-else>
                     	<Input v-model="addDept.orgName" placeholder="请输入..." style="width: 200px"></Input>
-                    	<Button  type="primary" @click="submitDept">提交</Button>
+                    	<Button  type="info" @click="submitDept">提交</Button>
                     	<Button type="ghost" @click="toggleAddShow1">返回</Button>
                     </div>
                 </li>
@@ -47,13 +47,13 @@
                 </li>
             </ul>
         </div>
-        <div class="" v-show="i == index" v-for="(x,i) in userList">
-        	<div class="l-info">
+        <div >
+        	<div class="l-info" v-show="selectUser != ''">
         		<div class="l-info_title">
-        			<Button @click="editUser" v-show="editStatus == 1" type="primary" size="small">编辑</Button>
-                    <Button @click="submitEditUser" v-show="editStatus == 2" type="primary" size="small">完成</Button>
+        			<Button @click="editUser" v-show="editStatus == 1" type="info" size="small">编辑</Button>
+                    <Button @click="submitEditUser" v-show="editStatus == 2" type="info" size="small">完成</Button>
                     <Button @click="editStatus = 1" v-show="editStatus == 2" size="small">取消</Button>
-                    <Button style="float:right" size="small" @click="delUser"><Icon type="close" /></Button>
+                    <Button style="float:right" v-show="editStatus == 1" size="small" @click="delUser"><Icon type="close" /></Button>
         		</div>
 				<div class="l-info_content">
 					<div class="l-info_hbox">
@@ -82,26 +82,26 @@
                             <span v-show="editStatus == 1">{{selectUser.userEmail}}</span>
                             <Input v-model="editData.userEmail" v-show="editStatus == 2" style="width: 180px"></Input>
                         </div>
-						<div class="l-row">
+						<div class="l-row" v-show="editStatus != 2">
 							<label>用户状态</label>
 							<i-switch v-model="selectUser.userStatus" @on-change="changeStatus"></i-switch>
 						</div>
-						<div class="l-row">
+						<div class="l-row" v-show="editStatus != 2">
 							<label>用户角色</label>
 							<span>{{selectUser.userRole | filterUserRole}}</span>
 						</div>
 						<div class="l-row">
 							<label>所在部门</label>
 							<span v-show="editStatus == 1">{{selectUser.userOrgId | filterUserOrgId}}</span>
-                            <Input v-model="editData.userOrgId" v-show="editStatus == 2" style="width: 180px"></Input>
-
+                            <!-- <Input v-model="editData.userOrgId" v-show="editStatus == 2" style="width: 180px"></Input> -->
+                            <Select v-model="editData.userOrgId" v-show="editStatus == 2" style="width:180px">
+                                <Option v-for="item in deptList" :value="item.value" :key="item">{{ item.label }}</Option>
+                            </Select>
 						</div>
 					</div>
 				</div>
         	</div>
-        	<!-- <a v-show="i == index"  v-for="(x,i) in userList">{{x.userName}}({{x.userCode}})</a> -->
         </div>
-
     </div>
 </template>
 <script>
@@ -117,6 +117,7 @@ export default {
         	showAll:true,
 			showid:'',
             treedata: [],
+            deptList:[],
             currentData: {},
             selectData:{},
             addMenu: false,
@@ -126,7 +127,6 @@ export default {
             index:0,
             operate:'',
             addDept:{
-            	pageid:10013,
             	orgId:'',
             	orgName:'',
             },
@@ -139,9 +139,7 @@ export default {
                 userId:'',
                 userRole:''
             },
-            selectUser:{
-
-            }
+            selectUser:''
         }
     },
     created() {
@@ -173,12 +171,12 @@ export default {
             //这两个不能改
             this.editData.userId = '';
             this.editData.userRole = '';
-            this.operate = 'edit';
+            this.operate = 'add';
             this.editStatus = 2;
         },
         editUser(){
             this.operate = 'edit';
-            let currentUser = this.userList[this.index];
+            let currentUser = this.selectUser;
             console.log(currentUser)
             this.editStatus = 2;
             this.editData.userName = currentUser.userName;
@@ -193,9 +191,11 @@ export default {
         },
         async submitEditUser(){
             if(this.operate == 'edit'){
-                const data = await api.put(api.config.authUser,this.editData)
+                // 编辑用户
+                var data = await api.put(api.config.authUser,this.editData)
             }else{
-                const data = await api.post(api.config.authUser,this.editData)
+                // 新增用户
+                var data = await api.post(api.config.authUser,this.editData)
             }
             if(data){
                 this.$totast.success({
@@ -205,7 +205,6 @@ export default {
                 // 刷新用户
                 this.getUserList();
             }
-            console.log(data);
         },
         // 删除用户弹框
         delUser(){
@@ -231,7 +230,7 @@ export default {
                 this.getUserList();
             }
         },
-        // 删除部门
+        // 新增部门提交
     	async submitDept(){
     		if(this.addDept.orgId == ''){
     			this.$totast.warning({
@@ -271,13 +270,9 @@ export default {
     	},
         // 点击用户列表
     	userClick(i, data){
-            // console.log(data)
-    		// this.index = i;
-    		console.log(data);
             this.selectUser = data;
+            this.editStatus = 1;
     	},
-
-
         async getMenu() {
         	let arr = new Array();
         	const data = await api.get(api.config.orgTree)
@@ -289,24 +284,28 @@ export default {
             		y.level = 3;
             	}
             }
+            this.getDeptList(arr[0].childrens)
             this.treedata = arr;
+        },
+        getDeptList(data){
+            for(let x of data){
+                this.deptList.push({
+                    label:x.name,
+                    value:x.id
+                })
+                console.log(x);
+                for(let y of x.childrens){
+                   this.deptList.push({
+                        label:y.name,
+                        value:y.id
+                    }) 
+                }
+            }
+            console.log(data);
         },
         async getUserList() {
             const data = await api.post(api.config.userList)
             this.userList = data.datas.result;
-        },
-        treedbclick(data) {
-        	console.log(12);
-            this.currentData = data
-            this.modalType = "edit"
-            var _this = this
-            this.eachNode(this.treedata, function (item) {
-                if (item.id == data.parentId) {
-                    _this.currentData.menuParentName = item.name;
-                    _this.currentData.menuParentId = item.id
-                }
-            })
-            this.addMenu = true
         },
         filterList(id){
         	let temp = this.userList
@@ -321,6 +320,10 @@ export default {
         	return arr;
         },
         treeClick(data) {
+            if(this.addDept.orgId != data.id){
+                this.addshow1 = true;
+            }
+            // 新增部门上级id
         	this.addDept.orgId = data.id;
         	// 浙江聚有财金融服务外包有限公司
         	if(data.id == 2){
@@ -341,6 +344,7 @@ export default {
         	}
 
         },
+        // 点击部门删除按钮
         treeClose(data) {
         	console.log(data.id);
         	console.log(data.name);
@@ -352,47 +356,21 @@ export default {
                 },
             });
         },
-        eachNode(data, callback) {
-            var that = this
-            callback(data)
-            data.childrens.map(item => {
-                that.eachNode(item, callback);
-            })
-        },
-        resetCurrentData() {
-        	let param = {
-        		orgId:'100020',
-        		orgName:'ssss1',
-        		pageid:'10031'
-        	}
-        },
-
-        async updateMenu(param){
-            const data = await api.put(api.config.authMenu,param)
-            if(data){
-                this.$totast.success({
-                    title:"系统提示",
-                    message:"提交成功"
-                })
-                this.addMenu = false
-            }
-        },
-        async delMenu(obj){
+        // 删除部门
+         async delMenu(obj){
             const param = {
-                pageid : 10031,
                 userDel: true,
                 orgId : obj.id
             };
             const data = await api.delete(api.config.authOrg,param);
-            console.log(data);
-            // this.$totast.success({
-            //     title:"系统提示",
-            //     message:"删除成功"
-            // })
+            if(data){
+                this.$totast.success({
+                    title:"系统提示",
+                    message:"操作成功"
+                });
+            }
+            this.getMenu();
         },
-        cancle(){
-            this.addMenu = false;
-        }
     },
     filters:{
     	filterUserRole(value){
@@ -416,7 +394,7 @@ export default {
     			'100016':'车险项目组',
     			'100015':'EHR项目组',
     			'10003':'平台应用部',
-    			'10017':'云采家项目',
+    			'10012':'云采家项目',
     			'10004':'框架开发组',
     			'10002':'销售运营中心',
     			'10010':'数字营销部',

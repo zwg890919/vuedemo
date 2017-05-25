@@ -23,16 +23,12 @@ export default {
 	},
 	beforeRouteUpdate (to, from, next) {
 		if(!from.name) return;
-		if(this.hisRoute.length == 2){
-			this.hisRoute.shift();
-		}
-		this.hisRoute.push({
-			name:from.name,
-			url:'3'
-		});
-		// console.log(this.hisRoute.his);
-		// console.log(this.hisRoute.his.lenght)
-		console.log(this.hisRoute)
+        if(this.hisRoute.length == 2 && from.name != 'app'){
+            this.$store.commit("menuArrShift");
+        }
+        if(from.name != 'app'){
+            this.$store.commit("changeMenuArr", from) 
+        }
         next();
     },
 	computed: {
@@ -50,8 +46,6 @@ export default {
 	},
 	created() {
 		this.$store.dispatch("getMenu")
-        console.log(this.hisRoute);
-        console.log(this.asideIndent);
 	}
 }
 </script>

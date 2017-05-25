@@ -6,7 +6,7 @@
 			<Row :gutter="16">
                 <Col span="12">
                     <div class="comp-box">
-                    	<Button type="primary" @click="modal1 = true">显示对话框</Button>
+                    	<Button type="info" @click="modal1 = true">显示对话框</Button>
                         <Modal
                             v-model="modal1"
                             title="普通的Modal对话框标题"
@@ -67,7 +67,7 @@
 			<Row :gutter="16">
                 <Col span="12">
                     <div class="comp-box">
-                    	<Button type="primary" @click="modal6 = true">显示对话框</Button>
+                    	<Button type="info" @click="modal6 = true">显示对话框</Button>
                         <Modal
                             v-model="modal6"
                             title="对话框标题"

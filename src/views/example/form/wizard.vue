@@ -16,7 +16,7 @@
                             </Input>
                         </Form-item>
                         <Form-item>
-                            <Button type="primary" @click="handleSubmit('formInline',2)">NEXT</Button>
+                            <Button type="info" @click="handleSubmit('formInline',2)">NEXT</Button>
                         </Form-item>
                     </Form>
                 </Tab-pane>
@@ -27,15 +27,15 @@
                             <Input type="text" v-model="modelAge.age" placeholder="Your age"></Input>
                         </Form-item>
                         <Form-item>
-                            <Button type="primary" @click="prev(1)">PREV</Button>
-                            <Button type="primary" @click="handleSubmit('formAge',3)">NEXT</Button>
+                            <Button type="info" @click="prev(1)">PREV</Button>
+                            <Button type="info" @click="handleSubmit('formAge',3)">NEXT</Button>
                         </Form-item>
                     </Form>
                 </Tab-pane>
                 <Tab-pane label="标签三" name="name3" :disabled="disabled3">
                     <Progress :percent="percent" hide-info style="margin: 20px 0;"></Progress>
-                    <Button type="primary" @click="prev(2)">PREV</Button>
-                    <Button type="primary" @click="Finish()">Click me to Finish</Button>
+                    <Button type="info" @click="prev(2)">PREV</Button>
+                    <Button type="info" @click="Finish()">Click me to Finish</Button>
                 </Tab-pane>
             </Tabs>
         </Card>

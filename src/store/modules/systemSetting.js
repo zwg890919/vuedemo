@@ -46,6 +46,18 @@ const mutations = {
                 break;
         }
         localStorage.setItem("settings", JSON.stringify(state))
+    },
+    changeMenuArr(state, from) {
+        let name = from.name.split('.')[2] ? from.name.split('.')[2] : from.name.split('.')[1];
+        state.hisRoute.push({
+            name:name,
+            route:from.path
+        });
+        localStorage.setItem("settings", JSON.stringify(state))
+    },
+    menuArrShift(state) {
+        state.hisRoute.shift();
+        localStorage.setItem("settings", JSON.stringify(state))
     }
 }
 export default {
