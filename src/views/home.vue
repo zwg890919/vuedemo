@@ -23,11 +23,11 @@ export default {
 	},
 	beforeRouteUpdate (to, from, next) {
 		if(!from.name) return;
-        if(this.hisRoute.length == 2 && from.name != 'app'){
-            this.$store.commit("menuArrShift");
-        }
         if(from.name != 'app'){
             this.$store.commit("changeMenuArr", from) 
+        }
+        if(this.hisRoute.length == 3 && from.name != 'app'){
+            this.$store.commit("menuArrShift");
         }
         next();
     },
