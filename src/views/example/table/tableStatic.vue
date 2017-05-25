@@ -13,13 +13,13 @@
         <div class="table">
             <Table :columns="columns3" :data="data3" size="small" ref="table"></Table>
             <div class="table-btn">
-                <Button type="primary" size="large" @click="exportData(1)">
+                <Button type="info" size="large" @click="exportData(1)">
                     <Icon type="ios-download-outline"></Icon> 导出原始数据
                 </Button>
-                <Button type="primary" size="large" @click="exportData(2)">
+                <Button type="info" size="large" @click="exportData(2)">
                     <Icon type="ios-download-outline"></Icon> 导出排序和过滤后的数据
                 </Button>
-                <Button type="primary" size="large" @click="exportData(3)">
+                <Button type="info" size="large" @click="exportData(3)">
                     <Icon type="ios-download-outline"></Icon> 导出自定义数据
                 </Button>
             </div>
