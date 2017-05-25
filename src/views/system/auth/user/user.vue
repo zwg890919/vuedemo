@@ -47,13 +47,13 @@
                 </li>
             </ul>
         </div>
-        <div class="" v-show="i == index" v-for="(x,i) in userList">
-        	<div class="l-info">
+        <div >
+        	<div class="l-info" v-show="selectUser != ''">
         		<div class="l-info_title">
         			<Button @click="editUser" v-show="editStatus == 1" type="primary" size="small">编辑</Button>
                     <Button @click="submitEditUser" v-show="editStatus == 2" type="primary" size="small">完成</Button>
                     <Button @click="editStatus = 1" v-show="editStatus == 2" size="small">取消</Button>
-                    <Button style="float:right" size="small" @click="delUser"><Icon type="close" /></Button>
+                    <Button style="float:right" v-show="editStatus == 1" size="small" @click="delUser"><Icon type="close" /></Button>
         		</div>
 				<div class="l-info_content">
 					<div class="l-info_hbox">
@@ -139,9 +139,7 @@ export default {
                 userId:'',
                 userRole:''
             },
-            selectUser:{
-
-            }
+            selectUser:''
         }
     },
     created() {
@@ -273,6 +271,7 @@ export default {
         // 点击用户列表
     	userClick(i, data){
             this.selectUser = data;
+            this.editStatus = 1;
     	},
         async getMenu() {
         	let arr = new Array();
