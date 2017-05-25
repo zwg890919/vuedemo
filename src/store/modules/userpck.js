@@ -5,7 +5,8 @@ var state = {
     currentGroup: {},
     menuData: [],
     itempackList: [],
-    checkDisable: true
+    checkDisable: true,
+    modifyState:false,
 }
 
 const getters = {
@@ -30,9 +31,6 @@ const actions = {
             })
         }
     },
-    selectGroup({ commit, state }, groupData) {
-        commit('changeGroup', groupData)
-    },
 }
 
 const mutations = {
@@ -54,7 +52,10 @@ const mutations = {
     },
     modifiyMenu(state, checkState) {
         state.checkDisable = checkState
-    }
+    },
+    modifiyUser(state, modifyState) {
+        state.modifyState = modifyState
+    },
 }
 export default {
     state,

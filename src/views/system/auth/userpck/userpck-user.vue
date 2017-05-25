@@ -8,7 +8,7 @@
         </div>
         <div class="userlist">
             <div class="userlist-wrap">
-                <p v-for="item in filterBy(userList,userFilter,'userCode','userName')" @click="selectUser(item)" :class="{'active':currentUser.userId == item.userId}">
+                <p v-for="item in filterBy(userList,userFilter,'userCode','userName')" @click="selectUser(item)" @dblclick="modifyUser(item)" :class="{'active':currentUser.userId == item.userId}">
                     {{item.userName}}
                     <em>({{item.userCode}})</em>
                     <Tooltip content="平台管理员" class="fr" placement="left" v-if="item.userRole==1">
@@ -50,6 +50,9 @@ export default {
         },
         selectUser(item) {
             this.$store.dispatch('selectUser', item)
+        },
+        modifyUser(item){
+            this.$store.commit("modifiyUser",true)
         }
     }
 }
