@@ -24,6 +24,7 @@ module.exports = {
     userList:"/auth/user/list",  //用户列表
     itempckList:"/auth/itempck/list",  //用户组列表
     menuTeant:"/auth/menu/tenant",  //租户菜单树
+    userPckList:'/auth/user/itempck', //用户功能组
     /****用户管理****/
     orgTree:'/auth/org/tree?pageid=10031', // 获取部门列表
     orgBattch:'/auth/org/battch', // 新增部门

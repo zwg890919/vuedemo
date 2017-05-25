@@ -12,8 +12,9 @@ function convertTreedata(data, checkdata, itemPcks, components) {
 
             itemPcks.map(itempck => {
                 if (itempck == item.id) {
-                    components[index].title = `<span style="color:#23b7e5">${item.id}</span>`,
-                        components[index].checked = true
+                    // console.log(item)
+                    components[index].title = `<span style="color:#23b7e5">${item.name}${item.id}</span>`,
+                    components[index].checked = true
                 }
             })
             if (item.childrens.length) {
@@ -33,6 +34,7 @@ function findComponentsDownward(context, componentName, components = []) {
             const childs = child.$children;
 
             if (name === componentName) {
+                // console.log(child.$options.name,child.data.checked)
                 if (child.data.checked) {
                     components.push(child.data.id);
                 } else {

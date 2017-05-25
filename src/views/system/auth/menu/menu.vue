@@ -195,7 +195,6 @@ export default {
             window.location.hash = "#" + data.menuItemId
         },
         treeClose(data) {
-            console.log(data)
             this.$Modal.confirm({
                 title: '操作确认',
                 content: `<p>您确定要删除${data.name}，及下属所有的菜单?</p>`,

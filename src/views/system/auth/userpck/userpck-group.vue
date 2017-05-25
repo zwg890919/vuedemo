@@ -8,17 +8,33 @@
         </div>
         <div class="grouplist">
             <div class="grouplist-wrap">
-                <p v-for="item in filterBy(itempackList,groupFilter,'pckName')" :class="{'active':currentUser.userRole == item.pckId}" @click="selectGroup(item)" @dblclick="modifyGroup(item)">
-                    {{item.pckName}}
-                    <Icon type="close-round" size="16px" class="fr" @click.native="delPck(item)"></Icon>
-                </p>
+                <Checkbox-group v-model="modifyGroup">
+                    <p
+                    v-for="item in filterBy(itempackList,groupFilter,'pckName')"
+                    :class="{'active':userGroup.indexOf(item.pckId) >= 0}"
+                    @click="selectGroup(item)"
+                    @dblclick="modifyGroup(item)">
+                        <Checkbox :label="item.pckId" v-show="modifyState">
+                            <span>
+                                {{item.pckName}}
+                            </span>
+                        </Checkbox>
+                        <span v-show="!modifyState">
+                            {{item.pckName}}
+                        </span>
+                        <Icon type="close-round" size="16px" class="fr" @click.native="delGroup(item)"></Icon>
+                    </p>
+                </Checkbox-group>
             </div>
         </div>
         <div class="menu-bottom ltr">
-            <Input v-model="pckName" v-focus="addPck" placeholder="请输入..." v-show="!addPck" @on-blur="pckNameAdd"></Input>
-            <Button type="success" @click="addPck = false" v-show="addPck">
+            <Input v-model="pckName" placeholder="请输入..." v-show="!addPck" @on-blur="pckNameAdd"></Input>
+            <Button type="success" @click="addPck = false;pckName = ''" v-show="addPck && !modifyState">
                 <Icon type="plus" size="16px"></Icon>
                 新增用户组
+            </Button>
+            <Button type="success" @click="modifyUser" v-show="modifyState">
+                确认修改
             </Button>
         </div>
     </div>
@@ -34,6 +50,8 @@ export default {
             groupFilter: "",
             pckName: "",
             addPck: true,
+            modifyGroup: [],
+            userGroup: [],
         }
     },
     computed: mapState({
@@ -41,29 +59,69 @@ export default {
         currentGroup: state => state.userPck.currentGroup,
         itempackList: state => state.userPck.itempackList,
         checkDisable: state => state.userPck.checkDisable,
+        modifyState: state => state.userPck.modifyState,
     }),
+    watch: {
+        currentUser(state) {
+            if(state){
+                this.getUserpck()
+            }
+        },
+        modifyState(state){
+            if(state){
+                this.$store.commit('changeGroup', {})
+            }
+        },
+        modifyGroup(state){
+            this.userGroup = state
+        }
+    },
     created() {
         this.getItempckList()
+
     },
     methods: {
-        selectGroup(item) {
-            this.$store.dispatch('selectUser', {
-                userRole: item.pckId
-            })
-            this.currentUser.userRole = item.pckId
-            this.$store.dispatch('selectGroup', item)
-            this.$store.commit("modifiyMenu",true)
-        },
         async getItempckList() {
             const data = await api.post(api.config.itempckList)
-            this.$store.commit("setItempackList",data.datas.result)
+            this.$store.commit("setItempackList", data.datas.result)
         },
+        async getUserpck() {
+            const data = await api.get(api.config.userPckList, {
+                userId: this.currentUser.userId,
+            })
+            this.userGroup = data.datas.result
+            if(this.userGroup.length > 0){
+                this.$store.commit('changeGroup', this.userGroup[0])
+            }else{
+                this.$store.commit('changeGroup', {})
+            }
+        },
+        async modifyUser() {
+            var data = api.post(api.config.userPckList, {
+                userId: this.currentUser.userId,
+                pckid: this.modifyGroup,
+            })
+            // this.$store.commit("modifiyUser", false)
+        },
+        selectGroup(item) {
+            this.userGroup = [item.pckId]
+            this.$store.commit('changeGroup', item)
+        },
+        submitModify() {
+            this.modifyUser()
+        },
+        // 添加功能组
         async pckNameAdd() {
             const data = await api.post(api.config.authItempck, {
                 pckName: this.pckName
             })
-            this.addPck = true
+            if (data) {
+                this.addPck = true
+                this.getItempckList()
+            }
+
         },
+        // 删除功能组
         async delPck(item) {
             const data = await api.delete(api.config.authItempck, {
                 pckId: item.pckId
@@ -72,10 +130,19 @@ export default {
                 this.getItempckList()
             }
         },
-        modifyGroup(item){
-            this.$store.dispatch('selectGroup', item)
-            this.$store.commit("modifiyMenu",false)
-
+        //确认删除
+        delGroup(itempck) {
+            this.$Modal.confirm({
+                title: '操作确认',
+                content: `<p>您确定要删除${itempck.pckName}组吗?</p>`,
+                onOk: () => {
+                    this.delPck(itempck)
+                },
+            });
+        },
+        modifyGroup(item) {
+            // this.$store.dispatch('selectGroup', item)
+            // this.$store.commit("modifiyMenu", false)
         }
     },
     directives: {

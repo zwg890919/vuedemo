@@ -23,118 +23,6 @@ export default{
         userpckTree
     }
 }
-// import userpckGroup from "./userpck-group.vue"
-// import userpckTree from "./userpck-tree.vue"
-// export default {
-//     data() {
-//         return {
-//             pckName: "",
-//             addPck: true,
-//             userFilter: "",
-//             groupFilter: "",
-//             userList: [],
-//             currentUser: {},
-//             itempackList: [],
-//             currentItempck: [],
-//             menuList: [],
-//             menuData:[]
-//         }
-//     },
-//     components:{
-//         userpckUser,
-//         // userpckGroup,
-//         // userpckTree
-//     },
-//     created() {
-//         this.getUserList()
-//         this.getItempckList()
-//         this.getMenuList()
-//     },
-//     directives: {
-//         focus: {
-//             update(el, binding, vnode, oldVnode) {
-//                 var elinput = el.getElementsByTagName("input")
-//                 if (!binding.value) {
-//                     setTimeout(() => {
-//                         elinput[0].focus()
-//                     }, 100);
-//                     elinput[0].value = ""
-//                 }
-//             }
-//         }
-//     },
-//     methods: {
-//         selectGroup(item) {
-//             this.currentUser = {}
-//             this.currentUser.userRole = item.pckId
-//             this.itempackList.map(xitem => {
-//                 if(xitem.pckId == this.currentUser.userRole){
-//                     this.currentItempck = xitem.pckMenuId.split(",")
-//                 }
-//             })
-//             this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
-//         },
-//         async getUserList() {
-//             const data = await api.post(api.config.userList)
-//             this.userList = data.datas.result
-//         },
-//         async getItempckList() {
-//             const data = await api.post(api.config.itempckList)
-//             this.itempackList = data.datas.result
-//             // this.currentItempck = this.itempackList[0]
-//             // console.log(data)
-//         },
-//         async pckNameAdd() {
-//             const data = await api.post(api.config.authItempck, {
-//                 pckName: this.pckName
-//             })
-//             this.addPck = true
-//         },
-//         async getMenuList() {
-//             const data = await api.get(api.config.menuTeant)
-//             this.menuData = [data.datas.result]
-//             this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
-//             // console.log(this.menuList)
-//         },
-//         userFilte(userlist) {
-//             var filterList = []
-//             if (!this.userFilter) {
-//                 return userlist
-//             }
-//             var searchRegex = new RegExp(this.userFilter, 'i');
-//             userlist.map(item => {
-//                 if (item.userCode.indexOf(this.userFilter) >= 0) {
-//                     filterList.push(item)
-//                 }
-//                 if (searchRegex.test(item.userName)) {
-//                     filterList.push(item)
-//                 }
-//             })
-//             return filterList
-//         },
-//         itempckFilte(groupList) {
-//             var filterList = []
-//             return groupList
-//             // var searchRegex = new RegExp(this.groupFilter, 'i');
-//             // userlist.map(item => {
-//             //     if(searchRegex.test(item.userName)){
-//             //         filterList.push(item)
-//             //     }
-//             // })
-//             // return filterList
-//         },
-//         selectUser(item) {
-//             this.currentUser = item
-//             this.itempackList.map(xitem => {
-//                 if(xitem.pckId == this.currentUser.userRole){
-//                     console.log(xitem)
-//                     this.currentItempck = xitem.pckMenuId.split(",")
-//                 }
-//             })
-//             this.menuList = common.convertTreedata(this.menuData,this.currentItempck)
-//         }
-//     }
-// }
 </script>
 <style lang="scss" scoped>
 .userpck-wrap {
@@ -196,6 +84,9 @@ export default{
             em {
                 color: #98a6ad;
             }
+            span{
+                font-size: 16px;
+            }
         }
     }
 }
@@ -216,7 +107,7 @@ export default{
     }
     .ivu-tree-title{
         font-size:14px;
-        margin-top:-2px;
+        margin-top:2px;
     }
     .ivu-checkbox-wrapper{
         margin-right:0px;
