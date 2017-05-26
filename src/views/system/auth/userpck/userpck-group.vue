@@ -9,11 +9,7 @@
         <div class="grouplist">
             <div class="grouplist-wrap">
                 <Checkbox-group v-model="modifyGroup">
-                    <p
-                    v-for="item in filterBy(itempackList,groupFilter,'pckName')"
-                    :class="{'active':userGroup.indexOf(item.pckId) >= 0}"
-                    @click="selectGroup(item)"
-                    @dblclick="modifyGroup(item)">
+                    <p v-for="item in filterBy(itempackList,groupFilter,'pckName')" :class="{'active':userGroup.indexOf(item.pckId) >= 0}" @click="selectGroup(item)" @dblclick="modifyPck(item)">
                         <Checkbox :label="item.pckId" v-show="modifyState">
                             <span>
                                 {{item.pckName}}
@@ -56,29 +52,31 @@ export default {
     },
     computed: mapState({
         currentUser: state => state.userPck.currentUser,
-        currentGroup: state => state.userPck.currentGroup,
         itempackList: state => state.userPck.itempackList,
         checkDisable: state => state.userPck.checkDisable,
         modifyState: state => state.userPck.modifyState,
     }),
     watch: {
         currentUser(state) {
-            if(state){
+            // console.log(state,state.length)
+            if (state.userId) {
+                // console.log(1)
                 this.getUserpck()
             }
         },
-        modifyState(state){
-            if(state){
+        modifyState(state) {
+            if (state) {
+                console.log(2)
+                this.getUserpck()
                 this.$store.commit('changeGroup', {})
             }
         },
-        modifyGroup(state){
+        modifyGroup(state) {
             this.userGroup = state
         }
     },
     created() {
         this.getItempckList()
-
     },
     methods: {
         async getItempckList() {
@@ -89,23 +87,40 @@ export default {
             const data = await api.get(api.config.userPckList, {
                 userId: this.currentUser.userId,
             })
-            this.userGroup = data.datas.result
-            if(this.userGroup.length > 0){
-                this.$store.commit('changeGroup', this.userGroup[0])
-            }else{
+            if (data) {
+                this.userGroup = []
+                data.datas.result.map(item => {
+                    this.userGroup.push(item.pckId)
+                })
+                console.log()
+                if(this.userGroup.length > 0){
+                    this.$store.commit('changeGroup', this.userGroup[0])
+                }
+            } else {
+                this.userGroup = []
                 this.$store.commit('changeGroup', {})
             }
+            this.modifyGroup = this.userGroup
         },
         async modifyUser() {
-            var data = api.post(api.config.userPckList, {
-                userId: this.currentUser.userId,
-                pckid: this.modifyGroup,
-            })
-            // this.$store.commit("modifiyUser", false)
+            var str = `userId=${this.currentUser.userId}`
+            for (var item in this.modifyGroup) {
+                str += `&pckid=${this.modifyGroup[item]}`
+            }
+            var data = await api.post(`${api.config.userPckList}?${str}`)
+            if (data) {
+                this.$totast.success({
+                    title: "系统提示",
+                    message: data.i18nMessage
+                })
+                this.$store.commit("modifiyUser", false)
+            }
         },
         selectGroup(item) {
             this.userGroup = [item.pckId]
             this.$store.commit('changeGroup', item)
+            this.$store.dispatch('selectUser', {})
+            this.$store.commit("modifiyMenu", true)
         },
         submitModify() {
             this.modifyUser()
@@ -132,6 +147,7 @@ export default {
         },
         //确认删除
         delGroup(itempck) {
+            this.$store.commit("modifiyUser",false)
             this.$Modal.confirm({
                 title: '操作确认',
                 content: `<p>您确定要删除${itempck.pckName}组吗?</p>`,
@@ -140,9 +156,13 @@ export default {
                 },
             });
         },
-        modifyGroup(item) {
+        modifyPck(item) {
+            this.$store.dispatch('selectUser', {})
+            this.$store.commit("modifiyUser",false)
             // this.$store.dispatch('selectGroup', item)
-            // this.$store.commit("modifiyMenu", false)
+            this.$store.commit("modifiyMenu", false)
+            this.userGroup = [item.pckId]
+            this.$store.commit('changeGroup', item)
         }
     },
     directives: {

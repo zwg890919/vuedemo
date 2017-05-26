@@ -50,6 +50,7 @@ export default {
         },
         selectUser(item) {
             this.$store.dispatch('selectUser', item)
+            this.$store.commit("modifiyUser",false)
         },
         modifyUser(item){
             this.$store.commit("modifiyUser",true)

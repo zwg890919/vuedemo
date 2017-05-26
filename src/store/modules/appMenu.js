@@ -23,7 +23,6 @@ const actions = {
                 }, this);
                 const currentApp = applist[0]
                 let Newstate= {}
-                console.log(state.currentApp)
                 if(state.currentApp.id){
                      Newstate = { applist }
                 }else{

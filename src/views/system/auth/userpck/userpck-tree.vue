@@ -54,22 +54,21 @@ export default {
         },
         async updataItempck() {
             var menuIds = String(findComponentsDownward(this.$refs.tree, 'TreeNode'))
-            // console.log({
-            //     pckId: this.currentGroup.pckId,
-            //     pckName: this.pckName,
-            //     pckMenuId: menuIds.slice(0, -1)
-            // })
-            // console.log(menuIds)
+            if(this.pckName == ""){
+                return false
+            }
             const data = await api.put(api.config.authItempck, {
                 pckId: this.currentGroup.pckId,
                 pckName: this.pckName,
                 pckMenuId: menuIds
             })
-            this.$store.commit('updataGroup', {
-                pckName: this.pckName,
-                pckMenuId: menuIds
-            })
-            this.$store.commit("modifiyMenu",true)
+            if(data){
+                this.$store.commit('updataGroup', {
+                    pckName: this.pckName,
+                    pckMenuId: menuIds
+                })
+                this.$store.commit("modifiyMenu",true)
+            }
         }
     }
 }

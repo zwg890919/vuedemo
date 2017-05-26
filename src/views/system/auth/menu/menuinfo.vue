@@ -109,11 +109,13 @@ export default {
     props: ["itemdata", "selectItem", "modalOpen"],
     watch: {
         itemdata(val) {
+            console.log(val)
             this.currentList = val
         },
         modalOpen(val) {
             this.modalModify = "add"
             this.addFunction = val
+            // console.log(this.currentData)
             for (var key in this.currentData) {
                 this.currentData[key] = ''
             }
@@ -195,6 +197,7 @@ export default {
 
         },
         filtrate(itemlist) {
+            // console.log(itemlist)
             var CurrentArray = [];
             if (itemlist.length > 0 && this.itemFilter != "") {
                 var searchRegex = new RegExp(this.itemFilter, 'i');
