@@ -48,12 +48,21 @@ const mutations = {
         localStorage.setItem("settings", JSON.stringify(state))
     },
     changeMenuArr(state, from) {
-        let name = from.name.split('.')[2] ? from.name.split('.')[2] : from.name.split('.')[1];
-        state.hisRoute.push({
-            name:name,
-            route:from.path
-        });
-        localStorage.setItem("settings", JSON.stringify(state))
+        var name = from.name.split('.')[2] ? from.name.split('.')[2] : from.name.split('.')[1];
+        let toggle = true;
+        for(let x of state.hisRoute){
+            if(x.name == name) {
+                toggle = false
+            }
+        }
+        if(toggle){
+            state.hisRoute.push({
+                name:name,
+                route:from.path
+            });
+            localStorage.setItem("settings", JSON.stringify(state))
+        }
+        
     },
     menuArrShift(state) {
         state.hisRoute.shift();
