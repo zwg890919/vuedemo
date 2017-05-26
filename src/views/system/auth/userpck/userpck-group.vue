@@ -66,7 +66,6 @@ export default {
         },
         modifyState(state) {
             if (state) {
-                console.log(2)
                 this.getUserpck()
                 this.$store.commit('changeGroup', {})
             }
@@ -92,7 +91,6 @@ export default {
                 data.datas.result.map(item => {
                     this.userGroup.push(item.pckId)
                 })
-                console.log()
                 if(this.userGroup.length > 0){
                     this.$store.commit('changeGroup', this.userGroup[0])
                 }
@@ -119,8 +117,10 @@ export default {
         selectGroup(item) {
             this.userGroup = [item.pckId]
             this.$store.commit('changeGroup', item)
-            this.$store.dispatch('selectUser', {})
             this.$store.commit("modifiyMenu", true)
+            if(!this.modifyState){
+                this.$store.dispatch('selectUser', {})
+            }
         },
         submitModify() {
             this.modifyUser()

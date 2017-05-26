@@ -13,7 +13,7 @@ function convertTreedata(data, checkdata, itemPcks, components) {
             itemPcks.map(itempck => {
                 if (itempck == item.id) {
                     // console.log(item)
-                    components[index].title = `<span style="color:#23b7e5">${item.name}${item.id}</span>`,
+                    components[index].title = `<span style="color:#23b7e5">${item.name}</span>`,
                     components[index].checked = true
                 }
             })
