@@ -32,7 +32,6 @@
 				                <Icon type="ios-search-strong" size="22" style=""></Icon>
 				            </span>
 				            <input type="text" placeholder="输入关键字查询" v-model="itemFilter">
-
 				        </div>
 				        <div class="l-list">
 				        	<a @click="userClick(i, x)" v-show="x.userOrgId == showid || showAll" :class="{select: selectUser== x}" v-for="(x,i) in filtrate(userList)">{{x.userName}}({{x.userCode}})</a>
@@ -48,10 +47,10 @@
             </ul>
         </div>
         <div >
-        	<div class="l-info" v-show="selectUser != ''">
+        	<div class="l-info" v-show="selectUser != '' || editStatus == 2">
         		<div class="l-info_title">
         			<Button @click="editUser" v-show="editStatus == 1" type="info" size="small">编辑</Button>
-                    <Button @click="submitEditUser" v-show="editStatus == 2" type="info" size="small">完成</Button>
+                    <Button @click="submitEditUser('editData')" v-show="editStatus == 2" type="info" size="small">完成</Button>
                     <Button @click="editStatus = 1" v-show="editStatus == 2" size="small">取消</Button>
                     <Button style="float:right" v-show="editStatus == 1" size="small" @click="delUser"><Icon type="close" /></Button>
         		</div>
@@ -63,46 +62,38 @@
 						</div>
 						<div class="hbox2">
 							<p v-show="editStatus == 1">{{selectUser.userName}}</p>
-                            <!-- <Input v-model="editData.userName" v-show="editStatus == 2" style="width: 180px"></Input> -->
-                            <Form-item label="" prop="name">
+                            <Form-item label="2" prop="userName" v-show="editStatus == 2">
                                 <Input v-model="editData.userName" placeholder="请输入姓名"></Input>
                             </Form-item>
 						</div>
 					</div>
-                    </Form>
 					<div class="l-info_group">
-						<div class="l-row">
-							<label>用户账号</label>
-							<span v-show="editStatus == 1">{{selectUser.userCode}}</span>
-                            <Input v-model="editData.userCode" v-show="editStatus == 2" style="width: 180px"></Input>
-						</div>
-						<div class="l-row">
-							<label>手机号码</label>
-							<span v-show="editStatus == 1">{{selectUser.userMobile}}</span>
-                            <Input v-model="editData.userMobile" v-show="editStatus == 2" style="width: 180px"></Input>
-						</div>
-                        <div class="l-row">
-                            <label>邮箱地址</label>
+                        <Form-item label="用户账号" prop="userCode" >
+                            <Input v-model="editData.userCode" v-show="editStatus == 2" placeholder="请输入姓名"></Input>
+                            <span v-show="editStatus == 1">{{selectUser.userCode}}</span>
+                        </Form-item>
+                        <Form-item label="手机号码" prop="userMobile" >
+                            <Input v-model="editData.userMobile" v-show="editStatus == 2" placeholder="请输入手机号码"></Input>
+                            <span v-show="editStatus == 1">{{selectUser.userMobile}}</span>
+                        </Form-item>
+                        <Form-item label="邮箱地址" prop="userEmail" >
+                            <Input v-model="editData.userEmail" v-show="editStatus == 2" placeholder="请输入邮箱地址"></Input>
                             <span v-show="editStatus == 1">{{selectUser.userEmail}}</span>
-                            <Input v-model="editData.userEmail" v-show="editStatus == 2" style="width: 180px"></Input>
-                        </div>
-						<div class="l-row" v-show="editStatus != 2">
-							<label>用户状态</label>
-							<i-switch v-model="selectUser.userStatus" @on-change="changeStatus"></i-switch>
-						</div>
-						<div class="l-row" v-show="editStatus != 2">
-							<label>用户角色</label>
-							<span>{{selectUser.userRole | filterUserRole}}</span>
-						</div>
-						<div class="l-row">
-							<label>所在部门</label>
-							<span v-show="editStatus == 1">{{selectUser.userOrgId | filterUserOrgId}}</span>
-                            <!-- <Input v-model="editData.userOrgId" v-show="editStatus == 2" style="width: 180px"></Input> -->
+                        </Form-item>
+                        <Form-item label="用户状态" v-show="editStatus != 2">
+                            <i-switch v-model="selectUser.userStatus" @on-change="changeStatus"></i-switch>
+                        </Form-item>
+                        <Form-item label="用户角色" prop="userRole" v-show="editStatus != 2">
+                            <span>{{selectUser.userRole | filterUserRole}}</span>
+                        </Form-item>
+                        <Form-item label="所在部门" prop="userRole">
+                            <span v-show="editStatus == 1">{{selectUser.userOrgId | filterUserOrgId}}</span>
                             <Select v-model="editData.userOrgId" v-show="editStatus == 2" style="width:180px">
                                 <Option v-for="item in deptList" :value="item.value" :key="item">{{ item.label }}</Option>
                             </Select>
-						</div>
+                        </Form-item>
 					</div>
+                     </Form>
 				</div>
         	</div>
         </div>
@@ -113,11 +104,35 @@ import api from "@/api/"
 import menuInfo from "@/views/system/auth/menu/menuinfo"
 export default {
     data() {
+        const validateuserMobile = (rule, value, callback) => {
+            if(!(/^1[34578]\d{9}$/.test(value))){ 
+                callback(new Error('请再次输入正确的手机号码'));
+            }else {
+                callback();
+            }
+        };
+        const validateuserEmail = (rule, value, callback) => {
+            var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+            if(!myreg.test(value)){
+                callback(new Error('请再次输入正确的邮箱地址'));
+            } else {
+                callback();
+            }
+        };
         return {
             ruleValidate: {
-                name: [
-                        { required: true, message: '姓名不能为空', trigger: 'blur' }
-                    ],
+                userName: [
+                    { required: true, message: '姓名不能为空2', trigger: 'blur' }
+                ],
+                userCode: [
+                    { required: true, message: '用户账号不能为空', trigger: 'blur' }
+                ],
+                userMobile: [
+                    { validator: validateuserMobile, trigger: 'blur' }
+                ],
+                userEmail: [
+                    { validator: validateuserEmail, trigger: 'blur' }
+                ],
             },
             itemFilter:'',
             editStatus:1,
@@ -197,8 +212,15 @@ export default {
             this.editData.userRole = currentUser.userRole;
 
         },
-        async submitEditUser(){
-            if(this.operate == 'edit'){
+        submitEditUser(name){
+            this.$refs[name].validate((valid) => {
+                    if (valid) {
+                       this.submitEditUserAjax();
+                    } 
+                })
+        },
+        async submitEditUserAjax(){
+             if(this.operate == 'edit'){
                 // 编辑用户
                 var data = await api.put(api.config.authUser,this.editData)
             }else{
@@ -571,19 +593,9 @@ export default {
 	display:table-cell;
 }
 .l-info_group{
-	.l-row{
-		margin-bottom:30px;
-		font-size:14px;
-		label{
-			display:inline-block;
-			width:100px;
-			margin-left:40px;
-			color:#98a6ad;
-		}
-		span{
-
-		}
-	}
+    width:400px;
+    padding-left:20px;
+	
 }
 
 </style>
