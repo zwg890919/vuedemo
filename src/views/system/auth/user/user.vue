@@ -3,22 +3,21 @@
         <div>
             <ul>
                 <li class="row-row">
-                    <div>
+                    <div @click="addOrg = true">
                         <div class="scroll-cell">
-                            <jyc-tree :treedata="treedata" :showCheckbox="false"  @tree-click="treeClick" @tree-close="treeClose" >
+                            <jyc-tree :treedata="treedata" :showCheckbox="false" @tree-click="selectOrg" @tree-close="treeClose">
                             </jyc-tree>
                         </div>
                     </div>
                 </li>
                 <li class="menu-bottom">
-                    <Button v-if="addshow1" type="success" @click="toggleAddShow1">
+                    <Button v-show="addOrg" type="success" @click="changAddState">
                         <Icon type="plus" size="16px"></Icon>
                         新增部门
                     </Button>
-                    <div v-else>
-                    	<Input v-model="addDept.orgName" placeholder="请输入..." style="width: 200px"></Input>
-                    	<Button  type="info" @click="submitDept">提交</Button>
-                    	<Button type="ghost" @click="toggleAddShow1">返回</Button>
+                    <div v-show="!addOrg">
+                        <Input v-model="addDept.orgName" placeholder="请输入..." style="width: 260px"></Input>
+                        <Button type="primary" @click="submitDept">提交</Button>
                     </div>
                 </li>
             </ul>
@@ -27,409 +26,199 @@
             <ul>
                 <li class="row-row">
                     <div>
-                    	<div class="search-item">
-				            <span>
-				                <Icon type="ios-search-strong" size="22" style=""></Icon>
-				            </span>
-				            <input type="text" placeholder="输入关键字查询" v-model="itemFilter">
-				        </div>
-				        <div class="l-list">
-				        	<a @click="userClick(i, x)" v-show="x.userOrgId == showid || showAll" :class="{select: selectUser== x}" v-for="(x,i) in filtrate(userList)">{{x.userName}}({{x.userCode}})</a>
-				        </div>
+                        <div class="search-item">
+                            <span>
+                                <Icon type="ios-search-strong" size="22" style=""></Icon>
+                            </span>
+                            <input type="text" placeholder="输入关键字查询" v-model="userFilter">
+                        </div>
+                        <div class="l-list">
+                            <a v-for="user in filtrate(userList)" @click="userClick(user)" v-show="user.userOrgId == currentOrg.id || showAll" :class="{select: currentUser.userId== user.userId,userClose: !user.userStatus}">
+                                {{user.userName}}
+                                <em style="color:#98a6ad">({{user.userCode}})</em>
+                            </a>
+                        </div>
                     </div>
                 </li>
                 <li class="menu-bottom">
-                    <Button  type="success" @click="addFunction">
+                    <Button type="success" @click="addUser">
                         <Icon type="plus" size="16px"></Icon>
                         新增联系人
                     </Button>
                 </li>
             </ul>
         </div>
-        <div >
-        	<div class="l-info" v-show="selectUser != '' || editStatus == 2">
-        		<div class="l-info_title">
-        			<Button @click="editUser" v-show="editStatus == 1" type="info" size="small">编辑</Button>
-                    <Button @click="submitEditUser('editData')" v-show="editStatus == 2" type="info" size="small">完成</Button>
-                    <Button @click="editStatus = 1" v-show="editStatus == 2" size="small">取消</Button>
-                    <Button style="float:right" v-show="editStatus == 1" size="small" @click="delUser"><Icon type="close" /></Button>
-        		</div>
-				<div class="l-info_content">
-                    <Form ref="editData" :model="editData" :rules="ruleValidate" :label-width="80">
-					<div class="l-info_hbox">
-						<div class="hbox1">
-							<img src="../../../../assets/images/a0.jpg" alt="">
-						</div>
-						<div class="hbox2">
-							<p v-show="editStatus == 1">{{selectUser.userName}}</p>
-                            <Form-item label="2" prop="userName" v-show="editStatus == 2">
-                                <Input v-model="editData.userName" placeholder="请输入姓名"></Input>
-                            </Form-item>
-						</div>
-					</div>
-					<div class="l-info_group">
-                        <Form-item label="用户账号" prop="userCode" >
-                            <Input v-model="editData.userCode" v-show="editStatus == 2" placeholder="请输入姓名"></Input>
-                            <span v-show="editStatus == 1">{{selectUser.userCode}}</span>
-                        </Form-item>
-                        <Form-item label="手机号码" prop="userMobile" >
-                            <Input v-model="editData.userMobile" v-show="editStatus == 2" placeholder="请输入手机号码"></Input>
-                            <span v-show="editStatus == 1">{{selectUser.userMobile}}</span>
-                        </Form-item>
-                        <Form-item label="邮箱地址" prop="userEmail" >
-                            <Input v-model="editData.userEmail" v-show="editStatus == 2" placeholder="请输入邮箱地址"></Input>
-                            <span v-show="editStatus == 1">{{selectUser.userEmail}}</span>
-                        </Form-item>
-                        <Form-item label="用户状态" v-show="editStatus != 2">
-                            <i-switch v-model="selectUser.userStatus" @on-change="changeStatus"></i-switch>
-                        </Form-item>
-                        <Form-item label="用户角色" prop="userRole" v-show="editStatus != 2">
-                            <span>{{selectUser.userRole | filterUserRole}}</span>
-                        </Form-item>
-                        <Form-item label="所在部门" prop="userRole">
-                            <span v-show="editStatus == 1">{{selectUser.userOrgId | filterUserOrgId}}</span>
-                            <Select v-model="editData.userOrgId" v-show="editStatus == 2" style="width:180px">
-                                <Option v-for="item in deptList" :value="item.value" :key="item">{{ item.label }}</Option>
-                            </Select>
-                        </Form-item>
-					</div>
-                     </Form>
-				</div>
-        	</div>
+        <div>
+            <user-info :userdata="currentUser" :state="editStatus" :deptlist="deptList" @changstate="editUser" @changUserstate="changUser" @getlist="getUserList" @cancle="cancleStatus"></user-info>
         </div>
     </div>
 </template>
 <script>
 import api from "@/api/"
-import menuInfo from "@/views/system/auth/menu/menuinfo"
+import userInfo from "@/views/system/auth/user/userinfo"
 export default {
     data() {
-        const validateuserMobile = (rule, value, callback) => {
-            if(!(/^1[34578]\d{9}$/.test(value))){ 
-                callback(new Error('请再次输入正确的手机号码'));
-            }else {
-                callback();
-            }
-        };
-        const validateuserEmail = (rule, value, callback) => {
-            var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-            if(!myreg.test(value)){
-                callback(new Error('请再次输入正确的邮箱地址'));
-            } else {
-                callback();
-            }
-        };
         return {
-            ruleValidate: {
-                userName: [
-                    { required: true, message: '姓名不能为空2', trigger: 'blur' }
-                ],
-                userCode: [
-                    { required: true, message: '用户账号不能为空', trigger: 'blur' }
-                ],
-                userMobile: [
-                    { validator: validateuserMobile, trigger: 'blur' }
-                ],
-                userEmail: [
-                    { validator: validateuserEmail, trigger: 'blur' }
-                ],
-            },
-            itemFilter:'',
-            editStatus:1,
-        	addshow1:true,
-        	addshow2:true,
-        	showAll:true,
-			showid:'',
             treedata: [],
-            deptList:[],
-            currentData: {},
-            selectData:{},
-            addMenu: false,
-            modalType:"add",
-            functionType:false,
-            userList:[],
-            index:0,
-            operate:'',
-            addDept:{
-            	orgId:'',
-            	orgName:'',
+            deptList: [],
+            addOrg: true,
+            addDept: {
+                orgId: '',
+                orgName: '',
             },
-            editData:{
-                userName:'',
-                userCode:'',
-                userMobile:'',
-                userOrgId:'',
-                userEmail:'',
-                userId:'',
-                userRole:''
-            },
-            selectUser:''
+            showAll: true,
+            currentOrg: {},
+            userList: [],
+            userFilter: '',
+            currentUser: {},
+            editStatus: 1 //1为展示 2为新增 3为编辑
         }
     },
     created() {
-        this.getMenu();
+        this.getOrg();
         this.getUserList();
     },
-
     methods: {
-        filtrate(itemlist){
-            var CurrentArray = [];
-            if(itemlist.length>0 && this.itemFilter != ""){
-                var searchRegex = new RegExp(this.itemFilter, 'i');
-                for (var item of itemlist) {
-                    if(searchRegex.test(item.userCode) || searchRegex.test(item.userName)){
-                        CurrentArray.push(item)
+        async getOrg() {  //获取公司组织结构
+            let arr = new Array();
+            const data = await api.get(api.config.orgTree)
+            if (data) {
+                arr[0] = data.datas.result
+                arr[0].level = 1;
+                for (let x of arr[0].childrens) {
+                    x.level = 2;
+                    for (let y of x.childrens) {
+                        y.level = 3;
                     }
                 }
-                return CurrentArray
-            }else{
-                return itemlist
+                this.getDeptList(arr[0].childrens)
+                this.treedata = arr;
             }
         },
-        addFunction(){
-            this.editData.userName = '';
-            this.editData.userCode = '';
-            this.editData.userMobile = '';
-            this.editData.userOrgId = '';
-            this.editData.userEmail = '';
-            //这两个不能改
-            this.editData.userId = '';
-            this.editData.userRole = '';
-            this.operate = 'add';
-            this.editStatus = 2;
-        },
-        editUser(){
-            this.operate = 'edit';
-            let currentUser = this.selectUser;
-            this.editStatus = 2;
-            this.editData.userName = currentUser.userName;
-            this.editData.userCode = currentUser.userCode;
-            this.editData.userMobile = currentUser.userMobile;
-            this.editData.userOrgId = currentUser.userOrgId;
-            this.editData.userEmail = currentUser.userEmail;
-            //这两个不能改
-            this.editData.userId = currentUser.userId;
-            this.editData.userRole = currentUser.userRole;
-
-        },
-        submitEditUser(name){
-            this.$refs[name].validate((valid) => {
-                    if (valid) {
-                       this.submitEditUserAjax();
-                    } 
-                })
-        },
-        async submitEditUserAjax(){
-             if(this.operate == 'edit'){
-                // 编辑用户
-                var data = await api.put(api.config.authUser,this.editData)
-            }else{
-                // 新增用户
-                var data = await api.post(api.config.authUser,this.editData)
-            }
-            if(data){
-                this.$totast.success({
-                    title:"系统提示",
-                    message:"操作成功"
-                });
-                // 刷新用户
-                this.getUserList();
-            }
-        },
-        // 删除用户弹框
-        delUser(){
-             this.$Modal.confirm({
-                title: '操作确认',
-                content: "<p>您确定要删除用户?</p>",
-                onOk: () => {
-                    this.excuteDelUser()
-                },
-            });
-        },
-        // 删除用户
-        async excuteDelUser(){
-            const data = await api.delete(api.config.authUser,{
-                userId:this.userList[this.index].userId
-            });
-            if(data){
-                this.$totast.success({
-                    title:"系统提示",
-                    message:"操作成功"
-                });
-                // 刷新用户
-                this.getUserList();
-            }
-        },
-        // 新增部门提交
-    	async submitDept(){
-    		if(this.addDept.orgId == ''){
-    			this.$totast.warning({
-                    title:"操作提示",
-                    message:"请先选择一个父级部门"
-                })
-    		} else if(this.addDept.orgName == ''){
-    			this.$totast.warning({
-                    title:"操作提示",
-                    message:"请先输入组织名称，后提交"
-                })
-    		} else{
-    			const data = await api.post(api.config.orgBattch, this.addDept);
-                if(data){
-                    this.$totast.success({
-                        title:"系统提示",
-                        message:"操作成功"
-                    });
-                    this.getMenu();
-                }
-    		}
-    	},
-    	toggleAddShow1(){
-    		this.addshow1 = !this.addshow1;
-    	},
-        // 切换用户状态
-    	async changeStatus(status){
-    		const data = await api.put(api.config.userStatus, {
-    			userStatus:status
-    		})
-            if(data){
-                this.$totast.success({
-                    title:"系统提示",
-                    message:"操作成功"
-                });
-            }
-    	},
-        // 点击用户列表
-    	userClick(i, data){
-            this.selectUser = data;
-            this.editStatus = 1;
-    	},
-        async getMenu() {
-        	let arr = new Array();
-        	const data = await api.get(api.config.orgTree)
-            arr[0] = data.datas.result
-            arr[0].level = 1;
-            for(let x of arr[0].childrens){
-            	x.level = 2;
-            	for(let y of x.childrens){
-            		y.level = 3;
-            	}
-            }
-            this.getDeptList(arr[0].childrens)
-            this.treedata = arr;
-        },
-        getDeptList(data){
-            for(let x of data){
+        getDeptList(data) { //编译为tree适合的数据格式
+            for (let x of data) {
                 this.deptList.push({
-                    label:x.name,
-                    value:x.id
+                    label: x.name,
+                    value: x.id
                 })
-                for(let y of x.childrens){
-                   this.deptList.push({
-                        label:y.name,
-                        value:y.id
-                    }) 
+                for (let y of x.childrens) {
+                    this.deptList.push({
+                        label: y.name,
+                        value: y.id
+                    })
+                }
+            }
+        },
+        async submitDept() {  // 新增部门提交
+            if (this.addDept.orgId == '') {
+                this.$totast.warning({
+                    title: "操作提示",
+                    message: "请先选择一个父级部门"
+                })
+            } else if (this.addDept.orgName == '') {
+                this.$totast.warning({
+                    title: "操作提示",
+                    message: "请先输入组织名称，后提交"
+                })
+            } else {
+                const data = await api.post(api.config.orgBattch, this.addDept);
+                if (data) {
+                    this.$totast.success({
+                        title: "系统提示",
+                        message: data.i18nMessage
+                    });
+                    this.changAddState()
+                    this.getMenu()
+                }
+            }
+        },
+        changAddState() { //变更添加组织状态
+            this.addOrg = !this.addOrg
+            this.addDept.orgName = ""
+        },
+        selectOrg(data) { //选择查看部门员工
+            // 新增部门上级id
+            this.addDept.orgId = data.id;
+            // 浙江聚有财金融服务外包有限公司
+            if (data.id == 2) {
+                this.showAll = true;
+                this.currentUser
+                return;
+            } else {
+                this.showAll = false;
+            }
+            this.currentOrg = data
+            for (let item of this.userList) {
+                if (item.userOrgId == this.currentOrg.id) {
+                    this.currentUser = item;
+                    return;
                 }
             }
         },
         async getUserList() {
             const data = await api.post(api.config.userList)
-            this.userList = data.datas.result;
-        },
-        filterList(id){
-        	let temp = this.userList
-        	let arr = [];
-        	for(let x of temp){
-        		if(x.userOrgId == id){
-        			arr.push(x);
-        		}
-        	}
-        	return arr;
-        },
-        treeClick(data) {
-            if(this.addDept.orgId != data.id){
-                this.addshow1 = true;
+            if (data) {
+                this.userList = data.datas.result;
+                this.currentUser = this.userList[0];
             }
-            // 新增部门上级id
-        	this.addDept.orgId = data.id;
-        	// 浙江聚有财金融服务外包有限公司
-        	if(data.id == 2){
-        		this.index = 0;
-        		this.showAll = true;
-        		return;
-        	}else{
-        		this.showAll = false;
-        	}
-        	this.showid = data.id;
-        	for(let x in this.userList){
-        		if(this.userList[x].userOrgId == data.id){
-        			this.index = x;
-        			return;
-        		}
-        	}
-
         },
-        // 点击部门删除按钮
+        filtrate(itemlist) {
+            var CurrentArray = [];
+            if (itemlist.length > 0 && this.userFilter != "") {
+                var searchRegex = new RegExp(this.userFilter, 'i');
+                for (var item of itemlist) {
+                    if (searchRegex.test(item.userCode) || searchRegex.test(item.userName)) {
+                        CurrentArray.push(item)
+                    }
+                }
+                return CurrentArray
+            } else {
+                return itemlist
+            }
+        },
+        userClick(user) { // 点击用户列表
+            this.currentUser = user;
+            this.editStatus = 1;
+        },
+        addUser() {
+            this.editStatus = 2
+        },
+        editUser() {
+            this.editStatus = 3
+        },
+        cancleStatus() {
+            this.editStatus = 1
+        },
+        changUser(status) {
+            this.currentUser.userStatus = status;
+        },
         treeClose(data) {
             this.$Modal.confirm({
                 title: '操作确认',
-                content: "<p>您确定要删除"+data.name+"，及下属所有的用户?</p>",
+                content: "<p>您确定要删除" + data.name + "，及下属所有的用户?</p>",
                 onOk: () => {
                     this.delMenu(data)
                 },
             });
         },
         // 删除部门
-         async delMenu(obj){
+        async delMenu(obj) {
             const param = {
                 userDel: true,
-                orgId : obj.id
+                orgId: obj.id
             };
-            const data = await api.delete(api.config.authOrg,param);
-            if(data){
+            const data = await api.delete(api.config.authOrg, param);
+            if (data) {
                 this.$totast.success({
-                    title:"系统提示",
-                    message:"操作成功"
+                    title: "系统提示",
+                    message: "操作成功"
                 });
             }
             this.getMenu();
         },
     },
-    filters:{
-    	filterUserRole(value){
-    		if(value == 1){
-    			return '平台管理员';
-    		}else if(value == 2){
-    			return '管理员';
-    		}else if(value == 3){
-    			return '成员';
-    		}else{
-    			return '';
-    		}
-    	},
-    	filterUserOrgId(value){
-    		let map = {
-    			'2':'浙江聚有财金融服务外包有限公司',
-    			'10020':'技术研发中心',
-    			'10022':'系统运维组',
-    			'100021':'系统架构组',
-    			'10005':'大客户事业部',
-    			'100016':'车险项目组',
-    			'100015':'EHR项目组',
-    			'10003':'平台应用部',
-    			'10012':'云采家项目',
-    			'10004':'框架开发组',
-    			'10002':'销售运营中心',
-    			'10010':'数字营销部',
-    			'10009':'工商企业部',
-    			'10000':'行政服务中心',
-    			'10008':'综合管理部',
-    			'10007':'人力资源部',
-    		}
-    		return map[String(value)];
-    	}
-    },
     components: {
-        menuInfo
+        userInfo
     }
 }
 </script>
@@ -461,10 +250,10 @@ export default {
             width: 360px;
             border-right: 1px solid #dee5e7;
         }
-        &:nth-child(2){
-        	border-right:1px solid #dee5e7;
-        	width:200px;
-        	background:#f6f8f8;
+        &:nth-child(2) {
+            border-right: 1px solid #dee5e7;
+            width: 200px;
+            background: #f6f8f8;
         }
 
         ul {
@@ -488,11 +277,11 @@ export default {
                     height: 100%;
                     overflow: hidden;
                 }
-                .search-item{
-                    padding:5px;
-                    height:40px;
+                .search-item {
+                    padding: 5px;
+                    height: 40px;
                     border-bottom: #dee5e7 1px solid;
-                    background:#f6f8f8;
+                    background: #f6f8f8;
                 }
                 .scroll-cell {
                     position: absolute;
@@ -516,6 +305,7 @@ export default {
         }
     }
 }
+
 .search-item {
     display: table;
     width: 100%;
@@ -540,62 +330,27 @@ export default {
         background: none;
         border: none
     }
-
-}
-.l-list{
-	overflow:scroll;
-	position:absolute;
-	width:100%;
-	height:100%;
-	padding-bottom: 100px;
-	 a{
-	 	display:inline-block;
-	 	width:100%;
-    	padding:15px;
-    	color: #555;
-    	font-size:16px;
-    	border-bottom:1px solid #e7ecee;
-    }
-    a.select{
-    	background:#dbeef9;
-    }
-}
-.l-info{
-	background:#fff;
-	height:100%;
-}
-.l-info_title{
-	padding:8px;
-	border-bottom:1px solid #e7ecee;
-}
-.l-info_content{
-	padding:30px;
-}
-.l-info_hbox{
-	display:table;
-	margin-bottom:30px;
-}
-.hbox1{
-	width:150px;
-	height:96px;
-	display:table-cell;
-	text-align: center;
-	img{
-		width:96px;
-		height:96px;
-		border-radius:96px;
-		vertical-align:text-middle;
-	}
-}
-.hbox2{
-	font-size:36px;
-	font-weight:300;
-	display:table-cell;
-}
-.l-info_group{
-    width:400px;
-    padding-left:20px;
-	
 }
 
+.l-list {
+    overflow: scroll;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 100px;
+    a {
+        display: inline-block;
+        width: 100%;
+        padding: 15px;
+        color: #555;
+        font-size: 16px;
+        border-bottom: 1px solid #e7ecee;
+        &.userClose {
+            color: #98a6ad
+        }
+    }
+    a.select {
+        background: #dbeef9;
+    }
+}
 </style>
