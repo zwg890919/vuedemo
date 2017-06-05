@@ -142,8 +142,7 @@ export default {
                     message: "操作成功"
                 });
                 // 刷新用户
-                this.$emit("getlist")
-                // this.getUserList();
+                this.$emit("delDone")
             }
         },
         submitEditUser(name) {
@@ -167,7 +166,7 @@ export default {
                     message: "操作成功"
                 });
                 // 刷新用户
-                this.$emit("getlist")
+                this.$emit("editDone",this.currentUser)
                 this.$emit("cancle")
             }
         },

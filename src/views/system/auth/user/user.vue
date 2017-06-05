@@ -33,7 +33,7 @@
                             <input type="text" placeholder="输入关键字查询" v-model="userFilter">
                         </div>
                         <div class="l-list">
-                            <a v-for="user in filtrate(userList)" @click="userClick(user)" v-show="user.userOrgId == currentOrg.id || showAll" :class="{select: currentUser.userId== user.userId,userClose: !user.userStatus}">
+                            <a v-for="user in filtrate(userList)" @click="userClick(user)" v-show="(user.userOrgId == currentOrg.id || showAll) && !user.userIsdel" :class="{select: currentUser.userId== user.userId,userClose: !user.userStatus}">
                                 {{user.userName}}
                                 <em style="color:#98a6ad">({{user.userCode}})</em>
                             </a>
@@ -49,7 +49,16 @@
             </ul>
         </div>
         <div>
-            <user-info :userdata="currentUser" :state="editStatus" :deptlist="deptList" @changstate="editUser" @changUserstate="changUser" @getlist="getUserList" @cancle="cancleStatus"></user-info>
+            <user-info
+                :userdata="currentUser"
+                :state="editStatus"
+                :deptlist="deptList"
+                @changstate="editUser"
+                @changUserstate="changUser"
+                @editDone="editDone"
+                @delDone="getUserList"
+                @cancle="cancleStatus"
+            ></user-info>
         </div>
     </div>
 </template>
@@ -109,6 +118,18 @@ export default {
                 }
             }
         },
+        async editDone(user){
+            this.currentUser = user
+            var userList = [];
+            for (let item of this.userList) {
+                if (item.userId != this.currentUser.userId) {
+                    userList.push(item)
+                }else{
+                    userList.push(user)
+                }
+            }
+            this.userList = userList
+        },
         async submitDept() {  // 新增部门提交
             if (this.addDept.orgId == '') {
                 this.$totast.warning({
@@ -142,7 +163,6 @@ export default {
             // 浙江聚有财金融服务外包有限公司
             if (data.id == 2) {
                 this.showAll = true;
-                this.currentUser
                 return;
             } else {
                 this.showAll = false;
@@ -177,6 +197,7 @@ export default {
             }
         },
         userClick(user) { // 点击用户列表
+            console.log(user.userIsdel)
             this.currentUser = user;
             this.editStatus = 1;
         },
