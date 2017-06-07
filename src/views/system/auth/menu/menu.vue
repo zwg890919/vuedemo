@@ -15,7 +15,7 @@
                         <Icon type="plus" size="16px"></Icon>
                         新增菜单
                     </Button>
-                    <Tooltip placement="top"  class="tips">
+                    <Tooltip placement="top" class="tips">
                         <Icon type="help" size="20px"></Icon>
                         <div slot="content">
                             <p>双击编</p>
@@ -44,11 +44,10 @@
                             <p>辑功能</p>
                         </div>
                     </Tooltip>
-
                 </li>
             </ul>
         </div>
-        <Modal :title="modalType == 'add'? '新建菜单' : '修改菜单'" v-model="addMenu" width="600" @on-ok="submitMenu" @on-cancel="cancle" :mask-closable="false">
+        <Modal :title="modalType == 'add'? '新建菜单' : '修改菜单'" v-model="addMenu" width="600" @on-ok="submitMenu" @on-cancel="cancel" :mask-closable="false">
             <div class="model-wrap">
                 <Form ref="currentData" label-position="top" :model="currentData" :rules="ruleCustom">
                     <Row :gutter="20">
@@ -61,22 +60,30 @@
                         </Form-item>
                         <Form-item label="菜单类型" prop="menuType">
                             <Select v-model="currentData.menuType">
-                                <Option :value="1">框架菜单</Option>
-                                <Option :value="2">页面菜单</Option>
-                                <Option :value="3">功能菜单</Option>
+                                <Option :value="1">显示菜单</Option>
+                                <Option :value="2">隐藏菜单</Option>
+                                <Option :value="3">功能按钮</Option>
                             </Select>
                         </Form-item>
                         </Col>
                         <Col span="12">
                         <Form-item label="父级菜单" prop="menuParentName">
                             <input type="hidden" v-model="currentData.menuParentId" />
-                            <Input v-model="currentData.menuParentName" placeholder="请输入..."></Input>
+                            <Input v-if="modalType == 'add'" v-model="currentData.menuParentName" placeholder="请输入..."></Input>
+                            <Select v-if="modalType != 'add'" v-model="currentData.menuParentId" filterable>
+                                <Option v-for="item in menus" :value="item.value" :key="item">{{ item.label }}</Option>
+                            </Select>
                         </Form-item>
                         <Form-item label="菜单图标" prop="menuIconclass">
                             <Input type="text" v-model="currentData.menuIconclass" number></Input>
                         </Form-item>
                         <Form-item label="菜单路径" prop="menuHref">
                             <Input type="text" v-model="currentData.menuHref" number></Input>
+                        </Form-item>
+                        </Col>
+                        <Col span="24">
+                        <Form-item label="相关按钮code" prop="menuCode">
+                            <Input type="text" v-model="currentData.menuCode"></Input>
                         </Form-item>
                         </Col>
                         <Col span="24">
@@ -94,7 +101,7 @@
                 </Form>
             </div>
             <div slot="footer">
-                <Button type="text" @click="cancle">取消</Button>
+                <Button type="text" @click="cancel">取消</Button>
                 <Button type="primary" @click="submitMenu('currentData')">提交</Button>
             </div>
         </Modal>
@@ -103,6 +110,7 @@
 <script>
 import api from "@/api/"
 import menuInfo from "@/views/system/auth/menu/menuinfo"
+import { eachAllChild } from '@/assets/js/common'
 export default {
     data() {
         const validateMenuItemId = (rule, value, callback) => {
@@ -131,10 +139,11 @@ export default {
             currentData: {
                 name: '',
                 menuSerialNo: '',
-                menuType: '',
+                menuType: '1',
                 menuParentName: '',
                 menuIconclass: '',
                 menuHref: '',
+                menuCode: '',
                 menuItemId: '',
                 menuVisibility: ''
             },
@@ -153,7 +162,8 @@ export default {
                 menuItemId: [
                     { validator: validateMenuItemId, trigger: 'change' }
                 ]
-            }
+            },
+            menus: []
         }
     },
     created() {
@@ -170,11 +180,32 @@ export default {
         async getMenu() {
             const data = await api.get(api.config.globalMenu)
             this.treedata = data.datas.result
+            eachAllChild(this.treedata, item => {
+                this.menus.push({
+                    label: item.name,
+                    value: item.id
+                })
+            })
         },
         async getItemList() {
             const data = await api.post(api.config.itemList)
             this.itemList = data.datas.result
         },
+        // remoteMethod(query) {
+        //     this.currentData.menuParentName = ""
+        //     if (query) {
+        //         const list = []
+        //         eachAllChild(this.treedata, item => {
+        //             list.push({
+        //                 label: item.name,
+        //                 value: item.id
+        //             })
+        //         })
+        //         this.menus = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
+        //     } else {
+        //         this.menus = []
+        //     }
+        // },
         treedbclick(data) {
             Object.assign(this.currentData, data)
             this.modalType = "edit"
@@ -275,9 +306,12 @@ export default {
                 this.getMenu()
             }
         },
-        cancle() {
+        cancel() {
             this.$refs['currentData'].resetFields();
             this.addMenu = false;
+        },
+        selectMenuParent(item) {
+            this.currentData.menuParentId = item
         }
     },
     components: {
@@ -358,10 +392,10 @@ export default {
                 &.ltr {
                     background-color: #f6f8f8;
                 }
-                .tips{
+                .tips {
                     float: right;
-                    margin-top:10px;
-                    margin-right:30px;
+                    margin-top: 10px;
+                    margin-right: 30px;
                 }
             }
         }

@@ -39,7 +39,6 @@ axios.interceptors.response.use(  //请求拦截
 			})
             return false
         }
-
     },
     error => {
         if (error.response) {

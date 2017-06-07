@@ -14,7 +14,7 @@ function convertTreedata(data, checkdata, itemPcks, components) {
                 if (itempck == item.id) {
                     // console.log(item)
                     components[index].title = `<span style="color:#23b7e5">${item.name}</span>`,
-                    components[index].checked = true
+                        components[index].checked = true
                 }
             })
             if (item.childrens.length) {
@@ -53,7 +53,7 @@ function findComponentsDownward(context, componentName, components = []) {
 }
 
 
-function filtrate(itemlist, itemFilter,type) {
+function filtrate(itemlist, itemFilter, type) {
     var CurrentArray = [];
     if (itemlist.length > 0 && itemFilter != "") {
         var searchRegex = new RegExp(itemFilter, 'i');
@@ -68,8 +68,18 @@ function filtrate(itemlist, itemFilter,type) {
     }
 }
 
+function eachAllChild (srcNode, callback) {
+    callback(srcNode);
+    if(srcNode.childrens.length > 0){
+        srcNode.childrens.map(item => {
+            eachAllChild(item, callback);
+        })
+    }
+}
+
 export {
     filtrate,
     convertTreedata,
-    findComponentsDownward
+    findComponentsDownward,
+    eachAllChild
 }
