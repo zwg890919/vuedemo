@@ -7,14 +7,16 @@ function convertTreedata(data, checkdata, itemPcks, components) {
             components[index] = {
                 id: item.id,
                 title: item.name,
+                selected: false,
                 disableCheckbox: checkdata,
+                checked: false,
             }
 
             itemPcks.map(itempck => {
                 if (itempck == item.id) {
                     // console.log(item)
-                    components[index].title = `<span style="color:#23b7e5">${item.name}</span>`,
-                        components[index].checked = true
+                    components[index].title = `<span style="color:#23b7e5">${item.name}</span>`
+                    components[index].checked = true
                 }
             })
             if (item.childrens.length) {
@@ -68,18 +70,37 @@ function filtrate(itemlist, itemFilter, type) {
     }
 }
 
-function eachAllChild (srcNode, callback) {
+function eachAllChild(srcNode, callback) {
     callback(srcNode);
-    if(srcNode.childrens.length > 0){
+    if (srcNode.childrens.length > 0) {
         srcNode.childrens.map(item => {
             eachAllChild(item, callback);
         })
     }
 }
 
+var transformTree = ((treedata,checkedList = []) => {
+    treedata.map(item => {
+        var addObject ={
+            checked:false,
+            extendType: 'minus-round',
+            open:true,
+        }
+        if(checkedList.indexOf(String(item.id)) >= 0){
+            addObject.checked = true
+        }
+        Object.assign(item,addObject)
+        if(item.childrens.length > 0){
+            let itemChildrens = transformTree(item.childrens,checkedList)
+            if (itemChildrens) item.childrens = itemChildrens
+        }
+    })
+    return treedata
+})
 export {
     filtrate,
     convertTreedata,
     findComponentsDownward,
-    eachAllChild
+    eachAllChild,
+    transformTree
 }

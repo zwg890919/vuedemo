@@ -8,20 +8,32 @@
                     <Button type="info" size="small">取消</Button>
                 </span>
             </div>
-            <Tree ref="tree" :data="treeList" show-checkbox class="tree-wrap"></Tree>
+            <jyc-tree
+                :data="treeList"
+                :options="treeOptions"
+                >
+            </jyc-tree>
         </div>
     </div>
 </template>
 <script>
 import api from "@/api"
 import { mapState, mapGetters } from 'vuex'
-import {findComponentsDownward} from '@/assets/js/common.js'
+import {findComponentsDownward,transformTree} from '@/assets/js/common'
 export default {
     name: 'userpck-tree',
     data() {
         return {
             treeList: [],
-            pckName: ""
+            pckName: "",
+            treeOptions:{
+                showCheckbox : true,
+                selected : false,
+                showIcon : false,
+                hideDel: true,
+                halfCheckedStatus:false,
+                disableCheckbox:true
+            }
         }
     },
     computed: {
@@ -32,25 +44,26 @@ export default {
             checkDisable: state => state.userPck.checkDisable,
             groupPckname: state => state.userPck.currentGroup.pckName,
         }),
-        ...mapGetters([
-            'menuList'
-        ])
     },
     watch: {
-        menuList(value) {
-            this.treeList = value
-        },
         currentGroup(value) {
             this.pckName = value.pckName || this.groupPckname
+            // console.log(this.currentGroup.pckMenuId.split(","),indexOf())
+            this.treeList = transformTree(this.treeList,this.currentGroup.pckMenuId.split(","))
+            console.log(this.treeList)
+        },
+        checkDisable(state){
+            this.treeOptions.disableCheckbox = state
         }
     },
-    created() {
+    activated() {
         this.getMenuList()
     },
     methods: {
         async getMenuList() {
             const data = await api.get(api.config.menuTeant)
-            this.$store.commit('setMenuData', [data.datas.result])
+            this.treeList = transformTree(data.datas.result.childrens)
+            // this.$store.commit('setMenuData', [data.datas.result])
         },
         async updataItempck() {
             var menuIds = String(findComponentsDownward(this.$refs.tree, 'TreeNode'))

@@ -1,9 +1,10 @@
 import axios from 'axios'
 import api from '@/api'
-
+import {eachAllChild} from '@/assets/js/common'
 var state = {
     applist: [],
-    currentApp: {}
+    currentApp: {},
+    codeList:[]
 }
 
 const actions = {
@@ -28,6 +29,16 @@ const actions = {
                 }else{
                      Newstate = { applist, currentApp }
                 }
+
+                var codeList = []
+
+                eachAllChild({
+                    childrens : Newstate.applist
+                },(item) => {
+                    if(item.menuCode)
+                    codeList.push(item.menuCode)
+                })
+                commit('getCode',codeList)
                 commit('getMenu',Newstate)
             } else {
                 return false;
@@ -44,6 +55,9 @@ const mutations = {
     },
     changeMenu(state, currentApp) {
         state.currentApp = currentApp
+    },
+    getCode(state,codeList){
+        state.codeList = codeList
     }
 }
 export default {

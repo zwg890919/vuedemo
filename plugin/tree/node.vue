@@ -1,119 +1,76 @@
 <template>
     <ul>
-        <li>
-            <a @click="nodeClick" :style="{'padding-left': itemdata.level!=1?(itemdata.level-1)*30+'px':'10px'}" @dblclick="dnodeClick" :class="{active:itemdata.id == selectNode}">
-                    <Icon :type="extendType" @click.native="extendMenu()" v-if="itemdata.childrens.length>0"></Icon>
-                    <Checkbox class="tree-checkbox"
-                        v-if="showCheckbox"
-                        :value="itemdata.checkState"
-                        @on-change="treeCheck"
-                        :indeterminate = indeterminate
-                        :class="{'ml-n': itemdata.childrens.length==0}"></Checkbox>
-                    <span >
-                        <Icon type="folder" class="menu-folder" v-if="itemdata.childrens.length>0"></Icon>
-                        <Icon type="android-document" :class="{'ml-m':showCheckbox}" class="menu-document" v-if="itemdata.childrens.length==0"></Icon>
-                        <span>{{itemdata.name}}</span>
-                    </span>
-                    <Icon type="close" class="delMenu" @click.native="delMenu()"></Icon>
-                </a>
-            <tree-node v-for="item in extend(itemdata.childrens)" :selectNode="selectNode" v-show="extendShow" :indent="1" :key="item" :showCheckbox="showCheckbox" :itemdata="item">
-            </tree-node>
+        <li v-for="(item,index) in nodeData" :key="item.id">
+            <a :style="{'padding-left': item.level!=1?(item.level-1)*30+'px':'10px'}" @click="nodeClick(item)" @dblclick="dnodeClick(item)" :class="{active:item.id == selectNode.id && options.selected}">
+                <Icon :type="item.extendType" v-if="item.childrens.length>0" @click.native="extendMenu(item)"></Icon>
+                <Checkbox
+                    class="tree-checkbox"
+                    v-if="options.showCheckbox"
+                    v-model="item.checked"
+                    :disabled="options.disableCheckbox"
+                    :class="{'ml-n': item.childrens.length==0,'ml-r':!options.showIcon}"
+                    @on-change="treeCheck(item)"
+                >
+                </Checkbox>
+                <span>
+                    <Icon type="folder" class="menu-folder" v-if="item.childrens.length>0 && options.showIcon"></Icon>
+                    <Icon type="android-document" :class="{'ml-m':options.showCheckbox}" class="menu-document" v-if="item.childrens.length==0 && options.showIcon"></Icon>
+                    <span :class="{'checked':item.checked}">{{item.name}}</span>
+                </span>
+                <Icon v-if="!options.hideDel" type="close" class="delMenu" @click.native="delMenu(item,index)"></Icon>
+            </a>
+            <tree-node v-if="item.childrens && item.childrens.length>0" v-show="item.open" :nodeData="item.childrens" :selectNode="selectNode" :options="options"></tree-node>
         </li>
     </ul>
 </template>
 <script>
-import eventHub from "./event.js"
-
+import eventHub from './event.js'
 export default {
-    name: "treeNode",
-    data() {
-        return {
-            extendType: "minus-round",
-            extendShow: true,
-            indeterminate: false
+    name: 'treeNode',
+    props: {
+        nodeData: [Array],
+        options: [Object],
+        selectNode: [Object]
+    },
+    created() {
+        const parent = this.$parent
+        if (parent.isTree) {
+            this.tree = parent
+        } else {
+            this.tree = parent.tree
         }
     },
-    props: ['itemdata', 'indent', 'selectNode', 'showCheckbox'],
     methods: {
-        extend(data) {
-            var _this = this
-            if (data) {
-                data.map(function (item) {
-                    _this.$set(item, "checkState", false)
-                })
-                return data
-            }
-        },
-        nodeClick() {
-            eventHub.$emit("on-selected", this.itemdata)
-        },
-        dnodeClick() {
-            eventHub.$emit("tree-dbclick", this.itemdata)
-        },
-        delMenu() {
-            eventHub.$emit("tree-del", this.itemdata)
-        },
-        extendMenu() {
-            eventHub.$emit("tree-extend", this.itemdata)
-            this.extendShow = !this.extendShow;
-            if (this.extendType == "plus-round") {
-                this.extendType = "minus-round"
+        extendMenu(node) {
+            node.open = !node.open;
+            if (node.extendType == "plus-round") {
+                node.extendType = "minus-round"
             } else {
-                this.extendType = "plus-round"
+                node.extendType = "plus-round"
             }
-
         },
-        treeCheck() {
-            const checked = !this.itemdata.checkState;
-
-            if (!checked) {
-                findComponet(this).forEach(item => {
-                    item.itemdata.checkState = false
-                    // console.log(1,item.itemdata.name,item.itemdata.checkState)
-                })
-            } else {
-                findComponet(this).forEach(item => {
-                    item.itemdata.checkState = true
-                    //  console.log(2,item.itemdata.name,item.itemdata.checkState)
-                })
-            }
-            this.itemdata.checkState = checked
-            eventHub.$emit("tree-check", this.itemdata, checked)
-            eventHub.$emit("checked")
+        nodeClick(data) {
+            eventHub.$emit("node-click", data)
         },
-        setIndeterminate() {
-            // console.log(11)
-            this.indeterminate = this.itemdata.checkState ? false : findComponet(this).some(node => {
-                // console.log(node.itemdata.checkState)
-                node.itemdata.checkState
+        treeCheck(data) {
+            eventHub.$emit("tree-check", data)
+        },
+        delMenu(data, index) {
+            this.$Modal.confirm({
+                title: '操作确认',
+                content: `<p>您确定要删除${data.name}，及下属所有的菜单?</p>`,
+                onOk: () => {
+                    this.nodeData.splice(index, 1)
+                    eventHub.$emit("node-delete", data)
+                },
             });
+        },
+        dnodeClick(data) {
+            eventHub.$emit("tree-dbclick", data)
         }
-    },
-    mounted() {
-        eventHub.$on('indeterminate', () => {
-            // eventHub.$emit("indeterminate")
-            this.setIndeterminate();
-        });
     }
-}
-
-function findComponet(context, components = []) {
-    const childrens = context.$children
-    if (childrens.length) {
-        childrens.forEach(child => {
-            const name = child.$options.name
-            const childs = child.$children;
-
-            if (name == "treeNode") {
-                components.push(child)
-            }
-
-            if (childs.length) {
-                const findChilds = findComponet(child, components);
-                if (findChilds) components.concat(findChilds);
-            }
-        })
-    }
-    return components
 }
 </script>
+<style lang="scss">
+
+</style>

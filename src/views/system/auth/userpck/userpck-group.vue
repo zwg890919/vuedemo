@@ -58,9 +58,7 @@ export default {
     }),
     watch: {
         currentUser(state) {
-            // console.log(state,state.length)
             if (state.userId) {
-                // console.log(1)
                 this.getUserpck()
             }
         },

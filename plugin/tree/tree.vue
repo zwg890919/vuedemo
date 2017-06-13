@@ -1,105 +1,47 @@
 <template>
     <div class="menu-warp">
-        <tree-node v-for="item in extend(treedata)" :selectNode="selectNode" :key="item" :itemdata="item" :indeterminate="false" :showCheckbox="showCheckbox">
-        </tree-node>
+        <tree-node :nodeData="data" :selectNode="selectData" :options="options" ></tree-node>
     </div>
 </template>
 <script>
-import treeNode from "./node"
+import treeNode from './node.vue'
+import { changeCheckStatus } from './funStore.js'
 import eventHub from "./event.js"
+
 export default {
-    name: "jycTree",
+    name: 'jycTree',
     data() {
         return {
-            selectNode: "",
-            checkData: []
+            selectData: {}
         }
     },
-    props: {
-        treedata: {
-            type: Array,
-            default() {
-                return [];
-            }
-        },
-        showCheckbox: {
-            type: Boolean,
-            default: false
-        }
+    props: ['data', 'options'],
+    components: {
+        treeNode
     },
-    watch: {
-        treedata() {
-            this.$nextTick(() => {
-                eventHub.$emit("indeterminate");
-            });
-        }
-    },
-    mounted() {
-        this.updateData();
-        eventHub.$on('on-selected', (data) => {
-            this.selectNode = data.id;
-            this.$emit("tree-click", data)
-            // this.$emit('on-select-change', this.getSelectedNodes());
-        });
-        eventHub.$on("tree-dbclick", (data) => {
-            this.$emit("tree-dbclick", data)
-        }),
-        eventHub.$on("tree-del", (data) => {
-            this.$emit("tree-close", data)
-        }),
-        eventHub.$on("tree-extend", (data) => {
-            this.$emit("tree-extend", data)
-        }),
-        eventHub.$on("checked",() => {
-            this.updateData(false)
+    mounted(){
+        eventHub.$on("node-click", data =>{
+            this.$emit("node-click",data)
+            this.selectData = data
         })
-        eventHub.$on("tree-check", (data, state) => {
-            if (state) {
-                this.checkData.push(data)
-            } else {
-                var dataindex = this.checkData.indexOf(data);
-                this.checkData.splice(dataindex, 1)
-            }
-            this.$emit("tree-check", this.checkData)
+        eventHub.$on("tree-dbclick", data =>{
+            this.$emit("tree-dbclick",data)
+        })
+        eventHub.$on("node-delete", data =>{
+            this.$emit("node-delete",data)
+        })
+        eventHub.$on("tree-check", data =>{
+            this.treeCheck(data)
         })
     },
     methods: {
-        updateData(isInit = true) {
-            function forwadCheck(data) {
-                if (data.childrens) {
-                    let checkedLength = 0;
-                    data.childrens.forEach(node => {
-                        if (node.childrens) node = forwadCheck(node);
-                        if (node.checkState) checkedLength++;
-                    });
-                    if (isInit) {
-                        if (checkedLength >= data.childrens.length) data.checkState = true;
-                    } else {
-                        data.checkState = checkedLength >= data.childrens.length;
-                    }
-                    // console.log(data)
-                    return data;
-                } else {
-                    return data
-                }
+        treeCheck(data) {
+            if (this.options.halfCheckedStatus) {
+                console.log("半选中开启")
+            } else {
+                changeCheckStatus(data, this.data)
             }
-            this.treedata.map(node => {
-                forwadCheck(node)
-            })
-            eventHub.$emit("indeterminate");
-        },
-        extend(data) {
-            var _this = this
-            if (data) {
-                data.map(function (item) {
-                    _this.$set(item,"checkState",false)
-                })
-                return data
-            }
-        },
-    },
-    components: {
-        treeNode
+        }
     }
 }
 </script>
@@ -119,7 +61,7 @@ export default {
             a {
                 position: relative;
                 display: block;
-                padding: 3px 10px;
+                padding: 4px 10px;
                 cursor: pointer;
                 font-size: 0px;
                 &.active {
@@ -134,12 +76,19 @@ export default {
                     vertical-align: middle;
                     display: inline-block;
                     font-size: 14px;
+                    &.checked {
+                        color: #23b7e5
+                    }
                 }
                 .tree-checkbox {
-                    margin: 0px 0px 0px 5px;
+                    margin: 2px 0px 0px 5px;
                     vertical-align: top;
                     &.ml-n {
-                        margin-left: 20px;
+                        margin-left: 16px;
+                    }
+                    &.ml-r {
+                        margin-right: 5px;
+                        margin-top: 0px
                     }
                 }
                 i {

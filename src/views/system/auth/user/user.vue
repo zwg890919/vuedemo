@@ -5,8 +5,21 @@
                 <li class="row-row">
                     <div @click="addOrg = true">
                         <div class="scroll-cell">
-                            <jyc-tree :treedata="treedata" :showCheckbox="false" @tree-click="selectOrg" @tree-close="treeClose">
+                            <jyc-tree
+                                :data="treedata"
+                                :options="treeOptions"
+                                @node-click="selectOrg"
+                                @node-delete="treeClose">
                             </jyc-tree>
+                            <!--<jyc-tree
+                                :data="treedata"
+                                :options="treeOptions"
+                                :selectNode="selectData"
+                                @node-click="treeClick"
+                                @tree-dbclick="treedbclick"
+                                @node-delete="treeClose"
+                            >
+                            </jyc-tree>-->
                         </div>
                     </div>
                 </li>
@@ -49,22 +62,14 @@
             </ul>
         </div>
         <div>
-            <user-info
-                :userdata="currentUser"
-                :state="editStatus"
-                :deptlist="deptList"
-                @changstate="editUser"
-                @changUserstate="changUser"
-                @editDone="editDone"
-                @delDone="getUserList"
-                @cancle="cancleStatus"
-            ></user-info>
+            <user-info :userdata="currentUser" :state="editStatus" :deptlist="deptList" @changstate="editUser" @changUserstate="changUser" @editDone="editDone" @delDone="getUserList" @cancle="cancleStatus"></user-info>
         </div>
     </div>
 </template>
 <script>
 import api from "@/api/"
 import userInfo from "@/views/system/auth/user/userinfo"
+import {transformTree} from '@/assets/js/common'
 export default {
     data() {
         return {
@@ -80,7 +85,13 @@ export default {
             userList: [],
             userFilter: '',
             currentUser: {},
-            editStatus: 1 //1为展示 2为新增 3为编辑
+            editStatus: 1, //1为展示 2为新增 3为编辑
+            treeOptions:{
+                showCheckbox : false,
+                selected : true,
+                showIcon : true,
+                halfCheckedStatus:false
+            }
         }
     },
     created() {
@@ -101,7 +112,8 @@ export default {
                     }
                 }
                 this.getDeptList(arr[0].childrens)
-                this.treedata = arr;
+                this.treedata = transformTree(arr)
+                // this.treedata = arr;
             }
         },
         getDeptList(data) { //编译为tree适合的数据格式
@@ -118,13 +130,13 @@ export default {
                 }
             }
         },
-        async editDone(user){
+        async editDone(user) {
             this.currentUser = user
             var userList = [];
             for (let item of this.userList) {
                 if (item.userId != this.currentUser.userId) {
                     userList.push(item)
-                }else{
+                } else {
                     userList.push(user)
                 }
             }
@@ -197,7 +209,6 @@ export default {
             }
         },
         userClick(user) { // 点击用户列表
-            console.log(user.userIsdel)
             this.currentUser = user;
             this.editStatus = 1;
         },

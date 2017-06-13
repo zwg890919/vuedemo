@@ -109,7 +109,6 @@ export default {
     props: ["itemdata", "selectItem", "modalOpen"],
     watch: {
         itemdata(val) {
-            console.log(val)
             this.currentList = val
         },
         modalOpen(val) {

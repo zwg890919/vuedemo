@@ -5,7 +5,13 @@
                 <li class="row-row">
                     <div>
                         <div class="scroll-cell">
-                            <jyc-tree :treedata="treedata.childrens" :showCheckbox="false" @tree-dbclick="treedbclick" @tree-click="treeClick" @tree-close="treeClose">
+                            <jyc-tree
+                                :data="treedata"
+                                :options="treeOptions"
+                                @node-click="treeClick"
+                                @tree-dbclick="treedbclick"
+                                @node-delete="treeClose"
+                            >
                             </jyc-tree>
                         </div>
                     </div>
@@ -68,10 +74,8 @@
                         </Col>
                         <Col span="12">
                         <Form-item label="父级菜单" prop="menuParentName">
-                            <input type="hidden" v-model="currentData.menuParentId" />
-                            <Input v-if="modalType == 'add'" v-model="currentData.menuParentName" placeholder="请输入..."></Input>
-                            <Select v-if="modalType != 'add'" v-model="currentData.menuParentId" filterable>
-                                <Option v-for="item in menus" :value="item.value" :key="item">{{ item.label }}</Option>
+                            <Select v-model="currentMenuParentId" filterable @on-change="selectMenuParent">
+                                <Option v-for="item in menus" :value="item.value" :key="item.value">{{ item.label}}</Option>
                             </Select>
                         </Form-item>
                         <Form-item label="菜单图标" prop="menuIconclass">
@@ -89,7 +93,7 @@
                         <Col span="24">
                         <Form-item label="关联功能" prop="menuItemId">
                             <Select v-model="currentData.menuItemId" filterable>
-                                <Option value="2" key="">不关联功能</Option>
+                                <Option :value="2" key="">不关联功能</Option>
                                 <Option v-for="item in itemList" :key="item.itemId" :value="item.itemId">{{item.itemTab}} {{item.itemAllDesc}}</Option>
                             </Select>
                         </Form-item>
@@ -110,7 +114,7 @@
 <script>
 import api from "@/api/"
 import menuInfo from "@/views/system/auth/menu/menuinfo"
-import { eachAllChild } from '@/assets/js/common'
+import { eachAllChild, transformTree} from '@/assets/js/common'
 export default {
     data() {
         const validateMenuItemId = (rule, value, callback) => {
@@ -135,11 +139,12 @@ export default {
             callback();
         }
         return {
-            treedata: {},
+            treedata: [],
             currentData: {
                 name: '',
                 menuSerialNo: '',
                 menuType: '1',
+                menuParentId: '',
                 menuParentName: '',
                 menuIconclass: '',
                 menuHref: '',
@@ -163,10 +168,17 @@ export default {
                     { validator: validateMenuItemId, trigger: 'change' }
                 ]
             },
-            menus: []
+            menus: [],
+            currentMenuParentId: "",
+            treeOptions:{
+                showCheckbox : false,
+                selected : true,
+                showIcon : true,
+                halfCheckedStatus:false
+            }
         }
     },
-    created() {
+    activated(){
         this.getMenu()
         this.getItemList()
     },
@@ -179,8 +191,8 @@ export default {
         },
         async getMenu() {
             const data = await api.get(api.config.globalMenu)
-            this.treedata = data.datas.result
-            eachAllChild(this.treedata, item => {
+            this.treedata = transformTree(data.datas.result.childrens)
+            eachAllChild(data.datas.result, item => {
                 this.menus.push({
                     label: item.name,
                     value: item.id
@@ -191,25 +203,11 @@ export default {
             const data = await api.post(api.config.itemList)
             this.itemList = data.datas.result
         },
-        // remoteMethod(query) {
-        //     this.currentData.menuParentName = ""
-        //     if (query) {
-        //         const list = []
-        //         eachAllChild(this.treedata, item => {
-        //             list.push({
-        //                 label: item.name,
-        //                 value: item.id
-        //             })
-        //         })
-        //         this.menus = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
-        //     } else {
-        //         this.menus = []
-        //     }
-        // },
         treedbclick(data) {
             Object.assign(this.currentData, data)
             this.modalType = "edit"
             var _this = this
+            this.currentMenuParentId = data.parentId
             this.eachNode(this.treedata, function (item) {
                 if (item.id == data.parentId) {
                     Object.assign(_this.currentData, {
@@ -221,24 +219,18 @@ export default {
             this.addMenu = true
         },
         treeClick(data) {
-            this.currentData = {};
+            this.currentData.menuType = 1
             this.selectData = data;
+            this.currentMenuParentId = this.selectData.id
             window.location.hash = "#" + data.menuItemId
         },
         treeClose(data) {
-            this.$Modal.confirm({
-                title: '操作确认',
-                content: `<p>您确定要删除${data.name}，及下属所有的菜单?</p>`,
-                onOk: () => {
-                    this.delMenu(data)
-                },
-            });
+            this.delMenu(data)
         },
         eachNode(data, callback) {
-            var that = this
-            callback(data)
-            data.childrens.map(item => {
-                that.eachNode(item, callback);
+            data.map(item => {
+                callback(data)
+                this.eachNode(item.childrens, callback);
             })
         },
         resetCurrentData() {
@@ -255,18 +247,18 @@ export default {
                 if (valid) {
                     var param = {
                         menuName: this.currentData.name,
-                        menuParentId: this.currentData.menuParentId,
+                        menuParentId: this.currentMenuParentId,
                         menuType: this.currentData.menuType,
                         menuAuthLevel: this.currentData.menuAuthLevel,
                         menuVisibility: this.currentData.menuVisibility,
                         menuSerialNo: this.currentData.menuSerialNo,
                         menuIconclass: this.currentData.menuIconclass,
                         menuItemId: this.currentData.menuItemId,
-                        menuHref: this.currentData.menuHref
+                        menuHref: this.currentData.menuHref,
+                        menuCode: this.currentData.menuCode
                     }
                     if (this.modalType == "edit") {
                         param.menuId = this.currentData.id;
-                        // console.log(param)
                         this.updateMenu(param)
                     } else {
                         this.submitAddMenu(param)
@@ -278,11 +270,11 @@ export default {
         async submitAddMenu(param) {
             const data = await api.post(api.config.authMenu, param)
             if (data) {
+                this.getMenu()
                 this.$totast.success({
                     title: "系统提示",
                     message: data.i18nMessage
                 })
-                this.getMenu()
                 this.addMenu = false
             }
         },
@@ -303,15 +295,15 @@ export default {
             };
             const resdata = await api.delete(api.config.authMenu, param)
             if (resdata) {
-                this.getMenu()
+                // this.getMenu()
             }
         },
         cancel() {
-            this.$refs['currentData'].resetFields();
+            this.$refs.currentData.resetFields();
             this.addMenu = false;
         },
         selectMenuParent(item) {
-            this.currentData.menuParentId = item
+            this.currentMenuParentId = item
         }
     },
     components: {
