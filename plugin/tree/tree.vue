@@ -1,46 +1,58 @@
 <template>
     <div class="menu-warp">
-        <tree-node :nodeData="data" :selectNode="selectData" :options="options" ></tree-node>
+        <tree-node :nodeData="data" :selectNode="selectData" :options="options" @tree-dbclick="dbclick"></tree-node>
     </div>
 </template>
 <script>
 import treeNode from './node.vue'
-import { changeCheckStatus } from './funStore.js'
+import { changeCheckStatus, eachAllChild, allCheckStatus } from './funStore.js'
 import eventHub from "./event.js"
 
 export default {
     name: 'jycTree',
     data() {
         return {
-            selectData: {}
+            selectData: {},
         }
     },
     props: ['data', 'options'],
     components: {
         treeNode
     },
-    mounted(){
-        eventHub.$on("node-click", data =>{
-            this.$emit("node-click",data)
+    created() {
+        this.isTree = true
+    },
+    mounted() {
+        eventHub.$on("node-click", data => {
+            this.$emit("node-click", data)
             this.selectData = data
         })
-        eventHub.$on("tree-dbclick", data =>{
-            this.$emit("tree-dbclick",data)
+        eventHub.$on("node-delete", data => {
+            this.$emit("node-delete", data)
         })
-        eventHub.$on("node-delete", data =>{
-            this.$emit("node-delete",data)
-        })
-        eventHub.$on("tree-check", data =>{
+        eventHub.$on("tree-check", data => {
             this.treeCheck(data)
         })
     },
     methods: {
+        dbclick(data) {
+            this.$emit("tree-dbclick", data)
+        },
         treeCheck(data) {
             if (this.options.halfCheckedStatus) {
-                console.log("半选中开启")
-            } else {
                 changeCheckStatus(data, this.data)
+            } else {
+                allCheckStatus(data, this.data)
             }
+        },
+        getChecked() {
+            var checkedList = []
+            eachAllChild(this.data, item => {
+                if (item.checked) {
+                    checkedList.push(item)
+                }
+            })
+            return checkedList
         }
     }
 }

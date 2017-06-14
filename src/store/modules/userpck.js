@@ -6,7 +6,7 @@ var state = {
     menuData: [],
     itempackList: [],
     checkDisable: true,
-    modifyState:false,
+    modifyState: false,
 }
 
 const getters = {
@@ -22,15 +22,14 @@ const getters = {
 const actions = {
     selectUser({ commit, state }, userData) {
         commit('changeUser', userData)
-        // console.log(state.itempackList.length)
-        if (state.itempackList.length > 0) {
-            state.itempackList.map(item => {
-                if (item.pckId == userData.userRole) {
-                    commit('changeGroup', item)
-                }
-            })
-        }
     },
+    changeGroup({ commit, state }, groupId) {
+        state.itempackList.map(item => {
+            if (item.pckId == groupId) {
+                commit('changeGroup', item)
+            }
+        })
+    }
 }
 
 const mutations = {

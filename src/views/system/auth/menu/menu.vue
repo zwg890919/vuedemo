@@ -6,6 +6,7 @@
                     <div>
                         <div class="scroll-cell">
                             <jyc-tree
+                                ref="menuTree"
                                 :data="treedata"
                                 :options="treeOptions"
                                 @node-click="treeClick"
@@ -178,7 +179,7 @@ export default {
             }
         }
     },
-    activated(){
+    created(){
         this.getMenu()
         this.getItemList()
     },

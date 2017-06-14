@@ -9,9 +9,10 @@
                 </span>
             </div>
             <jyc-tree
+                ref="jyctree"
                 :data="treeList"
                 :options="treeOptions"
-                >
+            >
             </jyc-tree>
         </div>
     </div>
@@ -31,7 +32,7 @@ export default {
                 selected : false,
                 showIcon : false,
                 hideDel: true,
-                halfCheckedStatus:false,
+                halfCheckedStatus:true,
                 disableCheckbox:true
             }
         }
@@ -48,15 +49,18 @@ export default {
     watch: {
         currentGroup(value) {
             this.pckName = value.pckName || this.groupPckname
-            // console.log(this.currentGroup.pckMenuId.split(","),indexOf())
-            this.treeList = transformTree(this.treeList,this.currentGroup.pckMenuId.split(","))
-            console.log(this.treeList)
+            if(this.currentGroup.pckMenuId){
+                this.treeList = transformTree(this.treeList,this.currentGroup.pckMenuId.split(","))
+            }else{
+                this.treeList = transformTree(this.treeList,[])
+            }
+
         },
         checkDisable(state){
             this.treeOptions.disableCheckbox = state
         }
     },
-    activated() {
+    created() {
         this.getMenuList()
     },
     methods: {
@@ -66,7 +70,13 @@ export default {
             // this.$store.commit('setMenuData', [data.datas.result])
         },
         async updataItempck() {
-            var menuIds = String(findComponentsDownward(this.$refs.tree, 'TreeNode'))
+            // var menuIds = String(findComponentsDownward(this.$refs.tree, 'TreeNode'))
+            const checkedList = this.$refs.jyctree.getChecked()
+            var menuIds = []
+            checkedList.map(item => {
+                menuIds.push(item.id)
+            })
+            menuIds = String(menuIds)
             if(this.pckName == ""){
                 return false
             }

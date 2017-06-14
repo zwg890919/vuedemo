@@ -90,7 +90,9 @@ export default {
                     this.userGroup.push(item.pckId)
                 })
                 if(this.userGroup.length > 0){
-                    this.$store.commit('changeGroup', this.userGroup[0])
+                    this.$store.dispatch('changeGroup', this.userGroup[0])
+                }else{
+                    this.$store.commit('changeGroup', {})
                 }
             } else {
                 this.userGroup = []

@@ -170,7 +170,7 @@ export default new Router({
 			}, {
 				path: 'auth',
 				component: {
-					template: "<keep-alive><router-view></router-view></keep-alive>",
+					template: "<router-view></router-view>",
 				},
 				children: [{
 					path: '',

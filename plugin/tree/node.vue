@@ -66,7 +66,9 @@ export default {
             });
         },
         dnodeClick(data) {
-            eventHub.$emit("tree-dbclick", data)
+            console.log(this.tree)
+            this.tree.$emit('tree-dbclick', data)
+            // eventHub.$emit("tree-dbclick", data)
         }
     }
 }

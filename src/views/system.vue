@@ -3,9 +3,7 @@
         <layout-nav :asideIndent="asideIndent" :headerFixed="true" :asidefixed="true"></layout-nav>
         <layout-aside :asideIndent="asideIndent" :headerFixed="true" :Asidefixed="true"></layout-aside>
         <div class="layout-content" :class="{'extend-content':asideIndent}">
-            <keep-alive>
                 <router-view></router-view>
-            </keep-alive>
         </div>
     </div>
 </template>
@@ -40,7 +38,7 @@ export default {
             this.$store.commit("menuArrShift");
         }
         if(from.name != 'app'){
-            this.$store.commit("changeMenuArr", from) 
+            this.$store.commit("changeMenuArr", from)
         }
         next();
     },
