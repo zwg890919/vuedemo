@@ -5,14 +5,7 @@
                 <li class="row-row">
                     <div>
                         <div class="scroll-cell">
-                            <jyc-tree
-                                ref="menuTree"
-                                :data="treedata"
-                                :options="treeOptions"
-                                @node-click="treeClick"
-                                @tree-dbclick="treedbclick"
-                                @node-delete="treeClose"
-                            >
+                            <jyc-tree ref="menuTree" :data="treedata" :options="treeOptions" @node-click="treeClick" @tree-dbclick="treedbclick" @node-delete="treeClose">
                             </jyc-tree>
                         </div>
                     </div>
@@ -115,7 +108,7 @@
 <script>
 import api from "@/api/"
 import menuInfo from "@/views/system/auth/menu/menuinfo"
-import { eachAllChild, transformTree} from '@/assets/js/common'
+import { eachAllChild, transformTree } from '@/assets/js/common'
 export default {
     data() {
         const validateMenuItemId = (rule, value, callback) => {
@@ -171,15 +164,15 @@ export default {
             },
             menus: [],
             currentMenuParentId: "",
-            treeOptions:{
-                showCheckbox : false,
-                selected : true,
-                showIcon : true,
-                halfCheckedStatus:false
+            treeOptions: {
+                showCheckbox: false,
+                selected: true,
+                showIcon: true,
+                halfCheckedStatus: false
             }
         }
     },
-    created(){
+    created() {
         this.getMenu()
         this.getItemList()
     },
@@ -223,7 +216,9 @@ export default {
             this.currentData.menuType = 1
             this.selectData = data;
             this.currentMenuParentId = this.selectData.id
-            window.location.hash = "#" + data.menuItemId
+            if (data.menuItemId) {
+                window.location.hash = "#" + data.menuItemId
+            }
         },
         treeClose(data) {
             this.delMenu(data)

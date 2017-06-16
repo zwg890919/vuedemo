@@ -11,17 +11,21 @@ import userpckUser from "./userpck-user.vue"
 import userpckGroup from "./userpck-group.vue"
 import userpckTree from "./userpck-tree.vue"
 
-export default{
-    name:'userpcl',
-    data(){
+export default {
+    name: 'userpcl',
+    data() {
         return {
         }
     },
-    components:{
+    components: {
         userpckUser,
         userpckGroup,
         userpckTree
-    }
+    },
+    beforeRouteLeave(to, from, next) {
+        this.$store.commit("modifiyMenu",false)
+        next()
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -84,7 +88,7 @@ export default{
             em {
                 color: #98a6ad;
             }
-            span{
+            span {
                 font-size: 16px;
             }
         }
@@ -101,16 +105,16 @@ export default{
     .ivu-tree-arrow {
         padding: 0px 5px 0px 0px;
         vertical-align: middle;
-        i{
-            font-size:16px;
+        i {
+            font-size: 16px;
         }
     }
-    .ivu-tree-title{
-        font-size:14px;
-        margin-top:2px;
+    .ivu-tree-title {
+        font-size: 14px;
+        margin-top: 2px;
     }
-    .ivu-checkbox-wrapper{
-        margin-right:0px;
+    .ivu-checkbox-wrapper {
+        margin-right: 0px;
     }
 }
 </style>
