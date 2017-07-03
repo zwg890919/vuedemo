@@ -5,12 +5,22 @@
 </template>
 
 <script>
+
 export default {
-  name: 'app'
+  name: 'app',
 }
 </script>
 
 <style>
+html{
+  background: url("../static/image/bg.jpg");
+  background-attachment: fixed;
+  background-size: cover;
+  height:100%;
+}
+body{
+  background-color: none
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

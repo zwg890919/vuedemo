@@ -5,7 +5,6 @@ import systemSetting from './modules/systemSetting'
 
 Vue.use(Vuex)
 
-
 export default new Vuex.Store({
   modules: {
     systemSetting

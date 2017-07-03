@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import vuex from './store'
+import store from './store'
 import iView from 'iview'
 import vueToast from '../plugin/toast/'
 import VueCookie from 'vue-cookie'
@@ -37,7 +37,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
-  vuex,
+  store,
   template: '<App/>',
   components: { App }
 })

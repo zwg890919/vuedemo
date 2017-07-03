@@ -1,8 +1,6 @@
-const data={
+const state={
   'headerFixed':false,
   'Asidefixed':false,
-  'Asidefolded':false,
-  'Asidedock':false,
   'container':false,
   'asideIndent':false
 }
@@ -21,16 +19,10 @@ const mutations={
         state.Asidefixed = !state.Asidefixed
         break;
       case 3:
-        state.Asidefolded = !state.Asidefolded
+        state.asideIndent = !state.asideIndent
         break;
       case 4:
-        state.Asidedock = !state.Asidedock
-        break;
-      case 5:
         state.container = !state.container
-        break;
-      case 6:
-        state.asideIndent = !state.asideIndent
         break;
       default:
         break;

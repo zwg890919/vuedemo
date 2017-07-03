@@ -1,13 +1,13 @@
 <template>
-  <div class="layout-nav">
-    <div class="layout-nav__header" :class="{'layout-indent':!asideShow}">
+  <div class="layout-nav" :class="{'layout-fixed':headerFixed}">
+    <div class="layout-nav__header" :class="{'layout-indent':asideIndent}">
       <a href="" class="navbar-brand">
         <Icon type="ionic"></Icon>
-        <span v-show="asideShow">聚有财理财</span>
+        <span v-show="!asideIndent">聚有财理财</span>
       </a>
     </div>
-    <div class="layout-nav__con" :class="{'layout-indent':!asideShow}">
-      <a class="nav-btn" @click="asideIndent">
+    <div class="layout-nav__con" :class="{'layout-indent':asideIndent}">
+      <a class="nav-btn" @click="changeIndent">
         <Icon type="navicon"></Icon>
       </a>
       <a class="nav-btn">
@@ -40,12 +40,15 @@
     data(){
       return {
         dropdown : false,
-        asideShow : true
       }
     },
+    props:["asideIndent",'headerFixed'],
     methods:{
-      asideIndent(){
-        this.asideShow = !this.asideShow;
+      changeIndent(){
+        this.$store.commit("changeSetting",1)
+        this.$store.commit("changeSetting",2)
+        this.$store.commit("changeSetting",3)
+        this.$store.commit("changeSetting",4)
       }
     }
   }
