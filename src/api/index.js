@@ -1,6 +1,6 @@
 import axios from 'axios'
 import config from './config'
-import Qs from 'Qs'
+import qs from 'Qs'
 /**
  * [checkCode deal with data.code]
  * @param  {[object]} response
@@ -44,7 +44,7 @@ export default {
      * @return {[promise object]} axios [a promise object]
      */
     post(url, data) {
-        data = Qs.stringify(data)
+        data = qs.stringify(data)
         return axios({
             method: 'post',
             url: config.api + url,
@@ -60,7 +60,7 @@ export default {
      * @return {[promise object]} axios [a promise object]
      */
     put(url, data) {
-        data = Qs.stringify(data)
+        data = qs.stringify(data)
         return axios({
             method: 'put',
             url: config.api + url,
@@ -76,7 +76,7 @@ export default {
      * @return {[promise object]} axios [a promise object]
      */
     delete(url, data) {
-        data = Qs.stringify(data)
+        data = qs.stringify(data)
         return axios({
             method: 'delete',
             url: config.api + url,
@@ -86,7 +86,7 @@ export default {
         }).then(checkStatus);
     },
     login(data) {
-        data = Qs.stringify(data)
+        data = qs.stringify(data)
         return axios({
             method: 'post',
             url: config.api + config.getToken,

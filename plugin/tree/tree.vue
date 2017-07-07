@@ -25,6 +25,7 @@ export default {
     mounted() {
         eventHub.$on("node-click", data => {
             this.$emit("node-click", data)
+            console.log(data)
             this.selectData = data
         })
         eventHub.$on("node-delete", data => {

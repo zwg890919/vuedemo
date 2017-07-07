@@ -1,4 +1,4 @@
-import Tree from './Tree'
+import Tree from './tree'
 
 const install = (Vue) => {
   Vue.component(Tree.name, Tree)

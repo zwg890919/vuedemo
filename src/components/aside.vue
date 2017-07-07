@@ -46,7 +46,7 @@
                     <li class="line"></li>
 
                     <li class="layout-aside__title" v-show="!asideIndent">{{currentMenu.name}}</li>
-                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
+                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" :key="item" v-if="item.childrens[0].menuType==1" :class="{active:item.id == lastmenu}">
                         <a @click="drowpDown(item)" @mouseenter="showCurrent(item,$event)">
                             <Icon :type="item.menuIconclass" size="20"></Icon>
                             <!--<i :class="item.menuIconclass" style="font-size:14px;"></i>-->
@@ -64,7 +64,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" v-if="item.childrens[0].menuType>1" @mouseenter="hideCurrent()">
+                    <li class="layout-aside__item" v-for="item in currentMenu.childrens" :key="item" v-if="item.childrens[0].menuType>1" @mouseenter="hideCurrent()">
                         <router-link :to="item.menuHref | transformUrl" active-class="active" class="itemMenu">
                             <Icon :type="item.menuIconclass" size="20"></Icon>
                             <span v-show="!asideIndent">{{item.name}}</span>

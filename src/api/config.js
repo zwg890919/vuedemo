@@ -1,5 +1,5 @@
 module.exports = {
-    api: 'http://localhost:8083/api',
+    api: '/api',
 
     timeout: 30000,
     headers: {
